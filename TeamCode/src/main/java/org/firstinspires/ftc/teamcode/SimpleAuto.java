@@ -18,8 +18,8 @@ public class SimpleAuto extends LinearOpMode {
     private DcMotor rightBack = null;
     private IMU imu = null;
     private ElapsedTime timer = null;
-    static final double SPEED = 0.4;
-    static final double TURN_SPEED = 0.3;
+    static final double SPEED = 0.3;
+    static final double TURN_SPEED = 0.2;
 
 
     @Override
@@ -47,13 +47,13 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(1000);
+            sleep(500);
             //straight
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(1000);
+            sleep(500);
             leftFront.setPower(-TURN_SPEED);
             leftBack.setPower(-TURN_SPEED);
             rightFront.setPower(TURN_SPEED);
@@ -64,7 +64,7 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(4500);
+            sleep(3000);
 
 
             imu.resetYaw();
@@ -77,7 +77,7 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(900);
+            sleep(300);
             imu.resetYaw();
 
             leftFront.setPower(TURN_SPEED);
@@ -89,50 +89,50 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(4000);
+            sleep(2600);
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(700);
+            sleep(300);
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(4000);
+            sleep(2600);
 
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(700);
+            sleep(300);
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(4000);
+            sleep(2600);
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(700);
+            sleep(300);
 
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(4000);
+            sleep(2600);
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(700);
+            sleep(300);
 
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(4500);
+            sleep(3000);
             leftFront.setPower(0);
             leftBack.setPower(0);
             rightFront.setPower(0);
