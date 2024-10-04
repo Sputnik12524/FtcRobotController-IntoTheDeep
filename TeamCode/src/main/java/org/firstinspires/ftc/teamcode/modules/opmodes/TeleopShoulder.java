@@ -9,8 +9,6 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 @TeleOp(name = "ShoulderTest", group = "teleop")
 public class TeleopShoulder extends LinearOpMode {
 
-    private double shoulderPosition = 0;
-
 
     @Override
     public void runOpMode() {
@@ -23,26 +21,14 @@ public class TeleopShoulder extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()){
 
-            if (shoulderPosition > 1) {
-                shoulderPosition = 1;
-            }
-            if (shoulderPosition < 0) {
-                shoulderPosition = 0;
-            }
-
             if (gamepad1.x) {
-                shoulderPosition += 0.005;
+                sl.shoulderPlus();
                 sleep(5);
             }
             if (gamepad1.y) {
-                shoulderPosition -= 0.005;
+                sl.shoulderMinus();
                 sleep(5);
             }
-
-
-
-
-
 
 
         }

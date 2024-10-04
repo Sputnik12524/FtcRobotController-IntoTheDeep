@@ -9,16 +9,30 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Shoulder {
 
     private final Servo servoShoulder;
-    private final LinearOpMode opMode;
 
-    public static double SHOULDER_START = 0;
-    public static double SHOULDER_SPECIMEN = 0.7;
-    public static double SHOULDER_LOW_BACKET = 1;
+    public double shoulderPosition = 0.5;
+    public static double SHOULDER_MAX = 1;
+    public static double SHOULDER_MIN = 0;
+    public static double SHOULDER_STEP = 0.005;
 
 
     public Shoulder(LinearOpMode opMode) {
-        this.opMode = opMode;
-        this.servoShoulder = opMode.hardwareMap.servo.get("servoDoor");
+        this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
 
+    }
+
+    public void shoulderPlus () {
+        if (shoulderPosition > SHOULDER_MAX) {
+            shoulderPosition = SHOULDER_MAX;
+        }
+        shoulderPosition += SHOULDER_STEP;
+        servoShoulder.setPosition(shoulderPosition);
+    }
+    public void shoulderMinus () {
+        if (shoulderPosition < SHOULDER_MIN) {
+            shoulderPosition = SHOULDER_MIN;
+        }
+        shoulderPosition -= SHOULDER_STEP;
+        servoShoulder.setPosition(shoulderPosition);
     }
 }
