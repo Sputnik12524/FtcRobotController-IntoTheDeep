@@ -115,7 +115,7 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(300);
+            sleep(400);
 
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
@@ -126,12 +126,12 @@ public class SimpleAuto extends LinearOpMode {
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(300);
+            sleep(400);
 
-            leftFront.setPower(SPEED);
-            leftBack.setPower(SPEED);
-            rightFront.setPower(SPEED);
-            rightBack.setPower(SPEED);
+            leftFront.setPower(-SPEED);
+            leftBack.setPower(-SPEED);
+            rightFront.setPower(-SPEED);
+            rightBack.setPower(-SPEED);
             sleep(3000);
             leftFront.setPower(0);
             leftBack.setPower(0);
