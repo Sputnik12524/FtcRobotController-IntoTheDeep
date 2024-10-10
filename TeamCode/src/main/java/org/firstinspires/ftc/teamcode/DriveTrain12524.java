@@ -75,6 +75,8 @@ public class DriveTrain12524 {
     }
 
     public void turn(double TURN_SPEED,double degrees){
+        aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());
+        aggregate.telemetry.update();
         leftFront.setPower(TURN_SPEED);
         rightFront.setPower(-TURN_SPEED);
         leftBack.setPower(TURN_SPEED);
@@ -139,8 +141,7 @@ public class DriveTrain12524 {
         aggregate.sleep(100);
     }
 
-    public double getHeading()
-    {
+    public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }

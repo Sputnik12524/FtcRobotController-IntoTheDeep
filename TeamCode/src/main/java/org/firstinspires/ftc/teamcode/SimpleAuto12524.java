@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class SimpleAuto12524 extends LinearOpMode {
     private DriveTrain12524 base;
     static final double drive_speed = .3;
-    static final double turn_speed = .2;
-    static final double side_speed =.3;
+    static final double turn_speed = .15;
+    static final double side_speed =.15;
 
     @Override
     public void runOpMode(){
@@ -23,24 +23,28 @@ public class SimpleAuto12524 extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            base.driveStraight(drive_speed, 60);
-            base.driveStraight(-drive_speed,50);
-            base.turn(turn_speed, 90);
-            base.driveStraight(drive_speed, 180); //Проезжаем вперед 3 плитки
-            base.turn(turn_speed, -90);//Поворачиваемся налево
-            base.driveStraight(drive_speed, 40);//Проезжаем вперед
-            base.turn(turn_speed, -90);//Поворачиваемся налево
-            base.driveStraight(drive_speed, 130);//Едем вперед до зоны сетей, сбивая крайнюю пробу
-            base.side(-side_speed, 5);//Проезжаем вбок
-            base.driveStraight(-drive_speed, 130);//задом едем к пробам
-            base.side(-side_speed, 15);//проезжаем боком к центральной пробе
-            base.driveStraight(drive_speed, 130);//отвозим ее в зону сетей
-            base.side(-side_speed, 5);//Проезжаем вбок
-            base.driveStraight(-drive_speed, 130);//едем к пробам
-            base.side(-side_speed,20);//проезжаем вбок
-            base.driveStraight(drive_speed,140);//едем парковаться
+            base.driveStraight(.4, 25);
+            base.driveStraight(-.4,10);
+            base.turn(-turn_speed, 75);
+            base.driveStraight(drive_speed, 93); //Проезжаем вперед 3 плитки
+            base.turn(turn_speed, 75);//Поворачиваемся налево
+            base.driveStraight(drive_speed, 2);//Проезжаем вперед
+            base.turn(turn_speed, 57);//Поворачиваемся налево
+
+            base.driveStraight(drive_speed, 100);//Едем вперед до зоны сетей, сбивая крайнюю пробу
+            base.side(-side_speed, 6);//Проезжаем вбок
+            base.driveStraight(-drive_speed, 100);//задом едем к пробам
+
+            base.side(-side_speed, 10);//проезжаем боком к центральной пробе
+            base.driveStraight(drive_speed, 90);//отвозим ее в зону сетей
+
             base.stop();//останавливаемся
             sleep(100);
         }
     }
 }
+
+//base.side(-side_speed, 5);//Проезжаем вбок
+//base.driveStraight(-drive_speed, 90);//едем к пробам
+// base.side(-side_speed,15);//проезжаем вбок
+// base.driveStraight(.4,100);//едем парковаться

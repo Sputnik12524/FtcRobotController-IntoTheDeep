@@ -138,21 +138,6 @@ public class SimpleAuto extends LinearOpMode {
             rightFront.setPower(0);
             rightBack.setPower(0);
             sleep(200);
-               //base.driveStraight(.25, 180); //Проезжаем вперед 3 плитки
-           // base.turn(.2, -90);//Поворачиваемся налево
-           // base.driveStraight(.25, 40);//Проезжаем вперед
-            //base.turn(.2, -90);//Поворачиваемся налево
-            //base.driveStraight(.25, 130);//Едем вперед до зоны сетей, сбивая крайнюю пробу
-           // base.side(-.2, 5);//Проезжаем вбок
-            //base.driveStraight(-.25, 130);//задом едем к пробам
-           // base.side(-.2, 15);//проезжаем боком к центральной пробе
-            //base.driveStraight(.25, 130);//отвозим ее в зону сетей
-          //  base.side(-.2, 5);//Проезжаем вбок
-            //base.driveStraight(-.25, 130);//едем к пробам
-            //base.side(-.2,20);//проезжаем вбок
-           // base.driveStraight(.25,140);//едем парковаться
-            //base.driveStraight(0,0);//останавливаемся
-
         }
     }
     public double getHeading(){
