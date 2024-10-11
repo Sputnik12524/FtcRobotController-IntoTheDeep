@@ -19,7 +19,7 @@ public class TeleopShoulder extends LinearOpMode {
 
         }
         waitForStart();
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
 
             if (gamepad1.x) {
                 sl.shoulderPlus();
@@ -30,8 +30,15 @@ public class TeleopShoulder extends LinearOpMode {
                 sleep(5);
             }
 
+            telemetry.addData("Позиция сервомотора: ", sl.getPosition());
+            telemetry.addLine("Управление плечом:");
+            telemetry.addLine("X - вверх");
+            telemetry.addLine("Y - вниз");
+            telemetry.update();
 
         }
+
+
     }
 
 }
