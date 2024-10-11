@@ -26,6 +26,9 @@ public class TeleopClaw extends LinearOpMode {
             if (gamepad2.y) {
                 cl.open();
             }
+            if (gamepad2.b) {
+                cl.switchPosition();
+            }
         }
 
 
