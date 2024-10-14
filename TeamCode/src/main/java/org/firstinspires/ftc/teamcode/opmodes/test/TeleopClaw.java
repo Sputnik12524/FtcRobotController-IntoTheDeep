@@ -29,15 +29,16 @@ public class TeleopClaw extends LinearOpMode {
             if (gamepad2.b) {
                 cl.switchPosition();
             }
+            telemetry.addData("Значение клешни", cl.stateOpen);
+            telemetry.addLine("Управление:");
+            telemetry.addLine("X - Закрыть");
+            telemetry.addLine("A - Открыть наполовину");
+            telemetry.addLine("Y - Открыть");
+            telemetry.addLine("B - Смена позиции");
+            telemetry.update();
         }
 
-        telemetry.addData("Значение клешни", cl.stateOpen);
-        telemetry.addLine("Управление:");
-        telemetry.addLine("X - Закрыть");
-        telemetry.addLine("A - Открыть наполовину");
-        telemetry.addLine("Y - Открыть");
-        telemetry.addLine("B - Смена позиции");
-        telemetry.update();
+
 
 
 
