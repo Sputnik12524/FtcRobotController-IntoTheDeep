@@ -36,7 +36,7 @@ public class Claw {
         stateOpen = true;
     }
     public void switchPosition() {
-        if (stateOpen = false) {
+        if (!stateOpen) {
             clawServo.setPosition(CLAW_OPEN);
         } else {
             clawServo.setPosition(CLAW_CLOSE);

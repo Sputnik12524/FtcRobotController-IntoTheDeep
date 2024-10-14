@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -30,6 +30,15 @@ public class TeleopClaw extends LinearOpMode {
                 cl.switchPosition();
             }
         }
+
+        telemetry.addData("Значение клешни", cl.stateOpen);
+        telemetry.addLine("Управление:");
+        telemetry.addLine("X - Закрыть");
+        telemetry.addLine("A - Открыть наполовину");
+        telemetry.addLine("Y - Открыть");
+        telemetry.addLine("B - Смена позиции");
+        telemetry.update();
+
 
 
 
