@@ -47,97 +47,101 @@ public class SimpleAuto16772 extends LinearOpMode {
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(500);
-            //straight
+            sleep(500); //довозим пробу
+
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(500);
+            sleep(500); //отъезжаем назад
             leftFront.setPower(-TURN_SPEED);
             leftBack.setPower(-TURN_SPEED);
             rightFront.setPower(TURN_SPEED);
             rightBack.setPower(TURN_SPEED);
-            while (opModeIsActive() && Math.abs(getHeading()) <= 90);
+            while (opModeIsActive() && Math.abs(getHeading()) <= 90); //поворот
 
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(3000);
-
+            sleep(3000); //едем вперед
 
             imu.resetYaw();
             leftFront.setPower(TURN_SPEED);
             leftBack.setPower(TURN_SPEED);
             rightFront.setPower(-TURN_SPEED);
             rightBack.setPower(-TURN_SPEED);
-            while (opModeIsActive() && Math.abs(getHeading()) <= 85);
+            while (opModeIsActive() && Math.abs(getHeading()) <= 85); //поворот
+
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(300);
-            imu.resetYaw();
+            sleep(400);
+            imu.resetYaw(); //сбиваем пробу
 
             leftFront.setPower(TURN_SPEED);
             leftBack.setPower(TURN_SPEED);
             rightFront.setPower(-TURN_SPEED);
             rightBack.setPower(-TURN_SPEED);
-            while (opModeIsActive() && Math.abs(getHeading()) <= 82);
+            while (opModeIsActive() && Math.abs(getHeading()) <= 82); //поворачиваемся к зоне сетей
+
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(2600);
+            sleep(2600); //едем в зону сетей
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(300);
+            sleep(350); //проезжаем вбок
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(2600);
+            sleep(2400); //едем к пробам
 
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(300);
+            sleep(350); //проезжаем вбок к пробе
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(2600);
+            sleep(2400); //едем вперед в зону сетей
+
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(400);
+            sleep(350); //вбок
 
             leftFront.setPower(SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(SPEED);
-            sleep(2600);
+            sleep(2400); //едем вперед к пробам
+
             leftFront.setPower(-SPEED);
             leftBack.setPower(SPEED);
             rightFront.setPower(SPEED);
             rightBack.setPower(-SPEED);
-            sleep(400);
+            sleep(400); //вбок
 
             leftFront.setPower(-SPEED);
             leftBack.setPower(-SPEED);
             rightFront.setPower(-SPEED);
             rightBack.setPower(-SPEED);
-            sleep(3000);
+            sleep(2400); //едем обратно
+
             leftFront.setPower(0);
             leftBack.setPower(0);
             rightFront.setPower(0);
             rightBack.setPower(0);
-            sleep(200);
+            sleep(5000);
         }
     }
     public double getHeading(){

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
 @Autonomous (name="SimpleAuto12524", group = "Robot")
@@ -33,12 +32,7 @@ public class SimpleAuto12524 extends LinearOpMode {
             base.side(-side_speed, 10);//проезжаем боком к центральной пробе
             base.driveStraight(drive_speed, 85);//отвозим ее в зону сетей
             base.driveStraight(0,0);
-            sleep(100);
+            sleep(5000);
         }
     }
 }
-
-//base.side(-side_speed, 5);//Проезжаем вбок
-//base.driveStraight(-drive_speed, 90);//едем к пробам
-// base.side(-side_speed,15);//проезжаем вбок
-// base.driveStraight(.4,100);//едем парковаться

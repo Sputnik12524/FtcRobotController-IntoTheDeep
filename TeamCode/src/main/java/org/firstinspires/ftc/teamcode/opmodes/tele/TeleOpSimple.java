@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name="TeleOp", group="Robot")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name="TeleOp Test", group="Robot")
+
 public class TeleOpSimple extends LinearOpMode {
 
     private DriveTrain driveTrain;
-
     private boolean stateX = false;
     private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false;
