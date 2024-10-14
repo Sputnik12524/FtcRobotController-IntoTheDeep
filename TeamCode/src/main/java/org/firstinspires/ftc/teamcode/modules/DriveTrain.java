@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.modules;
 
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-public class DriveTrain12524 {
+public class DriveTrain {
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftBack;
@@ -26,7 +26,7 @@ public class DriveTrain12524 {
     private double multiplier = 1;
     private LinearOpMode aggregate;
 
-    public DriveTrain12524(LinearOpMode aggregate) {
+    public DriveTrain(LinearOpMode aggregate) {
         leftFront = aggregate.hardwareMap.get(DcMotor.class, "left_front");
         leftBack = aggregate.hardwareMap.get(DcMotor.class, "left_back");
         rightBack = aggregate.hardwareMap.get(DcMotor.class, "right_back");

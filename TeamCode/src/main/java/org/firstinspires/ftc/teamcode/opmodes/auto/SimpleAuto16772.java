@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous (name="SimpleAuto16772", group = "Robot")
-public class SimpleAuto extends LinearOpMode {
+public class SimpleAuto16772 extends LinearOpMode {
     private DcMotor leftFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightFront = null;

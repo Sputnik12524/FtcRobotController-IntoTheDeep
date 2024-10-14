@@ -1,25 +1,20 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
 @Autonomous (name="SimpleAuto12524", group = "Robot")
 public class SimpleAuto12524 extends LinearOpMode {
-    private DriveTrain12524 base;
+    private DriveTrain base;
     static final double drive_speed = .3;
     static final double turn_speed = .15;
     static final double side_speed =.15;
 
     @Override
     public void runOpMode(){
-        base = new DriveTrain12524(this);
+        base = new DriveTrain(this);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -32,13 +27,12 @@ public class SimpleAuto12524 extends LinearOpMode {
             base.turn(turn_speed, 57);//Поворачиваемся налево
 
             base.driveStraight(drive_speed, 100);//Едем вперед до зоны сетей, сбивая крайнюю пробу
-            base.side(-side_speed, 6);//Проезжаем вбок
+            base.side(-side_speed, 5.5);//Проезжаем вбок
             base.driveStraight(-drive_speed, 100);//задом едем к пробам
 
             base.side(-side_speed, 10);//проезжаем боком к центральной пробе
-            base.driveStraight(drive_speed, 90);//отвозим ее в зону сетей
-
-            base.stop();//останавливаемся
+            base.driveStraight(drive_speed, 85);//отвозим ее в зону сетей
+            base.driveStraight(0,0);
             sleep(100);
         }
     }
