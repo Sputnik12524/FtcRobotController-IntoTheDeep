@@ -11,7 +11,7 @@ public class Claw {
     private final LinearOpMode opMode;
 
     public static double CLAW_CLOSE = 0.735;
-    public static double CLAW_HALF_OPEN = 0.5;
+    public static double CLAW_HALF_OPEN = 0.6;
     public static double CLAW_OPEN = 0.5;
 
     public boolean stateOpen;
@@ -38,8 +38,10 @@ public class Claw {
     public void switchPosition() {
         if (!stateOpen) {
             clawServo.setPosition(CLAW_OPEN);
+            stateOpen = true;
         } else {
             clawServo.setPosition(CLAW_CLOSE);
+            stateOpen = false;
         }
     }
 }
