@@ -19,7 +19,7 @@ public class TeleOpSimple extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             // управление кб
-            double main = gamepad1.left_stick_y;
+            double main = -gamepad1.left_stick_y;
             double side = -gamepad1.left_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             driveTrain.setPower(main, side, rotate);
@@ -31,7 +31,7 @@ public class TeleOpSimple extends LinearOpMode {
                 driveTrain.switchSlowMode();
             }
             stateLeftBumper = gamepad1.left_bumper;
-            stateX = gamepad2.x;
+            stateX = gamepad1.x;
 
             telemetry.addData("main", main);
             telemetry.addData("side", side);
