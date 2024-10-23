@@ -49,7 +49,7 @@ public class DriveTrain {
         this.aggregate = aggregate;
     }
 
-    public void driveStraight(double DRIVE_SPEED, double Distance){
+    public void driveStraight(double DRIVE_SPEED, double distance){
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,7 +65,7 @@ public class DriveTrain {
         leftBack.setPower(DRIVE_SPEED);
         rightBack.setPower(DRIVE_SPEED);
 
-        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(Distance));
+        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance));
 
         leftFront.setPower(0);
         rightFront.setPower(0);
