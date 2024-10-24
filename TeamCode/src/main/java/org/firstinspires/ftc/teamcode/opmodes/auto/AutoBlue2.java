@@ -27,18 +27,18 @@ public class AutoBlue2 extends LinearOpMode {
         waitForStart();
 
         base.turn(turn_speed,30);
-        base.driveStraight(drive_speed,70);
+        base.driveStraight(drive_speed,75);
         base.turn(-turn_speed,25);
         //lift.setMotorPower(.2);
         //shoulder.shoulderPlus();
         //claw.open();
-        base.driveStraight(-drive_speed,10);
+        base.driveStraight(-drive_speed*0.5,10);
         //claw.close();
         //lift.setMotorPower(-.2);
-        base.turn(-turn_speed,90);
-        base.driveStraight(drive_speed,100);
-        base.side(-side_speed,10);
-        base.turn(-turn_speed, 70);
+        base.turn(-turn_speed,40);
+        base.driveStraight(drive_speed,70);
+        base.side(side_speed,5);
+        base.turn(-turn_speed, 75);
         base.driveStraight(drive_speed, 100);
         base.driveStraight(-drive_speed,5);
         //нужно донастроить оба синих автонома и отзеркалить на красные стороны (в красных неправильные значения)!
