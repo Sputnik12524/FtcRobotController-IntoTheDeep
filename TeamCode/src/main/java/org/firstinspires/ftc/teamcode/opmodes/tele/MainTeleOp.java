@@ -21,7 +21,6 @@ public class MainTeleOp extends LinearOpMode {
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.5;
 
-
     // Плечо
 
     // Клешня
@@ -41,7 +40,7 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Управление колесной базой
-            double main = gamepad1.left_stick_y + gamepad1.right_stick_y;
+            double main = -gamepad1.left_stick_y - gamepad1.right_stick_y;
             double side = -gamepad1.left_stick_x - gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
