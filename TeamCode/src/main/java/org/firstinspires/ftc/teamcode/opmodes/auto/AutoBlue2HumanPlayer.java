@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
-@Autonomous (name = "Blue 2 (far from baskets)", group = "Robot")
-public class AutoBlue2 extends LinearOpMode {
+@Autonomous (name = "Blue Human", group = "Robot")
+public class AutoBlue2HumanPlayer extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;
     private Shoulder shoulder;
@@ -41,6 +41,5 @@ public class AutoBlue2 extends LinearOpMode {
         base.turn(-turn_speed, 75);
         base.driveStraight(drive_speed, 100);
         base.driveStraight(-drive_speed,5);
-        //нужно донастроить оба синих автонома и отзеркалить на красные стороны (в красных неправильные значения)!
     }
 }
