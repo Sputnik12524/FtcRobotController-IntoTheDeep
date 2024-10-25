@@ -72,7 +72,7 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.right_bumper && !btnState) {
                 cl.switchPosition();
             }
-            btnState = gamepad2.b;
+            btnState = gamepad2.right_bumper;
 
             // Телеметрия
             telemetry.addLine("УПРАВЛЕНИЕ");
