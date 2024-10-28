@@ -10,7 +10,7 @@ public class Claw {
     private final Servo clawServo;
     private final LinearOpMode opMode;
 
-    public static double CLAW_CLOSE = 0.735;
+    public static double CLAW_CLOSE = 0.740;
     public static double CLAW_HALF_OPEN = 0.6;
     public static double CLAW_OPEN = 0.5;
 

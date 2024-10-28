@@ -19,7 +19,7 @@ public class MainTeleOp extends LinearOpMode {
     private boolean stateRightBumper = false;
 
     // Подъемник
-    public static double LIFT_POWER_COEFFICIENT = 0.5;
+    public static double LIFT_POWER_COEFFICIENT = 0.7;
 
     // Плечо
 
@@ -38,6 +38,8 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeInInit()) {   }
         waitForStart();
         while (opModeIsActive()) {
+            telemetry.addData("shoulder", sl.getPosition());
+            telemetry.update();
 
             // Управление колесной базой
             double main = -gamepad1.left_stick_y - gamepad1.right_stick_y;
@@ -55,7 +57,7 @@ public class MainTeleOp extends LinearOpMode {
             stateX = gamepad2.x;
 
             // Управление подъемником
-            double speed = gamepad2.right_stick_y;
+            double speed = -gamepad2.right_stick_y;
             lt.setMotorPower(speed * LIFT_POWER_COEFFICIENT);
 
             // Управление плечом
@@ -66,6 +68,17 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.dpad_down) {
                 sl.shoulderMinus();
                 sleep(5);
+            }
+
+            if(gamepad2.x){
+                sl.shoulderPosition(.555);
+               /* if (sl.getPosition() == 0 || sl.getPosition() == 1) {
+                    sl.shoulderPosition(.555);
+                } else {
+                    sl.shoulderPosition(1);
+                }*/
+            } else if (gamepad2.y) {
+                sl.shoulderPosition(1);
             }
 
             // Управление клешней

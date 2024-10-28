@@ -14,6 +14,6 @@ public class Lift {
     }
 
     public void setMotorPower (double speed) {
-        liftMotor.setPower(speed * 0.5);
+        liftMotor.setPower(speed);
     }
 }
