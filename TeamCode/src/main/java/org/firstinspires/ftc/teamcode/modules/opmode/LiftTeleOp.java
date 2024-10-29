@@ -12,10 +12,16 @@ public class LiftTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
+        lift.getPIDFCoefficients();
         waitForStart();
 
         while (opModeIsActive()) {
+            boolean stateB = gamepad2.b;
+
             double speed = gamepad2.right_stick_y;
+            if (!stateB && gamepad2.b) {
+                lift.resetZero();
+            }
 
             lift.setMotorPower(speed);
         }
