@@ -16,6 +16,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Lift {
     private final DcMotorEx liftMotor;
     private final double LOW_POSITION = 0;
+    private final double COIL_DIAMETER = 21;
+    private final double PI = Math.PI;
+    private final double PULSES = 700;
     public static double HIGH_POSITION = 0;
     public static double P_COEF = 0;
     public static double I_COEF = 0;
