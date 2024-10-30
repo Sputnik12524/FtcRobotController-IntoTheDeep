@@ -14,7 +14,7 @@ public class Shoulder {
     public static double SHOULDER_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double INITIAL_POSITION = 0;
+    public static double INITIAL_POSITION = 0.1678;
 
 
 
