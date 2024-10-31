@@ -18,11 +18,14 @@ public class LiftTeleOp extends LinearOpMode {
             boolean stateB = gamepad2.b;
 
             //double speed = gamepad2.right_stick_y;
-            if (!stateB && gamepad2.b) {
+            if (gamepad2.b) {
                 lift.resetZero();
             }
 
             lift.setMotorPower(gamepad2.right_stick_y);
+
+            telemetry.addData("encoder: ", lift.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
