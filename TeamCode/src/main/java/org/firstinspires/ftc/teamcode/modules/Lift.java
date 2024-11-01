@@ -23,7 +23,8 @@ public class Lift {
         liftMotor.setPower(speed * 0.5);
     }
     public void motorUp (double speed) {
-        liftMotor.setPower(speed);
+        liftMotor.setPower(speed*0.5);
         aggregate.sleep(500);
+        liftMotor.setPower(0);
     }
 }
