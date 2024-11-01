@@ -41,4 +41,7 @@ public class Shoulder {
     public double getPosition() {
         return servoShoulder.getPosition();
     }
+    public void shoulderPosition(double position) {
+        servoShoulder.setPosition(position);
+    }
 }

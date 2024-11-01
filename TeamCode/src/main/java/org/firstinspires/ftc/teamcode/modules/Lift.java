@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Config
@@ -17,6 +18,10 @@ public class Lift {
     public final DcMotorEx liftMotor;
     private final double LOW_POSITION = 0;
     private final double HIGH_POSITION = 2400;
+
+    private ElapsedTime timer;
+
+    private LinearOpMode aggregate;
     // public static double P_COEF = 500;
     // public static double I_COEF = 10;
     //public static double D_COEF = 500;
@@ -31,6 +36,9 @@ public class Lift {
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
         // liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
+        this.timer = new ElapsedTime();
+        timer.reset();
+        this.aggregate = opMode;
     }
 
     public void setMotorPower (double speed) {
@@ -47,6 +55,7 @@ public class Lift {
         // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
         // dashboardTelemetry.update();
     }
+
     public double getCurrentPosition() {
         double num = liftMotor.getCurrentPosition();
         return num;
@@ -61,7 +70,9 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-
-
-
+    public void motorUp (double speed) {
+        liftMotor.setPower(speed*0.5);
+        aggregate.sleep(500);
+        liftMotor.setPower(0);
+    }
 }
