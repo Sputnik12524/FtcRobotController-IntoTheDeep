@@ -20,11 +20,13 @@ public class MainTeleOp extends LinearOpMode {
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
+    boolean bState;
 
     // Плечо
 
     // Клешня
     boolean btnState;
+
 
 
     @Override
@@ -38,8 +40,9 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeInInit()) {   }
         waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("shoulder", sl.getPosition());
-            telemetry.update();
+
+
+
 
             // Управление колесной базой
             double main = -gamepad1.left_stick_y - gamepad1.right_stick_y;
@@ -57,8 +60,13 @@ public class MainTeleOp extends LinearOpMode {
             stateX = gamepad2.x;
 
             // Управление подъемником
-            double speed = -gamepad2.right_stick_y;
+            double speed = gamepad2.right_stick_y;
             lt.setMotorPower(speed * LIFT_POWER_COEFFICIENT);
+
+            if (gamepad2.b && !btnState) {
+                lt.resetZero();
+            }
+
 
             // Управление плечом
             if (gamepad2.dpad_up) {
@@ -86,6 +94,7 @@ public class MainTeleOp extends LinearOpMode {
                 cl.switchPosition();
             }
             btnState = gamepad2.right_bumper;
+            bState = gamepad2.b;
 
             // Телеметрия
             telemetry.addLine("УПРАВЛЕНИЕ");
@@ -98,6 +107,10 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine("Правый стик - Подъемник");
             telemetry.addLine("Крестовина вверх/вниз - Плечо");
             telemetry.addLine("Правый бампер - Смена позиции клешни");
+            telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
+            telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
+            telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
+            telemetry.addData("shoulder", sl.getPosition());
             telemetry.update();
 
         }
