@@ -15,8 +15,10 @@ public class MainTeleOp extends LinearOpMode {
 
     // КБ
     private boolean stateX = false;
-    private boolean stateLeftBumper = false;
+
     private boolean stateRightBumper = false;
+
+
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
@@ -25,7 +27,7 @@ public class MainTeleOp extends LinearOpMode {
     // Плечо
 
     // Клешня
-    boolean btnState;
+    private boolean stateLeftBumper = false;
 
 
 
@@ -35,7 +37,10 @@ public class MainTeleOp extends LinearOpMode {
         Lift lt = new Lift(this);
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
+        cl.close();
 
+        sl.shoulderPosition(1);
+        lt.resetZero();
 
         while (opModeInInit()) {   }
         waitForStart();
@@ -45,8 +50,8 @@ public class MainTeleOp extends LinearOpMode {
 
 
             // Управление колесной базой
-            double main = -gamepad1.left_stick_y - gamepad1.right_stick_y;
-            double side = -gamepad1.left_stick_x - gamepad1.right_stick_x;
+            double main = -gamepad1.left_stick_y;
+            double side = -gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
 
@@ -60,12 +65,15 @@ public class MainTeleOp extends LinearOpMode {
             stateX = gamepad2.x;
 
             // Управление подъемником
-            double speed = gamepad2.right_stick_y;
+            double speed = -gamepad2.right_stick_y;
             lt.setMotorPower(speed * LIFT_POWER_COEFFICIENT);
 
-            if (gamepad2.b && !btnState) {
-                lt.resetZero();
+            if (gamepad2.left_bumper && !stateLeftBumper) {
+                lt.unlockLift();
             }
+           // if (gamepad2.b && !btnState) {
+            //    lt.resetZero();
+            //}
 
 
             // Управление плечом
@@ -78,22 +86,25 @@ public class MainTeleOp extends LinearOpMode {
                 sleep(5);
             }
 
-            if(gamepad2.x){
-                sl.shoulderPosition(.555);
+            if(gamepad2.y){
+                sl.shoulderPosition(.59); //highest
                /* if (sl.getPosition() == 0 || sl.getPosition() == 1) {
                     sl.shoulderPosition(.555);
                 } else {
                     sl.shoulderPosition(1);
                 }*/
-            } else if (gamepad2.y) {
-                sl.shoulderPosition(1);
+            } else if (gamepad2.x) {
+                sl.shoulderPosition(.4); //level 1 and specimen
+            } else if(gamepad2.a){
+                sl.shoulderPosition(.1289); //lowest
             }
 
             // Управление клешней
-            if (gamepad2.right_bumper && !btnState) {
+            if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPosition();
             }
-            btnState = gamepad2.right_bumper;
+            stateLeftBumper = gamepad2.left_bumper;
+            stateRightBumper = gamepad2.right_bumper;
             bState = gamepad2.b;
 
             // Телеметрия

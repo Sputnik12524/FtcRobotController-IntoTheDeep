@@ -27,7 +27,6 @@ public class AutoRed1Baskets extends LinearOpMode {
 
         waitForStart();
 
-        base.turn(-turn_speed,35);
         base.driveStraight(-drive_speed,74);
         base.turn(turn_speed,20);
         base.driveStraight(-.25,5);

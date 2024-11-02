@@ -44,4 +44,7 @@ public class Claw {
             stateOpen = false;
         }
     }
+    public void setPosition(double position) {
+        clawServo.setPosition(position);
+    }
 }

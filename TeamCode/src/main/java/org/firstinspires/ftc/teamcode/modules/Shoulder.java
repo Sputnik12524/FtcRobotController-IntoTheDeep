@@ -14,14 +14,14 @@ public class Shoulder {
     public static double SHOULDER_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double INITIAL_POSITION = 0.1678;
+    public static double INITIAL_POSITION = 1; //pon
 
 
 
 
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
-        servoShoulder.setPosition(INITIAL_POSITION);
+      //  servoShoulder.setPosition(INITIAL_POSITION);
 
     }
 

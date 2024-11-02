@@ -17,9 +17,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Lift {
     public final DcMotorEx liftMotor;
     private final double LOW_POSITION = 0;
-    private final double HIGH_POSITION = 2400;
-
-    private ElapsedTime timer;
+    private final double HIGH_POSITION = 2700;
+    private boolean unlockStatement = false;
 
     private LinearOpMode aggregate;
     // public static double P_COEF = 500;
@@ -36,19 +35,22 @@ public class Lift {
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
         // liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
-        this.timer = new ElapsedTime();
-        timer.reset();
         this.aggregate = opMode;
     }
 
     public void setMotorPower (double speed) {
-        if (liftMotor.getCurrentPosition() < LOW_POSITION && speed < 0) {
-            liftMotor.setPower(0);
-        } else if (Math.abs(liftMotor.getCurrentPosition()) > HIGH_POSITION && speed > 0) {
-            liftMotor.setPower(0);
+        if (!unlockStatement) {
+            if (liftMotor.getCurrentPosition() < LOW_POSITION && speed < 0) {
+                liftMotor.setPower(0);
+            } else if (Math.abs(liftMotor.getCurrentPosition()) > HIGH_POSITION && speed > 0) {
+                liftMotor.setPower(0);
+            } else {
+                liftMotor.setPower(speed);
+            }
         } else {
             liftMotor.setPower(speed);
         }
+
 
         // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
         // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
@@ -70,9 +72,28 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    public void unlockLift() {
+        unlockStatement = !unlockStatement;
+        if (unlockStatement) {
+            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
     public void motorUp (double speed) {
-        liftMotor.setPower(speed*0.5);
-        aggregate.sleep(500);
+        while(liftMotor.getCurrentPosition() < 2700) {
+            liftMotor.setPower(speed);
+        }
         liftMotor.setPower(0);
+    }
+    public void motorDown(double speed) {
+        while(liftMotor.getCurrentPosition() > 0) {
+            liftMotor.setPower(speed);
+        }
+        liftMotor.setPower(0);
+    }
+    public void motorMove(double speed) {
+        liftMotor.setPower(speed);
+        aggregate.sleep(500);
     }
 }
