@@ -106,6 +106,8 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine("2-й геймпад:");
             telemetry.addLine("Правый стик - Подъемник");
             telemetry.addLine("Крестовина вверх/вниз - Плечо");
+            telemetry.addLine("X - Плечо вверх");
+            telemetry.addLine("Y - Плечо вниз");
             telemetry.addLine("Правый бампер - Смена позиции клешни");
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
