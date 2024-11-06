@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
-@Autonomous (name = "Red Basket", group = "Robot")
-public class AutoRed1Baskets extends LinearOpMode {
+@Autonomous (name = "Blue Baskets", group = "Robot")
+public class AutoBlue1Baskets extends LinearOpMode {
     private DriveTrain base;
     private Lift lift;
     private Shoulder shoulder;
@@ -38,7 +38,7 @@ public class AutoRed1Baskets extends LinearOpMode {
         base.driveStraight(-drive_speed*0.5,10);
         claw.close();
         lift.motorUp(-.7);
-        base.turn(-turn_speed,40);
+        base.turn(-turn_speed,35);
         base.driveStraight(drive_speed,65);
         base.side(-side_speed,5);
         base.turn(turn_speed, 65);

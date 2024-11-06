@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
-@Autonomous (name = "TEST LIFT", group = "Robot")
+@Autonomous (name = "AUTO SPECIMEN SCORING", group = "Robot")
 public class AutoTest extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;
@@ -25,15 +25,23 @@ public class AutoTest extends LinearOpMode {
         claw = new Claw(this);
         lift = new Lift(this);
         shoulder = new Shoulder(this);
-
+        shoulder.shoulderPosition(.7);
+        claw.setPosition(.76);
+        lift.resetZero();
         waitForStart();
-
-        lift.motorUp(.5);
-        sleep(1000);
-        shoulder.shoulderPosition(.555);
-        sleep(500);
-        claw.open();
-        lift.motorUp(-.5);
-        base.driveStraight(-drive_speed*0.5,10);
+        while(opModeIsActive()) {
+            lift.motorUp(.5);
+            sleep(1000);
+            shoulder.shoulderPosition(.48);
+            sleep(500);
+            base.driveStraight(-.25, 57);
+            sleep(1000);
+            lift.motorMove(-0.15);
+            claw.open();
+            base.driveStraight(drive_speed * 0.5, 30);
+            base.turn(.15, 60);
+            base.driveStraight(.2, 75);
+            //lift.motorDown(-.5);
+        }
     }
 }
