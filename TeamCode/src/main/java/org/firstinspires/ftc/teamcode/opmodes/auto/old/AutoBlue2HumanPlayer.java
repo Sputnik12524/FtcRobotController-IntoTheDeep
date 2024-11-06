@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
-@Autonomous (name = "Red Human", group = "Robot")
-public class AutoRed2HumanPl extends LinearOpMode {
+@Autonomous (name = "Blue Human", group = "Robot")
+public class AutoBlue2HumanPlayer extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;
     private Shoulder shoulder;
@@ -40,8 +40,10 @@ public class AutoRed2HumanPl extends LinearOpMode {
         base.turn(turn_speed,40);
         base.driveStraight(drive_speed,70);
         base.side(side_speed,5);
-        base.turn(-turn_speed, 73);
+        base.turn(-turn_speed, 75);
         base.driveStraight(drive_speed, 100);
         base.driveStraight(-drive_speed,5);
+
+        //lift и shoulder - в них внесены изменения с этого ноутбука
     }
 }
