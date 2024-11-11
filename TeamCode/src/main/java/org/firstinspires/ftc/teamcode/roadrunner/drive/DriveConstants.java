@@ -32,6 +32,12 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
+
+
+    //straight test настроен, но измеренное расстояние и finalX различны в пределах 1 дюйма
+    //значения при проездах робота также различны в пределах 1-3%
+    //strafe test не настроен, потому что наш робот криво ездит вбок
+    // turn test работает
     public static final boolean RUN_USING_ENCODER = true;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
@@ -45,7 +51,10 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.968504; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
+    public static double GEAR_RATIO = 32.04724/29.6563*1; // output (wheel) speed / input (motor) speed
+    //31.3049 reported
+    //31,29921 measured
+
     public static double TRACK_WIDTH = 13.661417; // in
 
     /*
@@ -54,9 +63,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(MAX_RPM); //kV = 0.0175
-    public static double kA = 0;
-    public static double kStatic = 0;
+    public static double kV = 0.017;//1.0 / rpmToVelocity(MAX_RPM); //kV = 0.0175
+    public static double kA = 0.002;
+    public static double kStatic = 0.0025;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
