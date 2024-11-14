@@ -34,5 +34,6 @@ public class SplineTest extends LinearOpMode {
                         .splineTo(new Vector2d(0, 0), Math.toRadians(180))
                         .build()
         );
+        sleep(3000);
     }
 }
