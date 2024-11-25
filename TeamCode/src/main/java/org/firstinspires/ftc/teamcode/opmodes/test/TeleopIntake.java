@@ -38,9 +38,19 @@ public class TeleopIntake extends LinearOpMode {
                 in.flipPosition(FLIP_OUTTAKE);
             }
 
+            //выдвижение
+            if (gamepad1.dpad_up) {
+                in.extensionPlus();
+            }
+            if (gamepad1.dpad_down) {
+                in.extensionMinus();
+            }
 
 
-
+            telemetry.addData("Позиция сервомотора переворота: ", in.getFlipPosition());
+            telemetry.addData("Позиция сервомотора выдвижения: ", in.getExtensionPosition());
+            telemetry.addLine("");
+            telemetry.update();
 
 
 
