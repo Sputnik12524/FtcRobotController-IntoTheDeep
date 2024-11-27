@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.roadrunner.opmodes12524.TeleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,12 +9,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.roadrunner.modules12524.DriveTrainMecanum;
 
 @TeleOp(name="TeleOp Road Runner")
+@Config
 public class TeleOpRR extends LinearOpMode {
-
 
     private double straight;
     private double side;
     private double rotate;
+    public static double K1 = 100;
+    public static double K2 = 1;
+    public static double K3 = 1/K1;
+    private double w_target;
+    private double w_real;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,8 +27,6 @@ public class TeleOpRR extends LinearOpMode {
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
-
-
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
 
         //straight = gamepad1.left_stick_y * DriveTrainMecanum.multiplier;
@@ -33,11 +37,15 @@ public class TeleOpRR extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive() && !isStopRequested()) {
+            w_target = K1 * (gamepad1.left_trigger - gamepad1.right_trigger);
+            w_real = driveTrain.getExternalHeadingVelocity();
+            rotate = K3 * (w_target - w_real * K2);
+
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
-                            gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
+                            -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
                             gamepad1.right_stick_x * DriveTrainMecanum.multiplier,
-                            (gamepad1.left_trigger - gamepad1.right_trigger) * DriveTrainMecanum.multiplier
+                            rotate * DriveTrainMecanum.multiplier
                     )
             );
 
@@ -59,6 +67,6 @@ public class TeleOpRR extends LinearOpMode {
     }
 }
 
- class PoseStorage {
+class PoseStorage {
     public static Pose2d currentPose = new Pose2d();
 }
