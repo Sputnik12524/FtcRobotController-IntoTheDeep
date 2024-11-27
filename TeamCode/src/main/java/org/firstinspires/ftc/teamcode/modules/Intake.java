@@ -58,6 +58,15 @@ public class Intake {
             extensionServoRight.setPosition(extensionServoRight.getPosition()+EXTENSION_STEP);
         }
     }
+
+    public void extUpdatePosition(double k) {
+        if ((extensionServoRight.getPosition() < EXTENSION_MAX && k>0)
+                || (extensionServoRight.getPosition() > EXTENSION_MIN && k<0)) {
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+(EXTENSION_STEP * k));
+            extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k));
+        }
+    }
+
     public void extensionMinus() {
         if (extensionServoRight.getPosition() > EXTENSION_MIN) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition()-EXTENSION_STEP);
@@ -73,9 +82,13 @@ public class Intake {
     public double getFlipPosition() {
         return flipServoRight.getPosition();
     }
-    public double getExtensionPosition() {
+    public double getExtensionPositionR() {
         return extensionServoRight.getPosition();
     }
+    public double getExtensionPositionL() {
+        return extensionServoLeft.getPosition();
+    }
+
 
 
 }
