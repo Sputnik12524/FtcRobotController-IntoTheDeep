@@ -44,7 +44,7 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     private LinearOpMode aggregate;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(11, 0, 0); //kP = 11 (tuned)
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0); //kP = 4
 
     public static double LATERAL_MULTIPLIER = 1;
 

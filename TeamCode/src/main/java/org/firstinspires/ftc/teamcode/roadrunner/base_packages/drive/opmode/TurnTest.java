@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.SampleMecan
  * This is a simple routine to test turning capabilities.
  */
 @Config
-@Autonomous(group = "drive")
+@Autonomous(name = "TEST TURN", group = "drive")
 public class TurnTest extends LinearOpMode {
     public static double ANGLE = 90; // deg
 

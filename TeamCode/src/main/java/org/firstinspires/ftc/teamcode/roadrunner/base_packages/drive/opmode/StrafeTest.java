@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.SampleMecan
  * This is a simple routine to test translational drive capabilities.
  */
 @Config
-@Autonomous(group = "drive")
+@Autonomous(name = "TEST STRAFE", group = "drive")
 public class StrafeTest extends LinearOpMode {
     public static double DISTANCE = 20; // in
 

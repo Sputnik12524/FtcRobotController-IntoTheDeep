@@ -44,7 +44,7 @@ import java.util.Objects;
  */
 @Config
 
-@Autonomous(group = "drive")
+@Autonomous(name = "TEST Feedforward Manual", group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 

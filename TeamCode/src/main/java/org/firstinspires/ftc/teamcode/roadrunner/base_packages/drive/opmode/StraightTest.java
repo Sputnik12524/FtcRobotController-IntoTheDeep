@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.SampleMecan
  */
 @Config
 
-@Autonomous(group = "drive")
+@Autonomous(name = "TEST STRAIGHT", group = "drive")
 public class StraightTest extends LinearOpMode {
     public static double DISTANCE = 30; // in
 

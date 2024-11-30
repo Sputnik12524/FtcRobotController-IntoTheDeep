@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
-import org.firstinspires.ftc.teamcode.modules.Lift;
+import org.firstinspires.ftc.teamcode.roadrunner.modules12524.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
 @Autonomous (name = "AUTO SPECIMEN SCORING", group = "Robot")
@@ -29,13 +29,13 @@ public class AutoTest extends LinearOpMode {
         lift.resetZero();
         waitForStart();
         while(opModeIsActive()) {
-            lift.motorUp(.5);
+            //lift.motorUp(.5);
             sleep(1000);
             shoulder.shoulderPosition(.48);
             sleep(500);
             base.driveStraight(-.25, 57);
             sleep(1000);
-            lift.motorMove(-0.15);
+            //lift.motorMove(-0.15);
             claw.open();
             base.driveStraight(drive_speed * 0.5, 30);
             base.turn(.15, 60);
