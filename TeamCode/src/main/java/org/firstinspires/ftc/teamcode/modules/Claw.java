@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Claw {
 
     private final Servo clawServo;
+    private final Servo specimenClaw;
     private final LinearOpMode opMode;
 
     public static double CLAW_CLOSE = 0.740;
@@ -15,12 +16,13 @@ public class Claw {
     public static double CLAW_OPEN = 0.5;
 
     public boolean stateOpen;
+    public boolean stateOpenS;
 
 
     public Claw(LinearOpMode opMode) {
         this.opMode = opMode;
         clawServo = opMode.hardwareMap.servo.get("ClawServo");
-
+        specimenClaw = opMode.hardwareMap.servo.get("SpecimenClaw");
     }
 
     public void close() {
@@ -31,10 +33,26 @@ public class Claw {
     public void halfOpen() {
         clawServo.setPosition(CLAW_HALF_OPEN);
     }
+
     public void open() {
         clawServo.setPosition(CLAW_OPEN);
         stateOpen = true;
     }
+
+    public void switchPositionS(){
+        if(!stateOpenS) {
+            specimenClaw.setPosition(CLAW_OPEN);
+            stateOpenS = true;
+        } else {
+            clawServo.setPosition(CLAW_CLOSE);
+            stateOpenS = false;
+        }
+    }
+
+    public void setPosition(double value) {
+        clawServo.setPosition(value);
+    }
+
     public void switchPosition() {
         if (!stateOpen) {
             clawServo.setPosition(CLAW_OPEN);
@@ -43,8 +61,5 @@ public class Claw {
             clawServo.setPosition(CLAW_CLOSE);
             stateOpen = false;
         }
+        }
     }
-    public void setPosition(double position) {
-        clawServo.setPosition(position);
-    }
-}

@@ -23,8 +23,8 @@ public class Lift {
     //private final double HIGH_POSITION = -50;
     public static double P_COEF = 200;
     public static double I_COEF = 1;
-    public static double D_COEF = 1;
-    public static double F_COEF = 1;
+    public static double D_COEF = 20;
+    public static double F_COEF = 100;
     public static double VELOCITY_COEF = 1;
 
 
@@ -46,7 +46,11 @@ public class Lift {
 //        } else {
 //            liftMotor.setVelocity(VELOCITY_COEF * speed);
 //        }
-        liftMotor.setVelocity(VELOCITY_COEF * speed);
+        if (speed <= 0.01) {
+            liftMotor.setPower(0.01);
+        } else {
+            liftMotor.setPower(speed);
+        }
     }
 
     public double getCurrentPosition() {

@@ -25,7 +25,7 @@ public class AutoTest extends LinearOpMode {
         lift = new Lift(this);
         shoulder = new Shoulder(this);
         shoulder.shoulderPosition(.7);
-        claw.setPosition(.76);
+        claw.setPosition(.76); //claw.Position(.76);
         lift.resetZero();
         waitForStart();
         while(opModeIsActive()) {
