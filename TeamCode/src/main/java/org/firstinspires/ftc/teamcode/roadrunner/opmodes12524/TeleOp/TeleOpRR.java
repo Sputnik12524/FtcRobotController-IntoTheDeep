@@ -69,9 +69,9 @@ public class TeleOpRR extends LinearOpMode {
                 lift.resetZero();
             }
 
-            if (gamepad2.y && !stateY) {
-                lift.updatePIDF();
-            }
+//            if (gamepad2.y && !stateY) {
+//                lift.updatePIDF();
+//            }
 
             // Read pose
             Pose2d poseEstimate = driveTrain.getPoseEstimate();

@@ -39,7 +39,6 @@ public class MainTeleOp extends LinearOpMode {
         Claw cl = new Claw(this);
         cl.close();
 
-        sl.shoulderPosition(1);
         lt.resetZero();
 
         while (opModeInInit()) {   }

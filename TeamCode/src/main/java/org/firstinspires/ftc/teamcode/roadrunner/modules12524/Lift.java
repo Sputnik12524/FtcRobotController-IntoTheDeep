@@ -33,8 +33,8 @@ public class Lift {
         this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
-        liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
+        // PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
+        // liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
     }
 
     public void setMotorPower (double speed) {
@@ -46,8 +46,8 @@ public class Lift {
 //        } else {
 //            liftMotor.setVelocity(VELOCITY_COEF * speed);
 //        }
-        if (speed <= 0.01) {
-            liftMotor.setPower(0.01);
+        if (Math.abs(speed) < 0.01) {
+//            liftMotor.setPower(0.01);
         } else {
             liftMotor.setPower(speed);
         }
@@ -63,8 +63,8 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void updatePIDF() {
-        PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
-        liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
-    }
+//    public void updatePIDF() {
+//        PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
+//        liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
+//    }
 }
