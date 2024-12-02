@@ -18,9 +18,10 @@ public class Intake {
 
 
     public static double EXTENSION_MAX = 1;
-    public static double EXTENSION_MIN = 0;
+    public static double EXTENSION_MIN = 0.64;
     public static double EXTENSION_STEP = 0.005;
-    public static double  FLIP_INTAKE = 0.5;
+    public static double EXT_K = 0.6;
+    public static double  FLIP_INTAKE = 0.75;
     public static double  FLIP_OUTTAKE = 0;
 
     public static double SPEED_BRUSH = 1;
@@ -62,8 +63,8 @@ public class Intake {
     public void extUpdatePosition(double k) {
         if ((extensionServoRight.getPosition() < EXTENSION_MAX && k>0)
                 || (extensionServoRight.getPosition() > EXTENSION_MIN && k<0)) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+(EXTENSION_STEP * k));
-            extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k));
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+(EXTENSION_STEP * k * EXT_K));
+            extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k * EXT_K));
         }
     }
 
@@ -79,9 +80,8 @@ public class Intake {
         brushServoRight.setPower(0);
     }
 
-    public double getFlipPosition() {
-        return flipServoRight.getPosition();
-    }
+    public double getFlipPositionR() { return flipServoRight.getPosition(); }
+    public double getFlipPositionL() { return flipServoLeft.getPosition(); }
     public double getExtensionPositionR() {
         return extensionServoRight.getPosition();
     }
