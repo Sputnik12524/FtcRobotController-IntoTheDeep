@@ -48,10 +48,15 @@ public class TeleopIntake extends LinearOpMode {
                 in.extensionMinus();
             } */
 
-            telemetry.addData("Позиция сервомотора переворота: ", in.getFlipPosition());
+            telemetry.addData("Позиция сервомотора переворота (RIGHT): ", in.getFlipPositionR());
+            telemetry.addData("Позиция сервомотора переворота (LEFT): ", in.getFlipPositionL());
             telemetry.addData("Позиция сервомотора выдвижения (RIGHT): ", in.getExtensionPositionR());
             telemetry.addData("Позиция сервомотора выдвижения (LEFT): ", in.getExtensionPositionL());
-            telemetry.addLine("");
+            telemetry.addLine("Управление:");
+            telemetry.addLine("Щетка - принятие(A), выброс(B)");
+            telemetry.addLine("Переворот - принятие(Y), отдатие(X)");
+            telemetry.addLine("Выдвижение - Правый стик вверх/вниз                                              ");
+
             telemetry.update();
 
 
