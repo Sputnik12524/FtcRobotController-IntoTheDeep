@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
-@Autonomous(name = "Auto Far Park", group = "Robot")
+@Autonomous(name = "Auto Near Park", group = "Robot")
 @Config
-public class AutoFar extends LinearOpMode {
+public class AutoNearPark extends LinearOpMode {
     private DriveTrain driveTrain;
     //private DriveTrainMecanum drivetrain;
-    //public static double DISTANCE = 120;
+    //public static double DISTANCE = 70;
     @Override
     public void runOpMode() throws InterruptedException {
         driveTrain = new DriveTrain(this);
@@ -21,7 +21,9 @@ public class AutoFar extends LinearOpMode {
                 .build();
          */
         waitForStart();
-        driveTrain.driveStraight(.25,120);
+        while (opModeIsActive()) {
+            driveTrain.driveStraight(.25, 70);
+        }
         //drivetrain.followTrajectory(trajectory);
     }
 }
