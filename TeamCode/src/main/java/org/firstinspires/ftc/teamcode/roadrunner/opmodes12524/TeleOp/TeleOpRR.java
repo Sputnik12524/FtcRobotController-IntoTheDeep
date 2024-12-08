@@ -18,9 +18,8 @@ public class TeleOpRR extends LinearOpMode {
     private double straight;
     private double side;
     private double rotate;
-    public static double K1 = 100;
-    public static double K2 = 1;
-    public static double K3 = 1/K1;
+    public static double VELO_SCALE_COEF = 0.00225;
+    public static double CORRECTION_COEF = 7;
     private double w_target;
     private double w_real;
 
@@ -47,9 +46,12 @@ public class TeleOpRR extends LinearOpMode {
             double speed = gamepad2.right_stick_y;
 
             lift.setMotorPower(gamepad2.right_stick_y);
-            w_target = K1 * (gamepad1.left_trigger - gamepad1.right_trigger);
+            w_target = gamepad1.left_trigger - gamepad1.right_trigger;
             w_real = driveTrain.getExternalHeadingVelocity();
-            rotate = K3 * (w_target - w_real * K2);
+            if (Math.abs(w_real) < 1) {
+                w_real = 0;
+            }
+            rotate = CORRECTION_COEF * (w_target - w_real * VELO_SCALE_COEF) + w_target;
 
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
@@ -69,6 +71,10 @@ public class TeleOpRR extends LinearOpMode {
                 lift.resetZero();
             }
 
+            if(gamepad1.x) {
+                driveTrain.resetIMU();
+            }
+
 //            if (gamepad2.y && !stateY) {
 //                lift.updatePIDF();
 //            }
@@ -77,6 +83,12 @@ public class TeleOpRR extends LinearOpMode {
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
             // Print pose to telemetry
+            //telemetry.addData("W x:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
+            //telemetry.addData("W y:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate);
+            //telemetry.addData("W z", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).zRotationRate);
+            telemetry.addData("W real", w_real);
+            telemetry.addData("W target", w_target);
+            telemetry.addData("Rotate", rotate);
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());

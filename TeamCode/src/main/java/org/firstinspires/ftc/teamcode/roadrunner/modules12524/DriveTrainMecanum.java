@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.roadrunner.modules12524;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
@@ -23,6 +24,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -37,7 +39,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.util.LynxMo
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@Config
 public class DriveTrainMecanum extends MecanumDrive {
 
     public static double multiplier = 1;
@@ -68,6 +70,9 @@ public class DriveTrainMecanum extends MecanumDrive {
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
+    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+            DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+
 
     public DriveTrainMecanum(HardwareMap hardwareMap, LinearOpMode aggregate) {
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -85,8 +90,7 @@ public class DriveTrainMecanum extends MecanumDrive {
 
 
         imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+
         imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "left_front");
@@ -285,12 +289,12 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate;
+        return (double) imu.getRobotAngularVelocity(AngleUnit.DEGREES).zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
@@ -309,6 +313,9 @@ public class DriveTrainMecanum extends MecanumDrive {
         } else {
             multiplier *= 2;
         }
+    }
+    public void resetIMU(){
+        imu.initialize(parameters);
     }
 }
 
