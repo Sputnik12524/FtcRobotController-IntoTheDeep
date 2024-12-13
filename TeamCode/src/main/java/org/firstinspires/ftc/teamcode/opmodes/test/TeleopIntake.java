@@ -55,7 +55,7 @@ public class TeleopIntake extends LinearOpMode {
             telemetry.addLine("Управление:");
             telemetry.addLine("Щетка - принятие(A), выброс(B)");
             telemetry.addLine("Переворот - принятие(Y), отдатие(X)");
-            telemetry.addLine("Выдвижение - Правый стик вверх/вниз                                              ");
+            telemetry.addLine("Выдвижение - Правый стик вверх/вниз");
 
             telemetry.update();
 
