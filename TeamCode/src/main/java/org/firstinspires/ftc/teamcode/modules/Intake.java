@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class Intake {
 
-    private final CRServo brushServoLeft;
-    private final CRServo  brushServoRight;
+    //private final CRServo brushServoLeft;
+    //private final CRServo  brushServoRight;
+
+    private final CRServo  brushServo;
     private final Servo flipServoLeft;
     private final Servo flipServoRight;
     private final Servo extensionServoLeft;
@@ -33,21 +35,24 @@ public class Intake {
         this.flipServoRight = opMode.hardwareMap.servo.get("flipServoR");
         this.extensionServoLeft = opMode.hardwareMap.servo.get("extServoL");
         this.extensionServoRight = opMode.hardwareMap.servo.get("extServoR");
-        this.brushServoLeft = opMode.hardwareMap.crservo.get("brushServoL");
+        //this.brushServoLeft = opMode.hardwareMap.crservo.get("brushServoL");
+        //this.brushServoRight = opMode.hardwareMap.crservo.get("brushServoR");
+        this.brushServo = opMode.hardwareMap.crservo.get("brushServo");
 
-        this.brushServoRight = opMode.hardwareMap.crservo.get("brushServoR");
-        this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
+        //this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
         this.extensionServoLeft.setDirection(Servo.Direction.REVERSE);
 
     }
     public void brushIntake() {
-        brushServoLeft.setPower(SPEED_BRUSH);
-        brushServoRight.setPower(SPEED_BRUSH);
+        //brushServoLeft.setPower(SPEED_BRUSH);
+        //brushServoRight.setPower(SPEED_BRUSH);
+        brushServo.setPower(SPEED_BRUSH);
     }
     public void brushOuttake() {
-        brushServoLeft.setPower(-SPEED_BRUSH);
-        brushServoRight.setPower(-SPEED_BRUSH);
+        //brushServoLeft.setPower(-SPEED_BRUSH);
+        //brushServoRight.setPower(-SPEED_BRUSH);
+        brushServo.setPower(-SPEED_BRUSH);
     }
     public void flipPosition(double position) {
         flipServoLeft.setPosition(position);
@@ -76,8 +81,9 @@ public class Intake {
     }
 
     public void brushStop() {
-        brushServoLeft.setPower(0);
-        brushServoRight.setPower(0);
+       // brushServoLeft.setPower(0);
+       // brushServoRight.setPower(0);
+        brushServo.setPower(0);
     }
 
     public double getFlipPositionR() { return flipServoRight.getPosition(); }
