@@ -22,9 +22,16 @@ public class LiftTeleOp extends LinearOpMode {
                 lift.resetZero();
             }
 
-            lift.setMotorPower(gamepad2.right_stick_y);
+            if (gamepad2.a) {
+                lift.unlockLift();
+            }
 
-            telemetry.addData("encoder: ", lift.getCurrentPosition());
+            lift.setLiftMotorPower(gamepad2.right_stick_y);
+
+            telemetry.addData("encoder position: ", lift.getCurrentPosition());
+            telemetry.addData("joystick speed: ", gamepad2.right_stick_y);
+            telemetry.addData("magnit state: ", lift.isMagneting());
+            telemetry.addData("is on limits: ", lift.isOnLimits());
             telemetry.update();
         }
     }
