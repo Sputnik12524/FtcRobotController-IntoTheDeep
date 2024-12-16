@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.opmodes12524.Autonomous;
+package org.firstinspires.ftc.teamcode.roadrunner.modules12524.Autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -16,17 +16,17 @@ public class AutoHuman extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         driveTrain = new DriveTrainMecanum(hardwareMap,this);
-        Pose2d startPose = new Pose2d(0,0);
+        Pose2d startPose = new Pose2d(12,-58);
         driveTrain.setPoseEstimate(startPose);
 
-        Trajectory trajectoryToSubmarine = driveTrain.trajectoryBuilder(new Pose2d())
+        Trajectory trajectoryToSubmarine = driveTrain.trajectoryBuilder(startPose)
                 .forward(39.5)
                 .build();
 
-        Trajectory trajectoryToSamples = driveTrain.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(0,35),Math.toRadians(90))
-                .splineTo(new Vector2d(20,45), Math.toRadians(0))
-                .splineTo(new Vector2d(23,4), Math.toRadians(0))
+        Trajectory trajectoryToSamples = driveTrain.trajectoryBuilder(trajectoryToSubmarine.end().plus(new Pose2d(0,0, Math.toRadians(90))))
+                .splineTo(new Vector2d(12,-23),Math.toRadians(0))
+                .splineTo(new Vector2d(32,22), Math.toRadians(0))
+                .splineTo(new Vector2d(43,26), Math.toRadians(0))
                 .build();
 
         waitForStart();

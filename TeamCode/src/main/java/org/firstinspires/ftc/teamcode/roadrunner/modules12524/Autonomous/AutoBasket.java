@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.opmodes12524.Autonomous;
+package org.firstinspires.ftc.teamcode.roadrunner.modules12524.Autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -20,17 +20,17 @@ public class AutoBasket extends LinearOpMode {
                 .forward(39.5)
                 .build();
 
-        Trajectory trajectoryToYellowSample = driveTrain.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(0,35), Math.toRadians(90))
+        Trajectory trajectoryToYellowSample = driveTrain.trajectoryBuilder(trajectoryToSubmarine.end().plus(new Pose2d(0,0,Math.toRadians(90))))
+                .splineTo(new Vector2d(0,0), Math.toRadians(0))
                 .splineTo(new Vector2d(-20,45), Math.toRadians(0))
                 .build();
 
-        Trajectory trajectoryToNet = driveTrain.trajectoryBuilder(new Pose2d())
+        Trajectory trajectoryToNet = driveTrain.trajectoryBuilder(trajectoryToYellowSample.end().plus(new Pose2d(0,0,Math.toRadians(0))))
                 .splineTo(new Vector2d(-23,9), Math.toRadians(0))
                 .build();
 
-        Trajectory trajectoryToAscent = driveTrain.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(-10,45), Math.toRadians(45))
+        Trajectory trajectoryToAscent = driveTrain.trajectoryBuilder(trajectoryToNet.end().plus(new Pose2d(0,0,Math.toRadians(45))))
+                .splineTo(new Vector2d(-10,45), Math.toRadians(0))
                 .build();
         waitForStart();
 

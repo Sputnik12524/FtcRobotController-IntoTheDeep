@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.opmodes12524.TeleOp;
+package org.firstinspires.ftc.teamcode.opmodes.test;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
