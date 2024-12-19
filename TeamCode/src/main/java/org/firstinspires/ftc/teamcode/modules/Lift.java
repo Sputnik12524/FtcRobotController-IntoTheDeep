@@ -63,8 +63,6 @@ public class Lift {
             liftMotor.setPower(speed);
         }
 
-        liftMotor.setPower(speed * 0.4);
-
         // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
         // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
         // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
