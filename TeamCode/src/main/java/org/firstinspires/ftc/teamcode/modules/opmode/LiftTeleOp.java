@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.opmode;
 
-import static org.firstinspires.ftc.teamcode.modules.Lift.VELOCITY_COEF;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,7 +36,7 @@ public class LiftTeleOp extends LinearOpMode {
 
             telemetry.addData("Encoder Position: ", lift.liftMotor.getCurrentPosition());
             dashboardTelemetry.addData("Velocity:", lift.liftMotor.getVelocity());
-            dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
+            dashboardTelemetry.addData("Real Velocity:", speed);
             dashboardTelemetry.update();
             telemetry.update();
         }
