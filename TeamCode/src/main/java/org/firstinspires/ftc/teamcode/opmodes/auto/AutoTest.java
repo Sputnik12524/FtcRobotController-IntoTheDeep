@@ -26,7 +26,7 @@ public class AutoTest extends LinearOpMode {
         lift = new Lift(this);
         shoulder = new Shoulder(this);
         shoulder.shoulderPosition(.7);
-        claw.setPosition(.76);
+        claw.openSh();
         lift.resetZero();
         waitForStart();
         while(opModeIsActive()) {
@@ -37,7 +37,7 @@ public class AutoTest extends LinearOpMode {
             base.driveStraight(-.25, 57);
             sleep(1000);
             lift.motorMove(-0.15);
-            claw.open();
+            claw.openSh();
             base.driveStraight(drive_speed * 0.5, 30);
             base.turn(.15, 60);
             base.driveStraight(.2, 75);

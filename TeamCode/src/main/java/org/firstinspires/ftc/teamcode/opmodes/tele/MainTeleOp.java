@@ -26,7 +26,7 @@ public class MainTeleOp extends LinearOpMode {
 
     // Плечо
 
-    // Клешня
+    // Клешни
     private boolean stateLeftBumper = false;
 
 
@@ -37,7 +37,7 @@ public class MainTeleOp extends LinearOpMode {
         Lift lt = new Lift(this);
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
-        cl.close();
+        cl.closeSh();
 
         sl.shoulderPosition(1);
         lt.resetZero();
@@ -65,15 +65,15 @@ public class MainTeleOp extends LinearOpMode {
             stateX = gamepad2.x;
 
             // Управление подъемником
-            double speed = -gamepad2.right_stick_y;
+           /* double speed = -gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
 
             if (gamepad2.left_bumper && !stateLeftBumper) {
                 lt.unlockLift();
-            }
-           // if (gamepad2.b && !btnState) {
-            //    lt.resetZero();
-            //}
+            } --------
+            if (gamepad2.b && !btnState) {
+               lt.resetZero();
+            } */
 
 
             // Управление плечом
@@ -101,7 +101,10 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление клешней
             if (gamepad2.right_bumper && !stateRightBumper) {
-                cl.switchPosition();
+                cl.switchPositionShoulder();
+            }
+            if (gamepad2.right_bumper && !stateLeftBumper) {
+                cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
