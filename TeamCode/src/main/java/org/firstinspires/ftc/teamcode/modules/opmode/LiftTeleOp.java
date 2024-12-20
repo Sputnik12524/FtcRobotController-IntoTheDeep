@@ -21,18 +21,14 @@ public class LiftTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             boolean stateB = gamepad2.b;
-            boolean stateY = gamepad2.y;
 
             double speed = gamepad2.right_stick_y;
-            if (gamepad2.b && !stateB) {
-                lift.resetZero();
+
+            if (!stateB && gamepad2.b) {
+                lift.unlockLift();
             }
 
-            if (gamepad2.y && !stateY) {
-                lift.updatePIDF();
-            }
-
-            lift.setMotorPower(gamepad2.right_stick_y);
+            lift.setLiftMotorPower(gamepad2.right_stick_y);
 
             telemetry.addData("Encoder Position: ", lift.liftMotor.getCurrentPosition());
             dashboardTelemetry.addData("Velocity:", lift.liftMotor.getVelocity());
