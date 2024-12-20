@@ -16,9 +16,6 @@ public class MainTeleOp extends LinearOpMode {
     // КБ
     private boolean stateX = false;
 
-    private boolean stateRightBumper = false;
-
-
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
@@ -28,6 +25,7 @@ public class MainTeleOp extends LinearOpMode {
 
     // Клешни
     private boolean stateLeftBumper = false;
+    private boolean stateRightBumper = false;
 
 
 
@@ -68,34 +66,19 @@ public class MainTeleOp extends LinearOpMode {
             double speed = gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed);
 
-            boolean stateB = gamepad2.b;
-            boolean stateA = gamepad2.a;
-            //double speed = gamepad2.right_stick_y;
-            if (gamepad2.b && !stateB) {
+            boolean stateDown = gamepad2.dpad_down;
+            boolean stateUp = gamepad2.dpad_up;
+            if (gamepad2.b && !stateDown) {
                 lt.resetZero();
             }
-            if (gamepad2.a && !stateA) {
+            if (gamepad2.a && !stateUp) {
                 lt.unlockLift();
             }
 
 
             // Управление плечо
-            if (gamepad2.dpad_up) {
-                sl.shoulderPlus();
-                sleep(5);
-            }
-            if (gamepad2.dpad_down) {
-                sl.shoulderMinus();
-                sleep(5);
-            }
-
             if(gamepad2.y){
                 sl.shoulderPosition(.59); //highest
-               /* if (sl.getPosition() == 0 || sl.getPosition() == 1) {
-                    sl.shoulderPosition(.555);
-                } else {
-                    sl.shoulderPosition(1);
-                }*/
             } else if (gamepad2.x) {
                 sl.shoulderPosition(.4); //level 1 and specimen
             } else if(gamepad2.a){
@@ -106,7 +89,7 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionShoulder();
             }
-            if (gamepad2.right_bumper && !stateLeftBumper) {
+            if (gamepad2.left_bumper && !stateLeftBumper) {
                 cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;
