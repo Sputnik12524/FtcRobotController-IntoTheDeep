@@ -15,9 +15,24 @@ public class LiftTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            double speed = gamepad2.right_stick_y;
+            boolean stateB = gamepad2.b;
+            boolean stateA = gamepad2.a;
+            //double speed = gamepad2.right_stick_y;
+            if (gamepad2.b && !stateB) {
+                lift.resetZero();
+            }
 
-            lift.setMotorPower(speed);
+            if (gamepad2.a && !stateA) {
+                lift.unlockLift();
+            }
+
+            lift.setLiftMotorPower(gamepad2.right_stick_y);
+
+            telemetry.addData("encoder position: ", lift.getCurrentPosition());
+            telemetry.addData("joystick speed: ", gamepad2.right_stick_y);
+            telemetry.addData("magnit state: ", lift.isMagneting());
+            telemetry.addData("is on limits: ", lift.isOnLimits());
+            telemetry.update();
         }
     }
 }
