@@ -23,12 +23,12 @@ public class Claw {
         this.opMode = opMode;
         clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
         clawServoLift = opMode.hardwareMap.servo.get("ClawServoLift");
-
     }
 
     public void halfOpenSh() {
         clawServoShoulder.setPosition(CLAW_HALF_OPEN);
     }
+
     public void halfOpenLift() {
         clawServoLift.setPosition(CLAW_HALF_OPEN);
     }
@@ -42,6 +42,8 @@ public class Claw {
             stateOpenShoulder = false;
         }
     }
+
+
 
     public void switchPositionLift() {
         if (!stateOpenLift) {
@@ -65,3 +67,4 @@ public class Claw {
 
     }
 }
+
