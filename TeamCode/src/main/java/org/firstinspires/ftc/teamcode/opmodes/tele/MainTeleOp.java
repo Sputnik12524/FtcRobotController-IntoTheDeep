@@ -61,14 +61,21 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление подъемником
             double speed = gamepad2.right_stick_y;
-            lt.setMotorPower(speed * LIFT_POWER_COEFFICIENT);
+            lt.setLiftMotorPower(speed);
 
-            if (gamepad2.b && !btnState) {
+            boolean stateB = gamepad2.b;
+            boolean stateA = gamepad2.a;
+            //double speed = gamepad2.right_stick_y;
+            if (gamepad2.b && !stateB) {
                 lt.resetZero();
             }
 
+            if (gamepad2.a && !stateA) {
+                lt.unlockLift();
+            }
 
-            // Управление плечом
+
+            // Управление плечо
             if (gamepad2.dpad_up) {
                 sl.shoulderPlus();
                 sleep(5);
@@ -115,6 +122,4 @@ public class MainTeleOp extends LinearOpMode {
 
         }
     }
-
-
 }
