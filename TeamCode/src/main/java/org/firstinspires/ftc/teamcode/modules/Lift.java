@@ -9,22 +9,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.opmodes.test.LiftTeleOp;
-import org.opencv.core.Mat;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 
 @Config
 public class Lift {
     public final DcMotorEx liftMotor;
-    public final DigitalChannel magneticSensor;
-    private boolean isOnLimits = false;
-    private boolean unlockStatement = false;
-
-    private LinearOpMode aggregate;
+    private final double LOW_POSITION = 0;
+    private final double HIGH_POSITION = 2400;
     // public static double P_COEF = 500;
     // public static double I_COEF = 10;
     //public static double D_COEF = 500;
@@ -33,6 +26,12 @@ public class Lift {
 
     // FtcDashboard dashboard = FtcDashboard.getInstance();
     // Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
+    public final DigitalChannel magneticSensor;
+    private boolean isOnLimits = false;
+    private boolean unlockStatement = false;
+
+    private LinearOpMode aggregate;
 
     public Lift(LinearOpMode opMode) {
         this.liftMotor = opMode.hardwareMap.get(DcMotorEx.class, "liftMotor");
@@ -59,19 +58,8 @@ public class Lift {
                 liftMotor.setPower(speed);
                 isOnLimits = false;
             }
-        } else {
-            liftMotor.setPower(speed);
+
         }
-
-        // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
-        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
-        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
-        // dashboardTelemetry.update();
-    }
-
-    public double getCurrentPosition() {
-        double num = liftMotor.getCurrentPosition();
-        return num;
     }
 
     public double getSpeed() {
@@ -120,4 +108,9 @@ public class Lift {
         liftMotor.setPower(speed);
         aggregate.sleep(500);
     }
+
+    public double getCurrentPosition() {
+        return liftMotor.getCurrentPosition();
+    }
+
 }
