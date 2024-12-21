@@ -21,7 +21,8 @@ public class Shoulder {
 
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
-      //  servoShoulder.setPosition(INITIAL_POSITION);
+        servoShoulder.setPosition(INITIAL_POSITION);
+        servoShoulder.setDirection(Servo.Direction.REVERSE);
 
     }
 

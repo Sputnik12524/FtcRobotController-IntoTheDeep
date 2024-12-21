@@ -29,6 +29,9 @@ public class TeleOpRR extends LinearOpMode {
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
+    public static double HIGH_SH = .4;
+    public static double MID_SH = 0;
+    public static double LOW_SH = .86;
     boolean bState;
 
     // Плечо
@@ -99,23 +102,34 @@ public class TeleOpRR extends LinearOpMode {
             // Управление подъемником
             double speed = gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed);
-            boolean stateDown = gamepad2.dpad_down;
-            boolean stateUp = gamepad2.dpad_up;
-            if (gamepad2.dpad_down && !stateDown) {
+
+            boolean stateB = gamepad2.b;
+            boolean stateA = gamepad2.a;
+            if (gamepad2.b && !stateB) {
                 lt.resetZero();
             }
-            if (gamepad2.dpad_up && !stateUp) {
+            if (gamepad2.a && !stateA) {
                 lt.unlockLift();
             }
 
 
             // Управление плечо
+             //по диапозону
+            if (gamepad1.dpad_up) {
+                sl.shoulderPlus();
+                sleep(5);
+            }
+            if (gamepad1.dpad_down) {
+                sl.shoulderMinus();
+                sleep(5);
+            }
+            //по позициям
             if(gamepad2.y){
-                sl.shoulderPosition(.59); //highest
-            } else if (gamepad2.x) {
-                sl.shoulderPosition(.4); //level 1 and specimen
+                sl.shoulderPosition(HIGH_SH); //highest (для корзины)
+            } else if (gamepad2.b) {
+                sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
             } else if(gamepad2.a){
-                sl.shoulderPosition(.1289); //lowest
+                sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
             }
 
             // Управление клешней

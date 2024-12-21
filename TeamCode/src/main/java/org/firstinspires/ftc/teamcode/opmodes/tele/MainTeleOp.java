@@ -15,6 +15,13 @@ public class MainTeleOp extends LinearOpMode {
 
     // КБ
     private boolean stateX = false;
+    private boolean stateLeftBumperDT = false;
+    private boolean stateRightBumperDT = false;
+    public static double HIGH_SH = .4;
+    public static double MID_SH = 0;
+    public static double LOW_SH = .86;
+
+    // public static double INIT_SH = 1;
 
 
     // Подъемник
@@ -53,39 +60,49 @@ public class MainTeleOp extends LinearOpMode {
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
 
-            if(gamepad1.left_bumper && !stateLeftBumper) {
-                dt.switchReverse();
-            }
-            if (gamepad1.right_bumper && !stateRightBumper) {
+            if(gamepad1.left_bumper && !stateLeftBumperDT) {
                 dt.switchSlowMode();
             }
-            stateLeftBumper = gamepad1.left_bumper;
-            stateX = gamepad2.x;
+            if (gamepad1.right_bumper && !stateRightBumperDT) {
+                dt.switchReverse();
+            }
+            stateLeftBumperDT = gamepad1.left_bumper;
+            stateRightBumperDT = gamepad1.right_bumper;
 
             // Управление подъемником
             double speed = gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed);
 
-            boolean stateDown = gamepad2.dpad_down;
-            boolean stateUp = gamepad2.dpad_up;
-            if (gamepad2.b && !stateDown) {
+            boolean stateB = gamepad2.b;
+            boolean stateA = gamepad2.a;
+            if (gamepad2.dpad_left && !stateB) {
                 lt.resetZero();
             }
-            if (gamepad2.a && !stateUp) {
+            if (gamepad2.dpad_right && !stateA) {
                 lt.unlockLift();
             }
 
 
             // Управление плечо
+             //по диапозону
+            if (gamepad1.dpad_up) {
+                sl.shoulderPlus();
+                sleep(5);
+            }
+            if (gamepad1.dpad_down) {
+                sl.shoulderMinus();
+                sleep(5);
+            }
+             //по позициям
             if(gamepad2.y){
-                sl.shoulderPosition(.59); //highest
-            } else if (gamepad2.x) {
-                sl.shoulderPosition(.4); //level 1 and specimen
+                sl.shoulderPosition(HIGH_SH); //highest (для корзины)
+            } else if (gamepad2.b) {
+                sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
             } else if(gamepad2.a){
-                sl.shoulderPosition(.1289); //lowest
+                sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
             }
 
-            // Управление клешней
+            // Управление клешней.
             if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionShoulder();
             }
@@ -98,17 +115,20 @@ public class MainTeleOp extends LinearOpMode {
 
             // Телеметрия
             telemetry.addLine("УПРАВЛЕНИЕ");
-            telemetry.addLine("КБ:");
+            telemetry.addLine("1-ый геймпад:");
             telemetry.addLine("Левый/Правый стик - езда");
             telemetry.addLine("Левый/Правый триггер - повороты");
-            telemetry.addLine("Левый бампер - Противоположное движение");
-            telemetry.addLine("Левый/Правый триггер - Замедленное движение");
+            telemetry.addLine("Правый бампер - Противоположное движение");
+            telemetry.addLine("Левый бампер - Замедленное движение");
             telemetry.addLine("2-й геймпад:");
             telemetry.addLine("Правый стик - Подъемник");
-            telemetry.addLine("Крестовина вверх/вниз - Плечо");
-            telemetry.addLine("X - Плечо вверх");
-            telemetry.addLine("Y - Плечо вниз");
-            telemetry.addLine("Правый бампер - Смена позиции клешни");
+            telemetry.addLine("B - Подъемник reset 0");
+            telemetry.addLine("A - Подъемник Unlock");
+            telemetry.addLine("Крестовина вверх - Плечо поднято");
+            telemetry.addLine("Крестовина вниз  - Плечо опущено");
+            telemetry.addLine("Крестовина влево - Плечо образец");
+            telemetry.addLine("Правый бампер - Смена поз. клешни (плечо)");
+            telemetry.addLine("Левый бампер - Смена поз. клешни (подъемник)");
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
