@@ -28,6 +28,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.trajectorysequence.TrajectorySequenceRunner;
@@ -275,6 +276,26 @@ public class TestDT extends MecanumDrive {
         } else {
             multiplier *= 2;
         }
+    }
+
+    public void turnEncoder(double TURN_SPEED,double degrees){
+        aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());
+        aggregate.telemetry.update();
+        leftFront.setPower(TURN_SPEED);
+        rightFront.setPower(-TURN_SPEED);
+        leftBack.setPower(TURN_SPEED);
+        rightBack.setPower(-TURN_SPEED);
+        imu.resetYaw();
+        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        aggregate.sleep(500);
+    }
+    public double getHeading() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
     }
 }
 

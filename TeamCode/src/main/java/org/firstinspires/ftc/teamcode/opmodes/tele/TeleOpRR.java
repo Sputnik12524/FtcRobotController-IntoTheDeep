@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
+import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -45,12 +47,12 @@ public class TeleOpRR extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lt = new Lift(this);
-        DriveTrain dt = new DriveTrain(this);
+       // DriveTrain dt = new DriveTrain(this);
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
         cl.closeSh();
 
-        sl.shoulderPosition(1);
+        sl.shoulderPosition(INITIAL_POSITION);
         lt.resetZero();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -100,7 +102,7 @@ public class TeleOpRR extends LinearOpMode {
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
             // Управление подъемником
-            double speed = gamepad2.right_stick_y;
+            double speed = -gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed);
 
             boolean stateB = gamepad2.b;
@@ -114,16 +116,16 @@ public class TeleOpRR extends LinearOpMode {
 
 
             // Управление плечо
-             //по диапозону
-            if (gamepad1.dpad_up) {
+             // по диапазону
+            if (gamepad2.dpad_up) {
                 sl.shoulderPlus();
                 sleep(5);
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad2.dpad_down) {
                 sl.shoulderMinus();
                 sleep(5);
             }
-            //по позициям
+             //по позициям
             if(gamepad2.y){
                 sl.shoulderPosition(HIGH_SH); //highest (для корзины)
             } else if (gamepad2.b) {

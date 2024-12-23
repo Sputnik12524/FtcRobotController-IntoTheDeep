@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
+import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -44,7 +46,7 @@ public class MainTeleOp extends LinearOpMode {
         Claw cl = new Claw(this);
         cl.closeSh();
 
-        sl.shoulderPosition(1);
+        sl.shoulderPosition(INITIAL_POSITION);
         lt.resetZero();
 
         while (opModeInInit()) {   }
@@ -55,8 +57,8 @@ public class MainTeleOp extends LinearOpMode {
 
 
             // Управление колесной базой
-            double main = -gamepad1.left_stick_y;
-            double side = -gamepad1.right_stick_x;
+            double main = gamepad1.left_stick_y;
+            double side = gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
 
@@ -70,7 +72,7 @@ public class MainTeleOp extends LinearOpMode {
             stateRightBumperDT = gamepad1.right_bumper;
 
             // Управление подъемником
-            double speed = gamepad2.right_stick_y;
+            double speed = -gamepad2.right_stick_y;
             lt.setLiftMotorPower(speed);
 
             boolean stateB = gamepad2.b;
@@ -85,11 +87,11 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление плечо
              //по диапозону
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_up) {
                 sl.shoulderPlus();
                 sleep(5);
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad2.dpad_down) {
                 sl.shoulderMinus();
                 sleep(5);
             }

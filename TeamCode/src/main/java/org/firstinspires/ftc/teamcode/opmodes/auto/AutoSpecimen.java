@@ -28,22 +28,19 @@ public class AutoSpecimen extends LinearOpMode {
         lift.resetZero();
         waitForStart();
         while(opModeIsActive()) {
-            //lift.motorUp(.5);
-            //sleep(1000);
-            //shoulder.shoulderPosition(.48);
-           // sleep(500);
-            //shoulder.shoulderPosition(1);
             base.driveStraight(-.25, 20);
             shoulder.shoulderPosition(.8);
             base.driveStraight(-.25,60);
             shoulder.shoulderPosition(.9);
+            sleep(1000);
             base.driveStraight(.1,5);
             claw.openSh();
             base.driveStraight(drive_speed * 0.5, 30);
             shoulder.shoulderPosition(1);
+            sleep(1000);
             base.turn(.15, 60);
+            sleep(500);
             base.driveStraight(-.2, 75);
-            //lift.motorDown(-.5);
         }
     }
 }
