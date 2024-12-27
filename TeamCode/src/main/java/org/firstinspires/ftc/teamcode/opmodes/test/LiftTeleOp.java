@@ -12,9 +12,13 @@ public class LiftTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
+        Lift.SetLiftMotorPower setLiftMotorPower = lift.setLiftMotorPower;
+        setLiftMotorPower.start();
+
         waitForStart();
 
         while (opModeIsActive()) {
+
             boolean stateB = gamepad2.b;
 
             //double speed = gamepad2.right_stick_y;
@@ -26,7 +30,8 @@ public class LiftTeleOp extends LinearOpMode {
                 lift.unlockLift();
             }
 
-            lift.setLiftMotorPower(gamepad2.right_stick_y);
+            setLiftMotorPower.run(-gamepad2.right_stick_y);
+
 
             telemetry.addData("encoder position: ", lift.getCurrentPosition());
             telemetry.addData("joystick speed: ", gamepad2.right_stick_y);
