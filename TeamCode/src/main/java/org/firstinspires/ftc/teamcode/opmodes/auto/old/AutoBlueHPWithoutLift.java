@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
 @Autonomous (name = "Blue Basket", group = "Robot")
+@Disabled
 public class AutoBlueHPWithoutLift extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;

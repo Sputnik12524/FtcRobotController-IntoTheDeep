@@ -11,11 +11,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Config
 public class DriveTrain {
-    private DcMotor leftFront;
-    private DcMotor rightFront;
-    private DcMotor leftBack;
-    private DcMotor rightBack;
-    private IMU imu;
+    public static DcMotor leftFront;
+    public static DcMotor rightFront;
+    public static DcMotor leftBack;
+    public static DcMotor rightBack;
+    public static IMU imu;
 
     static final double PI = Math.PI;
     static final double WHEEL_DIAMETER = 10.1; // wheel diameter given in centimeters

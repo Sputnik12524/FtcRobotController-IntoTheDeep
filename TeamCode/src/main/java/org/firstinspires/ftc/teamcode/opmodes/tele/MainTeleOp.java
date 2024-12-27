@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
+import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,9 +17,13 @@ public class MainTeleOp extends LinearOpMode {
 
     // КБ
     private boolean stateX = false;
+    private boolean stateLeftBumperDT = false;
+    private boolean stateRightBumperDT = false;
+    public static double HIGH_SH = .4;
+    public static double MID_SH = 0;
+    public static double LOW_SH = .86;
 
-    private boolean stateRightBumper = false;
-
+    // public static double INIT_SH = 1;
 
 
     // Подъемник
@@ -26,8 +32,9 @@ public class MainTeleOp extends LinearOpMode {
 
     // Плечо
 
-    // Клешня
+    // Клешни
     private boolean stateLeftBumper = false;
+    private boolean stateRightBumper = false;
 
 
 
@@ -37,9 +44,9 @@ public class MainTeleOp extends LinearOpMode {
         Lift lt = new Lift(this);
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
-        cl.close();
+        cl.closeSh();
 
-        sl.shoulderPosition(1);
+        sl.shoulderPosition(INITIAL_POSITION);
         lt.resetZero();
 
         while (opModeInInit()) {   }
@@ -50,33 +57,35 @@ public class MainTeleOp extends LinearOpMode {
 
 
             // Управление колесной базой
-            double main = -gamepad1.left_stick_y;
-            double side = -gamepad1.right_stick_x;
+            double main = gamepad1.left_stick_y;
+            double side = gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
 
-            if(gamepad1.left_bumper && !stateLeftBumper) {
-                dt.switchReverse();
-            }
-            if (gamepad1.right_bumper && !stateRightBumper) {
+            if(gamepad1.left_bumper && !stateLeftBumperDT) {
                 dt.switchSlowMode();
             }
-            stateLeftBumper = gamepad1.left_bumper;
-            stateX = gamepad2.x;
+            if (gamepad1.right_bumper && !stateRightBumperDT) {
+                dt.switchReverse();
+            }
+            stateLeftBumperDT = gamepad1.left_bumper;
+            stateRightBumperDT = gamepad1.right_bumper;
 
             // Управление подъемником
             double speed = -gamepad2.right_stick_y;
             // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
-
-            if (gamepad2.left_bumper && !stateLeftBumper) {
+            boolean stateB = gamepad2.b;
+            boolean stateA = gamepad2.a;
+            if (gamepad2.dpad_left && !stateB) {
+                lt.resetZero();
+            }
+            if (gamepad2.dpad_right && !stateA) {
                 lt.unlockLift();
             }
-           // if (gamepad2.b && !btnState) {
-            //    lt.resetZero();
-            //}
 
 
-            // Управление плечом
+            // Управление плечо
+             //по диапозону
             if (gamepad2.dpad_up) {
                 sl.shoulderPlus();
                 sleep(5);
@@ -85,23 +94,21 @@ public class MainTeleOp extends LinearOpMode {
                 sl.shoulderMinus();
                 sleep(5);
             }
-
+             //по позициям
             if(gamepad2.y){
-                sl.shoulderPosition(.59); //highest
-               /* if (sl.getPosition() == 0 || sl.getPosition() == 1) {
-                    sl.shoulderPosition(.555);
-                } else {
-                    sl.shoulderPosition(1);
-                }*/
-            } else if (gamepad2.x) {
-                sl.shoulderPosition(.4); //level 1 and specimen
+                sl.shoulderPosition(HIGH_SH); //highest (для корзины)
+            } else if (gamepad2.b) {
+                sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
             } else if(gamepad2.a){
-                sl.shoulderPosition(.1289); //lowest
+                sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
             }
 
-            // Управление клешней
+            // Управление клешней.
             if (gamepad2.right_bumper && !stateRightBumper) {
-                cl.switchPosition();
+                cl.switchPositionShoulder();
+            }
+            if (gamepad2.left_bumper && !stateLeftBumper) {
+                cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
@@ -109,17 +116,20 @@ public class MainTeleOp extends LinearOpMode {
 
             // Телеметрия
             telemetry.addLine("УПРАВЛЕНИЕ");
-            telemetry.addLine("КБ:");
+            telemetry.addLine("1-ый геймпад:");
             telemetry.addLine("Левый/Правый стик - езда");
             telemetry.addLine("Левый/Правый триггер - повороты");
-            telemetry.addLine("Левый бампер - Противоположное движение");
-            telemetry.addLine("Левый/Правый триггер - Замедленное движение");
+            telemetry.addLine("Правый бампер - Противоположное движение");
+            telemetry.addLine("Левый бампер - Замедленное движение");
             telemetry.addLine("2-й геймпад:");
             telemetry.addLine("Правый стик - Подъемник");
-            telemetry.addLine("Крестовина вверх/вниз - Плечо");
-            telemetry.addLine("X - Плечо вверх");
-            telemetry.addLine("Y - Плечо вниз");
-            telemetry.addLine("Правый бампер - Смена позиции клешни");
+            telemetry.addLine("B - Подъемник reset 0");
+            telemetry.addLine("A - Подъемник Unlock");
+            telemetry.addLine("Крестовина вверх - Плечо поднято");
+            telemetry.addLine("Крестовина вниз  - Плечо опущено");
+            telemetry.addLine("Крестовина влево - Плечо образец");
+            telemetry.addLine("Правый бампер - Смена поз. клешни (плечо)");
+            telemetry.addLine("Левый бампер - Смена поз. клешни (подъемник)");
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
@@ -128,6 +138,4 @@ public class MainTeleOp extends LinearOpMode {
 
         }
     }
-
-
 }

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorLimelight3A;
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
@@ -26,18 +25,18 @@ public class AutoTest extends LinearOpMode {
         lift = new Lift(this);
         shoulder = new Shoulder(this);
         shoulder.shoulderPosition(.7);
-        claw.setPosition(.76);
+        claw.openSh();
         lift.resetZero();
         waitForStart();
         while(opModeIsActive()) {
-            lift.motorUp(.5);
+            //lift.motorUp(.5);
             sleep(1000);
             shoulder.shoulderPosition(.48);
             sleep(500);
             base.driveStraight(-.25, 57);
             sleep(1000);
-            lift.motorMove(-0.15);
-            claw.open();
+            //lift.motorMove(-0.15);
+            claw.openSh();
             base.driveStraight(drive_speed * 0.5, 30);
             base.turn(.15, 60);
             base.driveStraight(.2, 75);

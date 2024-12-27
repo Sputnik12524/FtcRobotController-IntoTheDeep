@@ -20,13 +20,13 @@ public class LiftTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             boolean stateB = gamepad2.b;
-
+            boolean stateA = gamepad2.a;
             //double speed = gamepad2.right_stick_y;
-            if (gamepad2.b) {
+            if (gamepad2.b && !stateB) {
                 lift.resetZero();
             }
 
-            if (gamepad2.a) {
+            if (gamepad2.a && !stateA) {
                 lift.unlockLift();
             }
 

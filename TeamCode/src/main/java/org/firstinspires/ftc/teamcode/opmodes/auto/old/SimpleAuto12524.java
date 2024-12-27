@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
 @Autonomous (name="SimpleAuto12524", group = "Robot")
+@Disabled
 public class SimpleAuto12524 extends LinearOpMode {
     private DriveTrain base;
     static final double drive_speed = .3;

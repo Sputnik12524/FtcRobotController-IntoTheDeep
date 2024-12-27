@@ -9,20 +9,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.opmodes.test.LiftTeleOp;
 
 
 @Config
 public class Lift {
     public final DcMotorEx liftMotor;
+
     public final DigitalChannel magneticSensor;
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
-
     private final LinearOpMode aggregate;
     public static double Kp = 500;
     public static double Ki = 10;
@@ -31,7 +29,6 @@ public class Lift {
     private double sError = 0;
     private double target;
     private final ElapsedTime timer = new ElapsedTime();
-    public static double VELOCITY_COEF = 1;
     public static double HIGH_POSITION = 3200;
     private boolean isStable;
     public SetLiftMotorPower setLiftMotorPower = new SetLiftMotorPower();
@@ -40,8 +37,6 @@ public class Lift {
         this.liftMotor = opMode.hardwareMap.get(DcMotorEx.class, "liftMotor");
         this.magneticSensor = opMode.hardwareMap.get(DigitalChannel.class, "magneticSensor");
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
-        // liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
         this.aggregate = opMode;
     }
 
@@ -95,12 +90,7 @@ public class Lift {
 //        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
 //        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
 //        // dashboardTelemetry.update();
-//    }
-
-    public double getCurrentPosition() {
-        double num = liftMotor.getCurrentPosition();
-        return num;
-    }
+//
 
     public double getSpeed() {
         double num = liftMotor.getPower();
@@ -148,4 +138,9 @@ public class Lift {
         liftMotor.setPower(speed);
         aggregate.sleep(500);
     }
+
+    public double getCurrentPosition() {
+        return liftMotor.getCurrentPosition();
+    }
+
 }
