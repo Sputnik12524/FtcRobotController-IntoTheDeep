@@ -73,8 +73,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление подъемником
             double speed = -gamepad2.right_stick_y;
-            lt.setLiftMotorPower(speed);
-
+            // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
             boolean stateB = gamepad2.b;
             boolean stateA = gamepad2.a;
             if (gamepad2.dpad_left && !stateB) {
