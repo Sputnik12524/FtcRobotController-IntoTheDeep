@@ -7,7 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.roadrunner.modules12524.TestDT;
+import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
 @Autonomous(name = "Auto test Park", group = "Robot")
 @Config

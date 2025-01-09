@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto.works;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
-import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.modules12524.TestDT;
+import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
-@Autonomous (name = "RR AUTO SPECIMEN", group = "Robot")
-public class AutoSpecimenRR extends LinearOpMode {
+@Autonomous (name = "RR AUTO BASKET SPECIMEN", group = "Robot")
+public class AutoSpecimenBasket extends LinearOpMode {
     private TestDT base;
     private Claw claw;
     private Shoulder shoulder;
@@ -28,19 +27,21 @@ public class AutoSpecimenRR extends LinearOpMode {
         lift = new Lift(this);
         shoulder = new Shoulder(this);
 
+        Pose2d startPose = new Pose2d(11,-46);
+        base.setPoseEstimate(startPose);
+
         Trajectory trajectoryToSubmarine1 = base.trajectoryBuilder(new Pose2d())
                 .forward(12)
                 .build();
         Trajectory trajectoryToSubmarine2 = base.trajectoryBuilder(trajectoryToSubmarine1.end().plus(new Pose2d()))
-                .forward(46)
+                .forward(40)
                 .build();
         Trajectory trajectoryBackward = base.trajectoryBuilder(trajectoryToSubmarine2.end().plus(new Pose2d()))
-                .back(2)
+                .back(3)
                 .build();
-        Trajectory trajectoryToObservationZone = base.trajectoryBuilder(trajectoryBackward.end().plus(new Pose2d()))
+        Trajectory trajectoryToNet = base.trajectoryBuilder(trajectoryBackward.end().plus(new Pose2d()))
                 .forward(85)
                 .build();
-
 
         claw.closeSh();
         lift.resetZero();
@@ -57,10 +58,10 @@ public class AutoSpecimenRR extends LinearOpMode {
             sleep(1000);
             shoulder.shoulderPosition(0);
             sleep(500);
-            base.turn(115);
+            //finished scoring specimen
+            base.turn(Math.toRadians(115));
             sleep(500);
-            base.followTrajectory(trajectoryToObservationZone);
-
+            base.followTrajectory(trajectoryToNet);
         }
     }
 }
