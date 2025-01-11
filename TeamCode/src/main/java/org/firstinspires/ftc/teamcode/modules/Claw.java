@@ -11,9 +11,12 @@ public class Claw {
     private final Servo clawServoLift;
     private final LinearOpMode opMode;
 
-    public static double CLAW_CLOSE = 0.740;
+    public static double CLAW_CLOSE = 0.3;
     public static double CLAW_HALF_OPEN = 0.6;
     public static double CLAW_OPEN = 0.5;
+    public static double CLAW_OPEN_LIFT = 0;
+
+    public static double CLAW_CLOSE_LIFT = 0.18;
 
     public boolean stateOpenShoulder;
     public boolean stateOpenLift;
@@ -47,10 +50,10 @@ public class Claw {
 
     public void switchPositionLift() {
         if (!stateOpenLift) {
-            clawServoLift.setPosition(CLAW_OPEN);
+            clawServoLift.setPosition(CLAW_OPEN_LIFT);
             stateOpenLift = true;
         } else {
-            clawServoLift.setPosition(CLAW_CLOSE);
+            clawServoLift.setPosition(CLAW_CLOSE_LIFT);
             stateOpenLift = false;
         }
     }
@@ -65,6 +68,14 @@ public class Claw {
         clawServoShoulder.setPosition(CLAW_OPEN);
         stateOpenShoulder = true;
 
+    }
+    public void closeLift() {
+        clawServoShoulder.setPosition(CLAW_CLOSE_LIFT);
+        stateOpenShoulder = false;
+    }
+    public void openLift() {
+        clawServoLift.setPosition(CLAW_OPEN_LIFT);
+        stateOpenShoulder = true;
     }
 }
 

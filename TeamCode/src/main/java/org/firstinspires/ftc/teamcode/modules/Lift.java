@@ -21,9 +21,9 @@ public class Lift {
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
     private final LinearOpMode aggregate;
-    public static double Kp = 500;
-    public static double Ki = 10;
-    public static double Kd = 500;
+    public static double Kp = 1;
+    public static double Ki = 0;
+    public static double Kd = 0;
     private double error, previousError, u;
     private double sError, dError = 0;
     private double target;
@@ -46,8 +46,8 @@ public class Lift {
 
     public class LiftMotorPowerDriver extends Thread {
         private final ElapsedTime timer = new ElapsedTime();
-        public void run(double speed)
-        {
+
+        public void run(double speed) {
             liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             timer.reset();
@@ -150,4 +150,11 @@ public class Lift {
     public double getCurrentPosition() {
         return liftMotor.getCurrentPosition();
     }
+
+    public void kolxoz(double speed) {
+        liftMotor.setPower(speed);
+    }
+
+
+
 }

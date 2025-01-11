@@ -32,6 +32,8 @@ public class TeleOpRR extends LinearOpMode {
     public static double LIFT_POWER_COEFFICIENT = 0.7;
     public static double HIGH_SH = .4;
     public static double MID_SH = 0;
+
+    public static double SUB_SH = .7;
     public static double LOW_SH = .86;
     boolean bState;
 
@@ -78,7 +80,7 @@ public class TeleOpRR extends LinearOpMode {
 
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
+                            gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
                             gamepad1.right_stick_x * DriveTrainMecanum.multiplier,
                             rotate * DriveTrainMecanum.multiplier
                     )
@@ -102,38 +104,42 @@ public class TeleOpRR extends LinearOpMode {
 
             // Управление подъемником
             double speed = -gamepad2.right_stick_y;
-            lt.setLiftMotorPower(speed);
-
+            lt.kolxoz(speed * 0.5);
+            // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
             boolean stateB = gamepad2.b;
             boolean stateA = gamepad2.a;
-            if (gamepad2.b && !stateB) {
+            if (gamepad2.dpad_left && !stateB) {
                 lt.resetZero();
             }
-            if (gamepad2.a && !stateA) {
+            if (gamepad2.dpad_right && !stateA) {
                 lt.unlockLift();
             }
 
 
             // Управление плечо
-             // по диапазону
-            if (gamepad2.dpad_up) {
+            //по диапозону
+            if (gamepad2.dpad_down) {
                 sl.shoulderPlus();
                 sleep(5);
             }
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_up) {
                 sl.shoulderMinus();
                 sleep(5);
             }
-             //по позициям
+            //по позициям
             if(gamepad2.y){
                 sl.shoulderPosition(HIGH_SH); //highest (для корзины)
             } else if (gamepad2.b) {
                 sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
             } else if(gamepad2.a){
+                cl.closeLift();
                 sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
+            } else if(gamepad2.x){
+                cl.closeLift();
+                sl.shoulderPosition(SUB_SH); //lowest (для взятия пробы)
             }
 
-            // Управление клешней
+            // Управление клешней.
             if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionShoulder();
             }
@@ -150,6 +156,26 @@ public class TeleOpRR extends LinearOpMode {
             //telemetry.addData("W x:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
             //telemetry.addData("W y:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate);
             //telemetry.addData("W z", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).zRotationRate);
+            telemetry.addLine("УПРАВЛЕНИЕ");
+            telemetry.addLine("1-ый геймпад:");
+            telemetry.addLine("Левый/Правый стик - езда");
+            telemetry.addLine("Левый/Правый триггер - повороты");
+            telemetry.addLine("Правый бампер - Противоположное движение");
+            telemetry.addLine("Левый бампер - Замедленное движение");
+            telemetry.addLine("2-й геймпад:");
+            telemetry.addLine("Правый стик - Подъемник");
+            telemetry.addLine("B - Подъемник reset 0");
+            telemetry.addLine("A - Подъемник Unlock");
+            telemetry.addLine("Крестовина вверх - Плечо поднято");
+            telemetry.addLine("Крестовина вниз  - Плечо опущено");
+            telemetry.addLine("Крестовина влево - Плечо образец");
+            telemetry.addLine("Правый бампер - Смена поз. клешни (плечо)");
+            telemetry.addLine("Левый бампер - Смена поз. клешни (подъемник)");
+
+            telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
+            telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
+            telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
+            telemetry.addData("shoulder", sl.getPosition());
             telemetry.addData("W real", w_real);
             telemetry.addData("W target", w_target);
             telemetry.addData("Rotate", rotate);

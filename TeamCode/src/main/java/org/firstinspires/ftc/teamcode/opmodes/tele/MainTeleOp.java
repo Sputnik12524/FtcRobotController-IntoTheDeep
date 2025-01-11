@@ -21,6 +21,7 @@ public class MainTeleOp extends LinearOpMode {
     private boolean stateRightBumperDT = false;
     public static double HIGH_SH = .4;
     public static double MID_SH = 0;
+    public static double SUB_SH = .7;
     public static double LOW_SH = .86;
 
     // public static double INIT_SH = 1;
@@ -45,6 +46,7 @@ public class MainTeleOp extends LinearOpMode {
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
         cl.closeSh();
+        cl.openLift();
 
         sl.shoulderPosition(INITIAL_POSITION);
         lt.resetZero();
@@ -73,6 +75,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление подъемником
             double speed = -gamepad2.right_stick_y;
+            lt.kolxoz(speed * 0.5);
             // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
             boolean stateB = gamepad2.b;
             boolean stateA = gamepad2.a;
@@ -86,11 +89,11 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление плечо
              //по диапозону
-            if (gamepad2.dpad_up) {
+            if (gamepad2.dpad_down) {
                 sl.shoulderPlus();
                 sleep(5);
             }
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_up) {
                 sl.shoulderMinus();
                 sleep(5);
             }
@@ -100,7 +103,11 @@ public class MainTeleOp extends LinearOpMode {
             } else if (gamepad2.b) {
                 sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
             } else if(gamepad2.a){
+                cl.closeLift();
                 sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
+            } else if(gamepad2.x){
+                cl.closeLift();
+                sl.shoulderPosition(SUB_SH); //lowest (для взятия пробы)
             }
 
             // Управление клешней.
@@ -116,6 +123,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Телеметрия
             telemetry.addLine("УПРАВЛЕНИЕ");
+            telemetry.addData("state open lift", cl.stateOpenLift);
             telemetry.addLine("1-ый геймпад:");
             telemetry.addLine("Левый/Правый стик - езда");
             telemetry.addLine("Левый/Правый триггер - повороты");

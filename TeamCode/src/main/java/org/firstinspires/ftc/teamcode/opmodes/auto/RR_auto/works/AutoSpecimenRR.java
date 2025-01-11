@@ -29,39 +29,43 @@ public class AutoSpecimenRR extends LinearOpMode {
         shoulder = new Shoulder(this);
 
         Trajectory trajectoryToSubmarine1 = base.trajectoryBuilder(new Pose2d())
-                .forward(12)
+                .forward(19)
                 .build();
         Trajectory trajectoryToSubmarine2 = base.trajectoryBuilder(trajectoryToSubmarine1.end().plus(new Pose2d()))
-                .forward(16 , TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(14 , TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         Trajectory trajectoryBackward = base.trajectoryBuilder(trajectoryToSubmarine2.end().plus(new Pose2d()))
-                .back(3, TestDT.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(3, TestDT.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         Trajectory trajectoryToObservationZone = base.trajectoryBuilder(trajectoryBackward.end().plus(new Pose2d(Math.toRadians(-105))))
-                .forward(50, TestDT.getVelocityConstraint(30, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(50, TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
-
+        shoulder.shoulderPosition(0);
         claw.closeSh();
         lift.resetZero();
+
         waitForStart();
+
         while(opModeIsActive()) {
             base.followTrajectory(trajectoryToSubmarine1);
-            shoulder.shoulderPosition(.3);
+            sleep(1500);
+            base.turn(Math.toRadians(180));
+            sleep(1000);
+            shoulder.shoulderPosition(.5);
             sleep(1000);
             base.followTrajectory(trajectoryToSubmarine2);
-            shoulder.shoulderPosition(.2);
+            shoulder.shoulderPosition(.7);
             sleep(500);
             base.followTrajectory(trajectoryBackward);
             claw.openSh();
             sleep(1000);
             shoulder.shoulderPosition(0);
             sleep(500);
-            base.turn(Math.toRadians(-105));
-            sleep(500);
-            //base.turn(Math25);
+            base.turn(Math.toRadians(-120));
+            sleep(1500);
             base.followTrajectory(trajectoryToObservationZone); //не работает
         }
     }

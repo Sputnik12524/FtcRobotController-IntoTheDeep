@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
+import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
 @Autonomous (name = "RR AUTO BASKET SPECIMEN", group = "Robot")
@@ -34,13 +35,16 @@ public class AutoSpecimenBasket extends LinearOpMode {
                 .forward(12)
                 .build();
         Trajectory trajectoryToSubmarine2 = base.trajectoryBuilder(trajectoryToSubmarine1.end().plus(new Pose2d()))
-                .forward(40)
+                .forward(16 , TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         Trajectory trajectoryBackward = base.trajectoryBuilder(trajectoryToSubmarine2.end().plus(new Pose2d()))
-                .back(3)
+                .back(2, TestDT.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         Trajectory trajectoryToNet = base.trajectoryBuilder(trajectoryBackward.end().plus(new Pose2d()))
-                .forward(85)
+                .forward(50, TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         claw.closeSh();
@@ -59,8 +63,8 @@ public class AutoSpecimenBasket extends LinearOpMode {
             shoulder.shoulderPosition(0);
             sleep(500);
             //finished scoring specimen
-            base.turn(Math.toRadians(115));
-            sleep(500);
+            base.turn(Math.toRadians(105));
+            sleep(1500);
             base.followTrajectory(trajectoryToNet);
         }
     }
