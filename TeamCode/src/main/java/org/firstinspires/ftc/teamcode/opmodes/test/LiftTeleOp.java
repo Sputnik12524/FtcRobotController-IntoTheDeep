@@ -12,8 +12,8 @@ public class LiftTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
-        Lift.SetLiftMotorPower setLiftMotorPower = lift.setLiftMotorPower;
-        setLiftMotorPower.start();
+        Lift.LiftMotorPowerDriver liftMotorPowerDriver = lift.liftMotorPowerDriver;
+        liftMotorPowerDriver.start();
 
         waitForStart();
 
@@ -30,7 +30,7 @@ public class LiftTeleOp extends LinearOpMode {
                 lift.unlockLift();
             }
 
-            setLiftMotorPower.run(-gamepad2.right_stick_y);
+            liftMotorPowerDriver.run(-gamepad2.right_stick_y);
 
 
             telemetry.addData("encoder position: ", lift.getCurrentPosition());

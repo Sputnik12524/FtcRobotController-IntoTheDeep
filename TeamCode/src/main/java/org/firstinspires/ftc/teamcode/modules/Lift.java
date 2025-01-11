@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -26,12 +25,11 @@ public class Lift {
     public static double Ki = 10;
     public static double Kd = 500;
     private double error, previousError, u;
-    private double sError = 0;
+    private double sError, dError = 0;
     private double target;
-    private final ElapsedTime timer = new ElapsedTime();
     public static double HIGH_POSITION = 3200;
     private boolean isStable;
-    public SetLiftMotorPower setLiftMotorPower = new SetLiftMotorPower();
+    public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
 
     public Lift(LinearOpMode opMode) {
         this.liftMotor = opMode.hardwareMap.get(DcMotorEx.class, "liftMotor");
@@ -40,26 +38,29 @@ public class Lift {
         this.aggregate = opMode;
     }
 
-    private double liftPos(int encoderPos) {
+    private double liftPos() {
         int stepsPerRevolution = 420;
         int D = 3;
-        return D * Math.PI * encoderPos / stepsPerRevolution;
+        return D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution;
     }
 
-
-    public class SetLiftMotorPower extends Thread {
+    public class LiftMotorPowerDriver extends Thread {
+        private final ElapsedTime timer = new ElapsedTime();
         public void run(double speed)
         {
-            int startIterationPos = liftMotor.getCurrentPosition();
+            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             timer.reset();
 
             while (!isInterrupted()) {
-                error = liftPos(startIterationPos - liftMotor.getCurrentPosition()) - target;
+                error = liftPos() - target;
 
                 sError = sError + error * timer.seconds();
+                dError = error - previousError;
+
+                liftMotor.setPower(error * Kp + sError * Ki + dError * Kd / timer.seconds());
                 timer.reset();
 
-                liftMotor.setPower(error * Kp + sError * Ki + (error - previousError) * Kd / timer.seconds());
 
                 previousError = error;
                 isOnLimits = (!magneticSensor.getState() && speed > 0) || (liftMotor.getCurrentPosition() >= HIGH_POSITION && speed < 0);
@@ -92,9 +93,16 @@ public class Lift {
 //        // dashboardTelemetry.update();
 //
 
+    public void setTarget(double newTarget) {
+        target = newTarget;
+    }
+
+    public double getTarget() {
+        return target;
+    }
+
     public double getSpeed() {
-        double num = liftMotor.getPower();
-        return num;
+        return liftMotor.getPower();
     }
 
     public boolean isMagneting() {
@@ -142,5 +150,4 @@ public class Lift {
     public double getCurrentPosition() {
         return liftMotor.getCurrentPosition();
     }
-
 }
