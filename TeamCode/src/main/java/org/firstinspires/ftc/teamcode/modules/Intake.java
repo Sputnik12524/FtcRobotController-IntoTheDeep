@@ -11,8 +11,8 @@ public class Intake {
 
     private final CRServo brushServoLeft;
     private final CRServo  brushServoRight;
-
     private final CRServo  brushServo;
+
     private final Servo flipServoLeft;
     private final Servo flipServoRight;
     private final Servo extensionServoLeft;
@@ -40,6 +40,8 @@ public class Intake {
         this.brushServo = opMode.hardwareMap.crservo.get("brushServo");
 
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
+        this.brushServoRight.setDirection(CRServo.Direction.FORWARD);
+        this.brushServo.setDirection(CRServo.Direction.REVERSE);
         this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
         this.extensionServoLeft.setDirection(Servo.Direction.REVERSE);
 
