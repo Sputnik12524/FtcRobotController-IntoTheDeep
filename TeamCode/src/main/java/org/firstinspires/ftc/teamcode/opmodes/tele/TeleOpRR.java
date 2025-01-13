@@ -24,7 +24,7 @@ public class TeleOpRR extends LinearOpMode {
     private double side;
     private double rotate;
     public static double VELO_SCALE_COEF = 0.00225;
-    public static double CORRECTION_COEF = 7;
+    public static double CORRECTION_COEF = 7; // need 10
     private double w_target;
     private double w_real;
 
@@ -103,7 +103,7 @@ public class TeleOpRR extends LinearOpMode {
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
             // Управление подъемником
-            double speed = -gamepad2.right_stick_y;
+            double speed = gamepad2.right_stick_y;
             lt.kolxoz(speed * 0.5);
             // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
             boolean stateB = gamepad2.b;

@@ -13,7 +13,7 @@ public class Claw {
 
     public static double CLAW_CLOSE = 0.3;
     public static double CLAW_HALF_OPEN = 0.6;
-    public static double CLAW_OPEN = 0.5;
+    public static double CLAW_OPEN = 0.7;
     public static double CLAW_OPEN_LIFT = 0;
 
     public static double CLAW_CLOSE_LIFT = 0.18;
