@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto.works;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -9,19 +8,15 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.roadrunner.base_packages.drive.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
-@Autonomous (name = "RR AUTO SPECIMEN", group = "Robot")
-public class AutoSpecimenRR extends LinearOpMode {
+@Autonomous (name = "Only Specimen", group = "Robot")
+public class OnlySpecimenScoringAuto extends LinearOpMode {
     private TestDT base;
     private Claw claw;
     private Shoulder shoulder;
     private Lift lift;
 
-   // static final double drive_speed = .3;
-   // static final double turn_speed = .3;
-   // static final double side_speed = .25;
     @Override
     public void runOpMode() {
         base = new TestDT(hardwareMap, this);

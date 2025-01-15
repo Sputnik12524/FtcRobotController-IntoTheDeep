@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.old;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
@@ -8,8 +9,9 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
-@Autonomous (name = "AUTO 2 SPECIMEN", group = "Robot")
-public class AutoSpecimen extends LinearOpMode {
+@Autonomous (name = "Blue Basket", group = "Robot")
+@Disabled
+public class AutoBlueHPWithoutLift extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;
     private Shoulder shoulder;
@@ -24,23 +26,17 @@ public class AutoSpecimen extends LinearOpMode {
         claw = new Claw(this);
         lift = new Lift(this);
         shoulder = new Shoulder(this);
-        claw.closeSh();
-        lift.resetZero();
+
         waitForStart();
-        while(opModeIsActive()) {
-            base.driveStraight(-.25, 20);
-            shoulder.shoulderPosition(.8);
-            base.driveStraight(-.25,60);
-            shoulder.shoulderPosition(.9);
-            sleep(1000);
-            base.driveStraight(.1,5);
-            claw.openSh();
-            base.driveStraight(drive_speed * 0.5, 30);
-            shoulder.shoulderPosition(1);
-            sleep(1000);
-            base.turn(.15, 60);
-            sleep(500);
-            base.driveStraight(-.2, 75);
-        }
+
+        base.driveStraight(drive_speed,80);
+        base.turn(-turn_speed,85);
+        base.driveStraight(drive_speed,6);
+        base.turn(-turn_speed,85);
+        base.driveStraight(drive_speed,65);
+        base.driveStraight(-drive_speed,100);
+        base.turn(turn_speed,90);
+        base.driveStraight(-drive_speed,5);
     }
 }
+//HIGH 2400

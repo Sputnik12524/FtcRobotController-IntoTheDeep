@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.old;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
@@ -9,7 +10,8 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 
 @Autonomous (name = "AUTO SPECIMEN SCORING", group = "Robot")
-public class AutoTest extends LinearOpMode {
+@Disabled
+public class test extends LinearOpMode {
     private DriveTrain base;
     private Claw claw;
     private Shoulder shoulder;

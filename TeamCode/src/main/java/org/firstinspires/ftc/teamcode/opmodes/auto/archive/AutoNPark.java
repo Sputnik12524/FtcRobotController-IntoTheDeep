@@ -1,13 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.old;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 @Autonomous(name = "Auto Near Park", group = "Robot")
 @Config
-public class AutoNearPark extends LinearOpMode {
+@Disabled
+public class AutoNPark extends LinearOpMode {
     private DriveTrain driveTrain;
     //private DriveTrainMecanum drivetrain;
     //public static double DISTANCE = 70;

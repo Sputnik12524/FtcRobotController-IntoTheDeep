@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
-@Autonomous(name = "A NEAR Park", group = "Robot")
+@Autonomous(name = "Near Park", group = "Robot")
 @Config
 public class AutoNear2 extends LinearOpMode {
     //private DriveTrain driveTrain;

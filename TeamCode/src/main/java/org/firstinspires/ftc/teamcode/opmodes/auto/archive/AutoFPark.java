@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto.works;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveTrainMec
 @Autonomous(name = "Auto Far Park", group = "Robot")
 @Config
 @Disabled
-public class AutoFarPark extends LinearOpMode {
+public class AutoFPark extends LinearOpMode {
     //private DriveTrain driveTrain;
     private DriveTrainMecanum drivetrain;
     public static double DISTANCE = 110;

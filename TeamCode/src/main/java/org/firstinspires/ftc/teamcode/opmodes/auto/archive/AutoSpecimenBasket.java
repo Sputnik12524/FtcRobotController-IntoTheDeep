@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto.works;
+package org.firstinspires.ftc.teamcode.opmodes.auto.archive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveConstant
 import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
 
 @Autonomous (name = "RR AUTO BASKET SPECIMEN", group = "Robot")
+@Disabled
 public class AutoSpecimenBasket extends LinearOpMode {
     private TestDT base;
     private Claw claw;
