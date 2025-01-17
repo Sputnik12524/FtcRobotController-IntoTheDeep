@@ -33,13 +33,11 @@ public class AutoBlue1Baskets extends LinearOpMode {
         base.driveStraight(-drive_speed,74);
         base.turn(turn_speed,20);
         base.driveStraight(-.25,5);
-       //lift.motorUp(.7);
         shoulder.shoulderPosition(.555);
         sleep(500);
         claw.openSh();
         base.driveStraight(-drive_speed*0.5,10);
         claw.closeSh();
-        //lift.motorUp(-.7);
         base.turn(-turn_speed,35);
         base.driveStraight(drive_speed,65);
         base.side(-side_speed,5);

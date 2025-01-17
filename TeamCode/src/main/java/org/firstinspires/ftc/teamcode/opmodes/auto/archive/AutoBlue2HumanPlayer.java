@@ -32,20 +32,16 @@ public class AutoBlue2HumanPlayer extends LinearOpMode {
         base.driveStraight(-drive_speed,75);
         base.turn(-turn_speed,25);
         base.driveStraight(-.25,5);
-        //lift.motorUp(.7);
         shoulder.shoulderPosition(.555);
         sleep(500);
         claw.openSh();
         base.driveStraight(-drive_speed*0.5,10);
         claw.closeSh();
-        //lift.motorUp(-.7);
         base.turn(turn_speed,40);
         base.driveStraight(drive_speed,70);
         base.side(side_speed,5);
         base.turn(-turn_speed, 75);
         base.driveStraight(drive_speed, 100);
         base.driveStraight(-drive_speed,5);
-
-        //lift и shoulder - в них внесены изменения с этого ноутбука
     }
 }

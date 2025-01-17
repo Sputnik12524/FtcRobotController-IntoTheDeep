@@ -24,8 +24,6 @@ public class MainTeleOp extends LinearOpMode {
     public static double SUB_SH = .7;
     public static double LOW_SH = .86;
 
-    // public static double INIT_SH = 1;
-
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
@@ -88,7 +86,7 @@ public class MainTeleOp extends LinearOpMode {
 
 
             // Управление плечо
-             //по диапозону
+             //по диапазону
             if (gamepad2.dpad_down) {
                 sl.shoulderPlus();
                 sleep(5);

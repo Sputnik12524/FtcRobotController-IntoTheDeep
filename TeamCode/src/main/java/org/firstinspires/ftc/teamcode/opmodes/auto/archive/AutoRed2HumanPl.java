@@ -32,7 +32,6 @@ public class AutoRed2HumanPl extends LinearOpMode {
         base.driveStraight(-drive_speed,75);
         base.turn(-turn_speed,25);
         base.driveStraight(-.25,5);
-        //lift.motorUp(.7);
         shoulder.shoulderPosition(.555);
         sleep(500);
         claw.openSh();

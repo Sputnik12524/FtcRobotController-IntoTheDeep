@@ -32,7 +32,6 @@ public class AutoRed1Baskets extends LinearOpMode {
         base.driveStraight(-drive_speed,74);
         base.turn(turn_speed,20);
         base.driveStraight(-.25,5);
-        //lift.motorUp(.7);
         shoulder.shoulderPosition(.555);
         sleep(500);
         claw.openSh();

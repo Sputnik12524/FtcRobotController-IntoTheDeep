@@ -11,21 +11,13 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 @Disabled
 public class AutoNPark extends LinearOpMode {
     private DriveTrain driveTrain;
-    //private DriveTrainMecanum drivetrain;
-    //public static double DISTANCE = 70;
     @Override
     public void runOpMode() throws InterruptedException {
         driveTrain = new DriveTrain(this);
-        //drivetrain = new DriveTrainMecanum(hardwareMap,this);
-        /*
-                Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-                .forward(DISTANCE)
-                .build();
-         */
+
         waitForStart();
         while (opModeIsActive()) {
             driveTrain.driveStraight(.25, 70);
         }
-        //drivetrain.followTrajectory(trajectory);
     }
 }

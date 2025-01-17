@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveTrainMecanum;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 /*
 Need test
  */
@@ -60,9 +60,6 @@ public class TeleOpRR extends LinearOpMode {
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
 
-        //straight = gamepad1.left_stick_y * DriveTrainMecanum.multiplier;
-        //side = gamepad1.right_stick_x * DriveTrainMecanum.multiplier;
-        //rotate = (gamepad1.left_trigger - gamepad1.right_trigger) * DriveTrainMecanum.multiplier;
 
         waitForStart();
 
@@ -153,9 +150,6 @@ public class TeleOpRR extends LinearOpMode {
 
 
             // Print pose to telemetry
-            //telemetry.addData("W x:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).xRotationRate);
-            //telemetry.addData("W y:", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).yRotationRate);
-            //telemetry.addData("W z", driveTrain.imu.getRobotAngularVelocity(AngleUnit.DEGREES).zRotationRate);
             telemetry.addLine("УПРАВЛЕНИЕ");
             telemetry.addLine("1-ый геймпад:");
             telemetry.addLine("Левый/Правый стик - езда");

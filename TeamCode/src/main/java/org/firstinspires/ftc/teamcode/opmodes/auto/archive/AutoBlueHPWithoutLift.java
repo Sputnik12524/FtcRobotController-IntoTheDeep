@@ -39,4 +39,3 @@ public class AutoBlueHPWithoutLift extends LinearOpMode {
         base.driveStraight(-drive_speed,5);
     }
 }
-//HIGH 2400

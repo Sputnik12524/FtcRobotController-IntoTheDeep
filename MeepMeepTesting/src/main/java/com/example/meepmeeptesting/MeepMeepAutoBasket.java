@@ -13,8 +13,8 @@ public class MeepMeepAutoBasket {
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+
+                .setConstraints(52, 52, Math.toRadians(180), Math.toRadians(180), 13)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-10, -56, 0))
                         .turn(Math.toRadians(90))
                         .forward(19)
@@ -29,9 +29,11 @@ public class MeepMeepAutoBasket {
                         .splineTo(new Vector2d(-53,-45), 90)
                         .turn(Math.toRadians(-45))
                         .waitSeconds(10) //capturing yellow sample
-                        .back(3)
+                        .back(5)
+                        .turn(Math.toRadians(-20))
                         .waitSeconds(10)
                        // .turn(Math.toRadians(45))
+                        .splineTo(new Vector2d(-25,-9),0)
                         .build());
 
 

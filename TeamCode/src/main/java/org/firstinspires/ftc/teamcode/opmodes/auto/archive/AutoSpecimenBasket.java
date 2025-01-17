@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.DriveConstants;
-import org.firstinspires.ftc.teamcode.roadrunner.driveTrainMecanum.TestDT;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
 
 @Autonomous (name = "RR AUTO BASKET SPECIMEN", group = "Robot")
 @Disabled
