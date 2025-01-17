@@ -20,7 +20,7 @@ public class Intake {
 
 
     public static double EXTENSION_MAX = 1;
-    public static double EXTENSION_MIN = 0.64;
+    public static double EXTENSION_MIN = 0;
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_K = 0.6;
     public static double  FLIP_INTAKE = 0.75;
