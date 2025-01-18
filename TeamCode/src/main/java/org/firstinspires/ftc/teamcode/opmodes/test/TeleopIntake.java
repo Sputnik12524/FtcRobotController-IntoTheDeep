@@ -39,14 +39,19 @@ public class TeleopIntake extends LinearOpMode {
             }
 
             //выдвижение
-            in.extUpdatePosition(gamepad1.right_stick_y);
+            in.extUpdatePosition(gamepad1.right_stick_y); //с помощью стика
 
-            /* if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) { //с помощью крестовины
                 in.extensionPlus();
             }
             if (gamepad1.dpad_down) {
                 in.extensionMinus();
-            } */
+            }
+
+            //многопоточность
+            if (gamepad1.right_bumper) {
+                in.needTake();
+            }
 
             telemetry.addData("Позиция сервомотора переворота (RIGHT): ", in.getFlipPositionR());
             telemetry.addData("Позиция сервомотора переворота (LEFT): ", in.getFlipPositionL());
@@ -55,7 +60,8 @@ public class TeleopIntake extends LinearOpMode {
             telemetry.addLine("Управление:");
             telemetry.addLine("Щетка - принятие(A), выброс(B)");
             telemetry.addLine("Переворот - принятие(Y), отдатие(X)");
-            telemetry.addLine("Выдвижение - Правый стик вверх/вниз");
+            telemetry.addLine("Выдвижение - Правый стик/крестовина: вверх/вниз");
+            telemetry.addLine("Многопоточность - правый бампер");
 
             telemetry.update();
 
