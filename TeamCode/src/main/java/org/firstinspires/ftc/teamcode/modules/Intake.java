@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class Intake {
@@ -18,6 +19,10 @@ public class Intake {
     private final Servo extensionServoLeft;
     private final Servo extensionServoRight;
 
+    private final SamplesTaker samplesTaker;
+
+
+
 
     public static double EXTENSION_MAX = 1;
     public static double EXTENSION_MIN = 0;
@@ -25,8 +30,10 @@ public class Intake {
     public static double EXT_K = 0.6;
     public static double  FLIP_INTAKE = 0.75;
     public static double  FLIP_OUTTAKE = 0;
-
+    public static double FLIP_TIME = 700;
     public static double SPEED_BRUSH = 1;
+
+
 
 
 
@@ -43,6 +50,10 @@ public class Intake {
         this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
         this.extensionServoLeft.setDirection(Servo.Direction.REVERSE);
 
+        this.samplesTaker = new SamplesTaker();
+        samplesTaker.start();
+
+
     }
     public void brushIntake() {
         brushServoLeft.setPower(SPEED_BRUSH);
@@ -54,15 +65,15 @@ public class Intake {
         brushServoRight.setPower(-SPEED_BRUSH);
         brushServo.setPower(-SPEED_BRUSH);
     }
+    public void brushStop() {
+        brushServoLeft.setPower(0);
+        brushServoRight.setPower(0);
+        brushServo.setPower(0);
+    }
+
     public void flipPosition(double position) {
         flipServoLeft.setPosition(position);
         flipServoRight.setPosition(position);
-    }
-    public void extensionPlus() {
-        if (extensionServoRight.getPosition() < EXTENSION_MAX) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+EXTENSION_STEP);
-            extensionServoRight.setPosition(extensionServoRight.getPosition()+EXTENSION_STEP);
-        }
     }
 
     public void extUpdatePosition(double k) {
@@ -72,18 +83,21 @@ public class Intake {
             extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k * EXT_K));
         }
     }
-
+    public void extensionPosition(double position) {
+        extensionServoLeft.setPosition(position);
+        extensionServoRight.setPosition(position);
+    }
     public void extensionMinus() {
         if (extensionServoRight.getPosition() > EXTENSION_MIN) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition()-EXTENSION_STEP);
             extensionServoRight.setPosition(extensionServoRight.getPosition()-EXTENSION_STEP);
         }
     }
-
-    public void brushStop() {
-        brushServoLeft.setPower(0);
-        brushServoRight.setPower(0);
-        brushServo.setPower(0);
+    public void extensionPlus() {
+        if (extensionServoRight.getPosition() < EXTENSION_MAX) {
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+EXTENSION_STEP);
+            extensionServoRight.setPosition(extensionServoRight.getPosition()+EXTENSION_STEP);
+        }
     }
 
     public double getFlipPositionR() { return flipServoRight.getPosition(); }
@@ -95,6 +109,30 @@ public class Intake {
         return extensionServoLeft.getPosition();
     }
 
+
+    public void needTake () {
+        samplesTaker.needTake = true;
+    }
+
+    class SamplesTaker extends Thread {
+        boolean needTake = false;
+
+        private ElapsedTime timer = new ElapsedTime();
+        public void run () {
+            while (!isInterrupted()) {
+                if (needTake) {
+                    flipPosition(FLIP_INTAKE);
+                    brushIntake();
+                    timer.reset();
+                    while (timer.milliseconds() < FLIP_TIME );
+                    brushStop();
+                    extensionPosition(EXTENSION_MIN);
+                    needTake = false;
+                }
+            }
+        }
+
+    }
 
 
 }
