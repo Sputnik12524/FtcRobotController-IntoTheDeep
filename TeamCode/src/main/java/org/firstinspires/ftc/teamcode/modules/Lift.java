@@ -4,80 +4,118 @@ package org.firstinspires.ftc.teamcode.modules;
 
 // import com.acmerobotics.dashboard.FtcDashboard;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.opmodes.test.LiftTeleOp;
-import org.opencv.core.Mat;
+import java.lang.annotation.Target;
 
 
 @Config
 public class Lift {
     public final DcMotorEx liftMotor;
+
     public final DigitalChannel magneticSensor;
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
-
-    private LinearOpMode aggregate;
-    // public static double P_COEF = 500;
-    // public static double I_COEF = 10;
-    //public static double D_COEF = 500;
-    //public static double F_COEF = 500;
-    // public static double VELOCITY_COEF = 10;
-
-    // FtcDashboard dashboard = FtcDashboard.getInstance();
-    // Telemetry dashboardTelemetry = dashboard.getTelemetry();
+    private final LinearOpMode aggregate;
+    public static double Kp = 0.001;
+    public static double Ki = 0;
+    public static double Kd = 0;
+    private double error, previousError, u;
+    private double sError, dError = 0;
+    private double target = 0;
+    public static double HIGH_POSITION = 3200;
+    private boolean isStable;
+    public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
 
     public Lift(LinearOpMode opMode) {
         this.liftMotor = opMode.hardwareMap.get(DcMotorEx.class, "liftMotor");
         this.magneticSensor = opMode.hardwareMap.get(DigitalChannel.class, "magneticSensor");
+        this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // PIDFCoefficients c = new PIDFCoefficients(P_COEF, I_COEF, D_COEF, F_COEF);
-        // liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, c);
         this.aggregate = opMode;
+        liftMotorPowerDriver.start();
     }
 
+    private double liftPos() {
+        int stepsPerRevolution = 420;
+        int D = 3;
+        return D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution;
+    }
 
-    public void setLiftMotorPower(double speed) {
-        if (!unlockStatement) {
-            double HIGH_POSITION = 3200;
-            if (!magneticSensor.getState() && speed > 0) {
-                isOnLimits = true;
-                liftMotor.setPower(0);
-                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            } else if (Math.abs(liftMotor.getCurrentPosition()) >= HIGH_POSITION && speed < 0) {
-                liftMotor.setPower(0);
-                isOnLimits = true;
-            } else {
-                liftMotor.setPower(speed);
-                isOnLimits = false;
+    public class LiftMotorPowerDriver extends Thread {
+        private final ElapsedTime timer = new ElapsedTime();
+
+        @Override
+        public void run() {
+            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            timer.reset();
+
+            while (!isInterrupted()) {
+                error = target - liftPos();
+
+                sError = sError + error * timer.seconds();
+                dError = error - previousError;
+
+                liftMotor.setPower(error * Kp + sError * Ki + dError * Kd / timer.seconds());
+                timer.reset();
+
+
+                previousError = error;
+                FtcDashboard.getInstance().getTelemetry().addData("error:", error);
+                FtcDashboard.getInstance().getTelemetry().addData("previousError:", previousError);
+                FtcDashboard.getInstance().getTelemetry().addData("sError:", sError);
+                FtcDashboard.getInstance().getTelemetry().addData("dError:", dError);
+                FtcDashboard.getInstance().getTelemetry().addData("Power:", getPower());
+                FtcDashboard.getInstance().getTelemetry().addData("Target", target);
+                FtcDashboard.getInstance().getTelemetry().addData("Pos", liftPos());
+                FtcDashboard.getInstance().getTelemetry().update();
             }
-        } else {
-            liftMotor.setPower(speed);
         }
-
-
-        // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
-        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
-        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
-        // dashboardTelemetry.update();
     }
 
-    public double getCurrentPosition() {
-        double num = liftMotor.getCurrentPosition();
-        return num;
+//    public void setLiftMotorPower(double speed) {
+//        if (!unlockStatement) {
+//            double HIGH_POSITION = 3200;
+//            if (!magneticSensor.getState() && speed > 0) {
+//                isOnLimits = true;
+//                liftMotor.setPower(0);
+//                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            } else if (Math.abs(liftMotor.getCurrentPosition()) >= HIGH_POSITION && speed < 0) {
+//                liftMotor.setPower(0);
+//                isOnLimits = true;
+//            } else {
+//                liftMotor.setPower(speed);
+//                isOnLimits = false;
+//            }
+//        } else {
+//            liftMotor.setPower(speed);
+//        }
+//
+//        // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
+//        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
+//        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
+//        // dashboardTelemetry.update();
+//
+
+    public void setTarget(double newTarget) {
+        target = newTarget;
     }
 
-    public double getSpeed() {
-        double num = liftMotor.getPower();
-        return num;
+    public double getTarget() {
+        return target;
+    }
+
+    public double getPower() {
+        return liftMotor.getPower();
     }
 
     public boolean isMagneting() {
@@ -121,4 +159,15 @@ public class Lift {
         liftMotor.setPower(speed);
         aggregate.sleep(500);
     }
+
+    public double getCurrentPosition() {
+        return liftMotor.getCurrentPosition();
+    }
+
+    public void kolxoz(double speed) {
+        liftMotor.setPower(speed);
+    }
+
+
+
 }
