@@ -24,13 +24,25 @@ public class Lift {
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
     private final LinearOpMode aggregate;
-    public static double Kp = 0.001;
+    public static double Kp = 0.05;
     public static double Ki = 0;
     public static double Kd = 0;
     private double error, previousError, u;
     private double sError, dError = 0;
-    private double target = 0;
-    public static double HIGH_POSITION = 3200;
+    private double target = 0; //target = -79 --> MAX POSITION!!!!!!!
+
+    public static double POS_LOWEST = 0;
+    public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
+
+    public static double POS_LOW_BASKET = -30;
+    public static double POS_HIGH_BASKET = -70;
+    public static double POS_SIDE = -4; // Берем с борта
+    public static double POS_LOW_SPECIMEN_BEFORE = -15; // Целимся для установки
+    public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
+    public static double POS_HIGH_SPECIMEN_BEFORE = -47; // Целимся для установки
+    public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
+
+
     private boolean isStable;
     public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
 
@@ -45,7 +57,7 @@ public class Lift {
     private double liftPos() {
         int stepsPerRevolution = 420;
         int D = 3;
-        return D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution;
+        return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0);
     }
 
     public class LiftMotorPowerDriver extends Thread {
@@ -165,6 +177,25 @@ public class Lift {
 
     public void kolxoz(double speed) {
         liftMotor.setPower(speed);
+    }
+
+    public void limits (double speed) {
+        if (!unlockStatement) {
+            if (!magneticSensor.getState() && speed > 0) {
+                isOnLimits = true;
+                liftMotor.setPower(0);
+                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            } else if (Math.abs(liftMotor.getCurrentPosition()) >= POS_HIGHEST && speed < 0) {
+                liftMotor.setPower(0);
+                isOnLimits = true;
+            } else {
+                liftMotor.setPower(speed);
+                isOnLimits = false;
+            }
+        } else {
+            liftMotor.setPower(speed);
+        }
     }
 
 
