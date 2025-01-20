@@ -40,7 +40,6 @@ public class Lift {
         this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.aggregate = opMode;
-        liftMotorPowerDriver.start();
     }
 
     private double liftPos() {

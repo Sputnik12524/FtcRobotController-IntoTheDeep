@@ -17,6 +17,7 @@ public class LiftTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
+        lift.liftMotorPowerDriver.start();
         waitForStart();
 
         while (opModeIsActive()) {
@@ -35,5 +36,6 @@ public class LiftTeleOp extends LinearOpMode {
             dashboardTelemetry.update();
             telemetry.update();
         }
+        lift.liftMotorPowerDriver.interrupt();
     }
 }

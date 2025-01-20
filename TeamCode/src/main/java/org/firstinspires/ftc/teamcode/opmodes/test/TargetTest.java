@@ -16,6 +16,7 @@ public class TargetTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
+        lift.liftMotorPowerDriver.start();
         waitForStart();
 
         while (opModeIsActive()) {
@@ -27,10 +28,7 @@ public class TargetTest extends LinearOpMode {
                 lift.setTarget(-25);
             }
 
-
-
         }
-
-
+        lift.liftMotorPowerDriver.interrupt();
     }
 }
