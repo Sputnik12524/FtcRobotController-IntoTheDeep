@@ -14,11 +14,10 @@ It's just a test program, and if it works, I will try to add RR methods
 @Config
 //@Disabled
 public class TestFieldCentricDrive extends LinearOpMode {
-    private DriveTrain drive;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new DriveTrain(this);
+        DriveTrain drive = new DriveTrain(this);
         waitForStart();
         while (opModeIsActive()){
             double straight = -gamepad1.left_stick_y;

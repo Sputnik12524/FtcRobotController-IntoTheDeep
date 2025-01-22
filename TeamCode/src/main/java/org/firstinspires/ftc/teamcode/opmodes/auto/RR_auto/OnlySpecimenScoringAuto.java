@@ -13,16 +13,14 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
 
 @Autonomous (name = "Only Specimen", group = "Robot")
 public class OnlySpecimenScoringAuto extends LinearOpMode {
-    private TestDT base;
     private Claw claw;
     private Shoulder shoulder;
-    private Lift lift;
 
     @Override
     public void runOpMode() {
-        base = new TestDT(hardwareMap, this);
+        TestDT base = new TestDT(hardwareMap, this);
         claw = new Claw(this);
-        lift = new Lift(this);
+        Lift lift = new Lift(this);
         shoulder = new Shoulder(this);
 
         Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));

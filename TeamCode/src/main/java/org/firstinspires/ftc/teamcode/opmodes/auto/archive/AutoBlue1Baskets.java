@@ -12,20 +12,16 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 @Autonomous (name = "Blue Baskets", group = "Robot")
 @Disabled
 public class AutoBlue1Baskets extends LinearOpMode {
-    private DriveTrain base;
-    private Lift lift;
-    private Shoulder shoulder;
-    private Claw claw;
 
     static final double drive_speed = .3;
     static final double turn_speed = .3;
     static final double side_speed = .25;
     @Override
     public void runOpMode()  {
-        base = new DriveTrain(this);
-        lift = new Lift(this);
-        shoulder = new Shoulder(this);
-        claw = new Claw(this);
+        DriveTrain base = new DriveTrain(this);
+        Lift lift = new Lift(this);
+        Shoulder shoulder = new Shoulder(this);
+        Claw claw = new Claw(this);
 
         waitForStart();
 

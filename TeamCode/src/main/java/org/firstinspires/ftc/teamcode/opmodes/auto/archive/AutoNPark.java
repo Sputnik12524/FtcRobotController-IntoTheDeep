@@ -10,10 +10,9 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 @Config
 @Disabled
 public class AutoNPark extends LinearOpMode {
-    private DriveTrain driveTrain;
     @Override
     public void runOpMode() throws InterruptedException {
-        driveTrain = new DriveTrain(this);
+        DriveTrain driveTrain = new DriveTrain(this);
 
         waitForStart();
         while (opModeIsActive()) {

@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 public class MainTeleOp extends LinearOpMode {
 
     // КБ
-    private boolean stateX = false;
+    private final boolean stateX = false;
     private boolean stateLeftBumperDT = false;
     private boolean stateRightBumperDT = false;
     public static double HIGH_SH = .4;

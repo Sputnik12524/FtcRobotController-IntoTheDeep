@@ -11,20 +11,16 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 @Autonomous (name = "Blue Human", group = "Robot")
 @Disabled
 public class AutoBlue2HumanPlayer extends LinearOpMode {
-    private DriveTrain base;
-    private Claw claw;
-    private Shoulder shoulder;
-    private Lift lift;
 
     static final double drive_speed = .3;
     static final double turn_speed = .3;
     static final double side_speed = .25;
     @Override
     public void runOpMode() {
-        base = new DriveTrain(this);
-        claw = new Claw(this);
-        lift = new Lift(this);
-        shoulder = new Shoulder(this);
+        DriveTrain base = new DriveTrain(this);
+        Claw claw = new Claw(this);
+        Lift lift = new Lift(this);
+        Shoulder shoulder = new Shoulder(this);
 
         waitForStart();
 

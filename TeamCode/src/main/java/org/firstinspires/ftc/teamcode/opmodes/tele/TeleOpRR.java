@@ -25,8 +25,6 @@ public class TeleOpRR extends LinearOpMode {
     private double rotate;
     public static double VELO_SCALE_COEF = 0.00225;
     public static double CORRECTION_COEF = 7; // need 10
-    private double w_target;
-    private double w_real;
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
@@ -68,8 +66,8 @@ public class TeleOpRR extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             //КБ
-            w_target = gamepad1.left_trigger - gamepad1.right_trigger;
-            w_real = driveTrain.getExternalHeadingVelocity();
+            double w_target = gamepad1.left_trigger - gamepad1.right_trigger;
+            double w_real = driveTrain.getExternalHeadingVelocity();
             if (Math.abs(w_real) < 1) {
                 w_real = 0;
             }

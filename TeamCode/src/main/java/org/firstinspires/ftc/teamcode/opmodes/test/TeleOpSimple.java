@@ -9,14 +9,11 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
 public class TeleOpSimple extends LinearOpMode {
 
-    private DriveTrain driveTrain;
-    private boolean stateX = false;
     private boolean stateLeftBumper = false;
-    private boolean stateRightBumper = false;
 
     @Override
     public void runOpMode() {
-        driveTrain = new DriveTrain(this);
+        DriveTrain driveTrain = new DriveTrain(this);
         waitForStart();
         while (opModeIsActive()) {
             // управление кб
@@ -29,11 +26,12 @@ public class TeleOpSimple extends LinearOpMode {
             if(gamepad1.left_bumper && !stateLeftBumper) {
                 driveTrain.switchReverse();
             }
+            boolean stateRightBumper = false;
             if (gamepad1.right_bumper && !stateRightBumper) {
                 driveTrain.switchSlowMode();
             }
             stateLeftBumper = gamepad1.left_bumper;
-            stateX = gamepad2.x;
+            boolean stateX = gamepad2.x;
 
             telemetry.addData("main", main);
             telemetry.addData("side", side);

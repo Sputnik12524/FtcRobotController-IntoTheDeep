@@ -13,11 +13,10 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Config
 @Disabled
 public class AutoFPark extends LinearOpMode {
-    private DriveTrainMecanum drivetrain;
-    public static double DISTANCE = 110;
+    public static final double DISTANCE = 110;
     @Override
     public void runOpMode() throws InterruptedException {
-        drivetrain = new DriveTrainMecanum(hardwareMap,this);
+        DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE)
                 .build();

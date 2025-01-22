@@ -14,24 +14,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Autonomous (name="SimpleAuto16772", group = "Robot")
 @Disabled
 public class SimpleAuto16772 extends LinearOpMode {
-    private DcMotor leftFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightFront = null;
-    private DcMotor rightBack = null;
     private IMU imu = null;
-    private ElapsedTime timer = null;
     static final double SPEED = 0.3;
     static final double TURN_SPEED = 0.2;
 
 
     @Override
     public void runOpMode(){
-        timer = new ElapsedTime();
+        ElapsedTime timer = new ElapsedTime();
         timer.reset();
-        leftFront = hardwareMap.get(DcMotor.class,"left_front");
-        leftBack = hardwareMap.get(DcMotor.class,"left_back");
-        rightFront = hardwareMap.get(DcMotor.class,"right_front");
-        rightBack = hardwareMap.get(DcMotor.class,"right_back");
+        DcMotor leftFront = hardwareMap.get(DcMotor.class, "left_front");
+        DcMotor leftBack = hardwareMap.get(DcMotor.class, "left_back");
+        DcMotor rightFront = hardwareMap.get(DcMotor.class, "right_front");
+        DcMotor rightBack = hardwareMap.get(DcMotor.class, "right_back");
 
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);

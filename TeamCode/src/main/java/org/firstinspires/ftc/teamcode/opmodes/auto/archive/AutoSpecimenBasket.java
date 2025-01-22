@@ -15,20 +15,16 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
 @Autonomous (name = "RR AUTO BASKET SPECIMEN", group = "Robot")
 @Disabled
 public class AutoSpecimenBasket extends LinearOpMode {
-    private TestDT base;
-    private Claw claw;
-    private Shoulder shoulder;
-    private Lift lift;
 
     static final double drive_speed = .3;
     static final double turn_speed = .3;
     static final double side_speed = .25;
     @Override
     public void runOpMode() {
-        base = new TestDT(hardwareMap, this);
-        claw = new Claw(this);
-        lift = new Lift(this);
-        shoulder = new Shoulder(this);
+        TestDT base = new TestDT(hardwareMap, this);
+        Claw claw = new Claw(this);
+        Lift lift = new Lift(this);
+        Shoulder shoulder = new Shoulder(this);
 
         Pose2d startPose = new Pose2d(11,-46);
         base.setPoseEstimate(startPose);

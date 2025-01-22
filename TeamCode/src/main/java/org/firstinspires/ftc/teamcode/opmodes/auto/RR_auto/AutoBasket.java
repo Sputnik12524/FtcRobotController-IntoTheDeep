@@ -7,17 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
 
 @Autonomous(name="AutoBasket", group="Robot")
 public class AutoBasket extends LinearOpMode {
 
-    private TestDT driveTrain;
-
     @Override
     public void runOpMode() throws InterruptedException {
-        driveTrain = new TestDT(hardwareMap, this);
+        TestDT driveTrain = new TestDT(hardwareMap, this);
 
         Pose2d startPose = new Pose2d(-10,-57,Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);

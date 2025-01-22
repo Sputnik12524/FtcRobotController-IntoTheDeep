@@ -25,7 +25,7 @@ public class DriveTrain {
         return PULSES / (PI*WHEEL_DIAMETER) * centimeter;
     }
     private double multiplier = 1;
-    private LinearOpMode aggregate;
+    private final LinearOpMode aggregate;
 
     public DriveTrain(LinearOpMode aggregate) {
         leftFront = aggregate.hardwareMap.get(DcMotor.class, "left_front");

@@ -41,25 +41,25 @@ import java.util.List;
 @Config
 public class TestDT extends MecanumDrive {
     public static double multiplier = 1;
-    private LinearOpMode aggregate;
+    private final LinearOpMode aggregate;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(13, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, 0); //kP = 11
     public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(DriveConstants.MAX_VEL, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(DriveConstants.MAX_ACCEL);
-    private TrajectoryFollower follower;
-    private DcMotorEx leftFront, leftBack, rightBack, rightFront;
-    private List<DcMotorEx> motors;
-    private IMU imu;
+    private final TrajectoryFollower follower;
+    private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    private final List<DcMotorEx> motors;
+    private final IMU imu;
     IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
             DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-    private VoltageSensor batteryVoltageSensor;
-    private List<Integer> lastEncPositions = new ArrayList<>();
-    private List<Integer> lastEncVels = new ArrayList<>();
+    private final VoltageSensor batteryVoltageSensor;
+    private final List<Integer> lastEncPositions = new ArrayList<>();
+    private final List<Integer> lastEncVels = new ArrayList<>();
 
     public TestDT(HardwareMap hardwareMap, LinearOpMode aggregate) {
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.TRACK_WIDTH, LATERAL_MULTIPLIER);

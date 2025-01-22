@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules;
 
-// import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-// import com.acmerobotics.dashboard.FtcDashboard;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -24,8 +20,9 @@ public class Lift {
     public static double Kp = 1;
     public static double Ki = 0;
     public static double Kd = 0;
-    private double error, previousError, u;
-    private double sError, dError = 0;
+    private double previousError;
+    private double u;
+    private double sError;
     private double target;
     public static double HIGH_POSITION = 3200;
     private boolean isStable;
@@ -53,10 +50,10 @@ public class Lift {
             timer.reset();
 
             while (!isInterrupted()) {
-                error = liftPos() - target;
+                double error = liftPos() - target;
 
                 sError = sError + error * timer.seconds();
-                dError = error - previousError;
+                double dError = error - previousError;
 
                 liftMotor.setPower(error * Kp + sError * Ki + dError * Kd / timer.seconds());
                 timer.reset();
@@ -67,31 +64,6 @@ public class Lift {
             }
         }
     }
-
-//    public void setLiftMotorPower(double speed) {
-//        if (!unlockStatement) {
-//            double HIGH_POSITION = 3200;
-//            if (!magneticSensor.getState() && speed > 0) {
-//                isOnLimits = true;
-//                liftMotor.setPower(0);
-//                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            } else if (Math.abs(liftMotor.getCurrentPosition()) >= HIGH_POSITION && speed < 0) {
-//                liftMotor.setPower(0);
-//                isOnLimits = true;
-//            } else {
-//                liftMotor.setPower(speed);
-//                isOnLimits = false;
-//            }
-//        } else {
-//            liftMotor.setPower(speed);
-//        }
-//
-//        // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
-//        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
-//        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
-//        // dashboardTelemetry.update();
-//
 
     public void setTarget(double newTarget) {
         target = newTarget;
