@@ -17,20 +17,19 @@ public class AutoSpecimen extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         driveTrain = new TestDT(hardwareMap,this);
-        Pose2d startPose = new Pose2d(10,-56,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(10,-57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .forward(19, TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(19, TestDT.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
-                .turn(Math.toRadians(180))
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(1)
-                .back(14)
+                .back(11)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
@@ -42,8 +41,10 @@ public class AutoSpecimen extends LinearOpMode {
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(52,-53),-90)
+                .splineTo(new Vector2d(45,-55),-90)
                 .turn(Math.toRadians(30))
+                .forward(7,TestDT.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH),TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
@@ -69,9 +70,8 @@ public class AutoSpecimen extends LinearOpMode {
                 .build();
 
         waitForStart();
+        if (isStopRequested()) return;
+        driveTrain.followTrajectorySequence(traj);
 
-        while (opModeIsActive() & !isStopRequested()){
-            driveTrain.followTrajectorySequence(traj);
-        }
     }
 }

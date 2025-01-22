@@ -13,17 +13,19 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
 @Autonomous(name="AutoBasket", group="Robot")
 public class AutoBasket extends LinearOpMode {
 
-    private DriveTrainMecanum driveTrain;
+    private TestDT driveTrain;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        driveTrain = new DriveTrainMecanum(hardwareMap, this);
-        Pose2d startPose = new Pose2d(-10,-56,Math.toRadians(90));
+        driveTrain = new TestDT(hardwareMap, this);
+
+        Pose2d startPose = new Pose2d(-10,-57,Math.toRadians(90));
+        driveTrain.setPoseEstimate(startPose);
+
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .forward(19, TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .back(19, TestDT.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
-                .turn(Math.toRadians(180))
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
@@ -41,8 +43,9 @@ public class AutoBasket extends LinearOpMode {
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .turn(Math.toRadians(-55))
-                .splineTo(new Vector2d(-53,-45), 90)
+                .turn(Math.toRadians(-45))
+                .forward(30)
+                .splineTo(new Vector2d(-52,-40), 90)
                 .turn(Math.toRadians(-45))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
@@ -66,11 +69,10 @@ public class AutoBasket extends LinearOpMode {
                 })
                 .splineTo(new Vector2d(-25,-9),0)
                 .build();
-        //нужно поставить плечо в позицию, с которой скорим в корзины
+        //здесь нужно поставить плечо в позицию, с которой скорим в корзины
         waitForStart();
+        if(isStopRequested()) return;
+        driveTrain.followTrajectorySequence(traj);
 
-        while(opModeIsActive() & !isStopRequested()) {
-            driveTrain.followTrajectorySequence(traj);
-        }
     }
 }

@@ -16,7 +16,7 @@ public class MeepMeepAutoSpecimen {
 
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(10, -56, 0))
-                        .turn(Math.toRadians(90))
+                        .turn(Math.toRadians(-90))
                         .forward(19)
                         .waitSeconds(1)
                         .turn(Math.toRadians(180))

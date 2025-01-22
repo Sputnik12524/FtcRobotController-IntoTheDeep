@@ -29,8 +29,31 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         base.setPoseEstimate(startPose);
 
         TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
-                .forward(19, TestDT.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(19, TestDT.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(.5);
+                })
+                .turn(Math.toRadians(180))
+                .waitSeconds(1)
+                .back(19)
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(.7);
+                })
+                .forward(4)
+                .addDisplacementMarker( () -> {
+                    claw.openSh();
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(-120))
+                .waitSeconds(1)
+                .back(50)
+                .waitSeconds(1)
+                .addDisplacementMarker( () -> {
+                    shoulder.shoulderPosition(0);
+                })
                 .build();
 
         shoulder.shoulderPosition(0);
@@ -39,8 +62,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
 
         waitForStart();
 
-        while(opModeIsActive()) {
-            base.followTrajectorySequence(trajectoryToSubmarine1);
-        }
+        if (isStopRequested());
+        base.followTrajectorySequence(trajectoryToSubmarine1);
     }
 }
