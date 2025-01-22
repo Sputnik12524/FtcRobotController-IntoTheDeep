@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -7,28 +7,28 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-@Autonomous(name="AutoBasket", group="Robot")
-public class AutoBasket extends LinearOpMode {
+@Autonomous(name = "Auto Specimen", group = "Robot")
+public class AutoSpecimen extends LinearOpMode {
+    //lift
 
     @Override
     public void runOpMode() throws InterruptedException {
-        TestDT driveTrain = new TestDT(hardwareMap, this);
-
-        Pose2d startPose = new Pose2d(-10,-57,Math.toRadians(90));
+        DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
+        Pose2d startPose = new Pose2d(10,-57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .back(19, TestDT.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .back(19, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(1)
-                .back(14)
+                .back(11)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
@@ -40,35 +40,36 @@ public class AutoBasket extends LinearOpMode {
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .turn(Math.toRadians(-45))
-                .forward(30)
-                .splineTo(new Vector2d(-52,-40), 90)
-                .turn(Math.toRadians(-45))
+                .splineTo(new Vector2d(45,-55),-90)
+                .turn(Math.toRadians(30))
+                .forward(7, DriveTrainMecanum.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH), DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
+                    telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                //capturing yellow sample
+                //here will be capturing of the specimen
 
                 .back(3)
+                .turn(Math.toRadians(60))
+                .back(46)
+                .turn(Math.toRadians(-60))
+                .waitSeconds(10)
                 .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь поднимется подъемник с наклоненным плечом");
+                    telemetry.addLine("Здесь мы зацепим специмен (lift down)");
                     telemetry.update();
                 })
-                //scoring to basket
+                //here will be scoring of the specimen
 
-                .turn(Math.toRadians(-20))
-                .waitSeconds(5)
-                .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь откроется клешня");
-                    telemetry.update();
-                })
-                .splineTo(new Vector2d(-25,-9),0)
+                .forward(3)
+                .splineTo(new Vector2d(52,-53),0)
+                .turn(Math.toRadians(90))
+                .waitSeconds(1)
                 .build();
-        //здесь нужно поставить плечо в позицию, с которой скорим в корзины
+
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(traj);
 
     }

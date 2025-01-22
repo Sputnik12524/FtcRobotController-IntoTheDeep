@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
 @Autonomous (name = "Only Specimen", group = "Robot")
 public class OnlySpecimenScoringAuto extends LinearOpMode {
@@ -18,7 +18,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        TestDT base = new TestDT(hardwareMap, this);
+        DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
         claw = new Claw(this);
         Lift lift = new Lift(this);
         shoulder = new Shoulder(this);
@@ -27,8 +27,8 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         base.setPoseEstimate(startPose);
 
         TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
-                .forward(19, TestDT.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        TestDT.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .forward(19, DriveTrainMecanum.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.5);

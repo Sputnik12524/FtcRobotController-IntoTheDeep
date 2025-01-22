@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.RR_auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.TestDT;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "For Test", group = "Robot")
@@ -16,7 +16,7 @@ public class TestAuto extends LinearOpMode {
     public static double y_distance = 30;
     @Override
     public void runOpMode() throws InterruptedException {
-        TestDT drivetrain = new TestDT(hardwareMap, this);
+        DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
 
         Pose2d startPose = new Pose2d(-11,-53,0);
         drivetrain.setPoseEstimate(startPose);
