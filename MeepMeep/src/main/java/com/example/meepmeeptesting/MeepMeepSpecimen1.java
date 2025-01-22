@@ -16,13 +16,8 @@ public class MeepMeepSpecimen1 {
                 .setConstraints(52, 52, Math.toRadians(180), Math.toRadians(180), 13)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(9, -54, Math.toRadians(180)))
                         .waitSeconds(5)
-                        /*
-                        .turn(Math.toRadians(180))
-                        .waitSeconds(1)
-                         */
-
                         .back(19)
-                        /*.forward(5)
+                        .forward(5)
                         .waitSeconds(1)
                         .turn(Math.toRadians(180))
                         .waitSeconds(1)
@@ -34,7 +29,7 @@ public class MeepMeepSpecimen1 {
                         .waitSeconds(1)
                         .back(40)
                         .waitSeconds(1)
-                        .waitSeconds(1)*/
+                        .waitSeconds(1)
                         .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)

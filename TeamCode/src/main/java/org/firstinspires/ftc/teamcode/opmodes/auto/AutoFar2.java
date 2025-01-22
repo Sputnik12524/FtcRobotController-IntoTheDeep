@@ -15,15 +15,12 @@ public class AutoFar2 extends LinearOpMode {
     public static final double DISTANCE = 45;
     @Override
     public void runOpMode() throws InterruptedException {
-        //driveTrain = new DriveTrain(this);
-        //private DriveTrain driveTrain;
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE,
                         DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
-
         waitForStart();
         sleep(2700);
         drivetrain.followTrajectory(trajectory);

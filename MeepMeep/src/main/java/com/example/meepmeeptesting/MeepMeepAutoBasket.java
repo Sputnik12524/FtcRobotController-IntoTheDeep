@@ -31,10 +31,9 @@ public class MeepMeepAutoBasket {
                         .splineTo(new Vector2d(-52,-40), 90)
                         .turn(Math.toRadians(-45))
                         .back(7)
-                        .waitSeconds(10) //capturing yellow sample
+                        .waitSeconds(10)
                         .turn(Math.toRadians(-20))
                         .waitSeconds(10)
-                       // .turn(Math.toRadians(45))
                         .splineTo(new Vector2d(-25,-9),0)
                         .build());
 

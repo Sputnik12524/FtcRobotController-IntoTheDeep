@@ -20,31 +20,19 @@ public class TestFieldCentricDrive extends LinearOpMode {
         DriveTrain drive = new DriveTrain(this);
         waitForStart();
         while (opModeIsActive()){
-            double straight = -gamepad1.left_stick_y;
-            double side = gamepad1.left_stick_x * 1.1;
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
 
             if(gamepad1.left_bumper){
                 DriveTrain.imu.resetYaw();
             }
 
-            double botHeading = DriveTrain.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-            double rotX = side * Math.cos(-botHeading) - straight * Math.sin(-botHeading);
-            double rotY = side * Math.sin(-botHeading) + straight * Math.cos(-botHeading);
+            double heading = DriveTrain.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            double powerX = (x * Math.cos(heading) + (-y * Math.sin(heading)));
+            double powerY = (x * Math.sin(heading) + y * Math.cos(heading));
 
-            rotX *= 1.1;
-
-            double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rotate), 1);
-            double fLPow = (rotY+rotX+rotate) / denominator;
-            double bLPow = (rotY-rotX+rotate) / denominator;
-            double fRPow = (rotY-rotX-rotate) / denominator;
-            double bRPow = (rotY+rotX-rotate) / denominator;
-
-            DriveTrain.leftFront.setPower(fLPow);
-            DriveTrain.leftBack.setPower(bLPow);
-            DriveTrain.rightFront.setPower(fRPow);
-            DriveTrain.rightBack.setPower(bRPow);
+            drive.setPower(powerY,powerX,rotate);
         }
     }
-
 }

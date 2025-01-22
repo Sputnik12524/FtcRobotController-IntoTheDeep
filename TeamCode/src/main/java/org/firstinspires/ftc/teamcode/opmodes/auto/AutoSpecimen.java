@@ -11,12 +11,10 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 
 @Autonomous(name = "Auto Specimen", group = "Robot")
 public class AutoSpecimen extends LinearOpMode {
-    //lift
-
     @Override
     public void runOpMode() throws InterruptedException {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
-        Pose2d startPose = new Pose2d(10,-57, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
@@ -40,9 +38,9 @@ public class AutoSpecimen extends LinearOpMode {
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(45,-55),-90)
+                .splineTo(new Vector2d(45, -55), -90)
                 .turn(Math.toRadians(30))
-                .forward(7, DriveTrainMecanum.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,
+                .forward(7, DriveTrainMecanum.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH), DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
@@ -50,7 +48,6 @@ public class AutoSpecimen extends LinearOpMode {
                     telemetry.update();
                 })
                 //here will be capturing of the specimen
-
                 .back(3)
                 .turn(Math.toRadians(60))
                 .back(46)
@@ -61,9 +58,8 @@ public class AutoSpecimen extends LinearOpMode {
                     telemetry.update();
                 })
                 //here will be scoring of the specimen
-
                 .forward(3)
-                .splineTo(new Vector2d(52,-53),0)
+                .splineTo(new Vector2d(52, -53), 0)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
                 .build();
@@ -71,6 +67,5 @@ public class AutoSpecimen extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(traj);
-
     }
 }

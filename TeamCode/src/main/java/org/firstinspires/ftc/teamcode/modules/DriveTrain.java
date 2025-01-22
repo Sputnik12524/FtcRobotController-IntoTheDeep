@@ -11,10 +11,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Config
 public class DriveTrain {
-    public static DcMotor leftFront;
-    public static DcMotor rightFront;
-    public static DcMotor leftBack;
-    public static DcMotor rightBack;
+    public final DcMotor leftFront;
+    public final DcMotor rightFront;
+    public final DcMotor leftBack;
+    public final DcMotor rightBack;
     public static IMU imu;
 
     static final double PI = Math.PI;

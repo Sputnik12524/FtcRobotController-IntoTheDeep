@@ -8,11 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 @Config
 public class Lift {
     public final DcMotorEx liftMotor;
-
     public final DigitalChannel magneticSensor;
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
@@ -58,13 +56,11 @@ public class Lift {
                 liftMotor.setPower(error * Kp + sError * Ki + dError * Kd / timer.seconds());
                 timer.reset();
 
-
                 previousError = error;
                 isOnLimits = (!magneticSensor.getState() && speed > 0) || (liftMotor.getCurrentPosition() >= HIGH_POSITION && speed < 0);
             }
         }
     }
-
     public void setTarget(double newTarget) {
         target = newTarget;
     }
@@ -126,7 +122,5 @@ public class Lift {
     public void kolxoz(double speed) {
         liftMotor.setPower(speed);
     }
-
-
 
 }

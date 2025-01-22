@@ -36,7 +36,6 @@ public class MainTeleOp extends LinearOpMode {
     private boolean stateRightBumper = false;
 
 
-
     @Override
     public void runOpMode() {
         DriveTrain dt = new DriveTrain(this);
@@ -49,20 +48,17 @@ public class MainTeleOp extends LinearOpMode {
         sl.shoulderPosition(INITIAL_POSITION);
         lt.resetZero();
 
-        while (opModeInInit()) {   }
+        while (opModeInInit()) {
+        }
         waitForStart();
         while (opModeIsActive()) {
-
-
-
-
             // Управление колесной базой
             double main = gamepad1.left_stick_y;
             double side = gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             dt.setPower(main, side, rotate);
 
-            if(gamepad1.left_bumper && !stateLeftBumperDT) {
+            if (gamepad1.left_bumper && !stateLeftBumperDT) {
                 dt.switchSlowMode();
             }
             if (gamepad1.right_bumper && !stateRightBumperDT) {
@@ -84,9 +80,8 @@ public class MainTeleOp extends LinearOpMode {
                 lt.unlockLift();
             }
 
-
             // Управление плечо
-             //по диапазону
+            //по диапазону
             if (gamepad2.dpad_down) {
                 sl.shoulderPlus();
                 sleep(5);
@@ -95,15 +90,15 @@ public class MainTeleOp extends LinearOpMode {
                 sl.shoulderMinus();
                 sleep(5);
             }
-             //по позициям
-            if(gamepad2.y){
+            //по позициям
+            if (gamepad2.y) {
                 sl.shoulderPosition(HIGH_SH); //highest (для корзины)
             } else if (gamepad2.b) {
                 sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
-            } else if(gamepad2.a){
+            } else if (gamepad2.a) {
                 cl.closeLift();
                 sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
-            } else if(gamepad2.x){
+            } else if (gamepad2.x) {
                 cl.closeLift();
                 sl.shoulderPosition(SUB_SH); //lowest (для взятия пробы)
             }

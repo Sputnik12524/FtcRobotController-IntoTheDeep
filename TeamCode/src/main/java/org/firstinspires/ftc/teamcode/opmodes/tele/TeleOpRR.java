@@ -13,10 +13,7 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-/*
-Need test
- */
-@TeleOp(name="TeleOp Road Runner")
+@TeleOp(name = "TeleOp Road Runner")
 @Config
 public class TeleOpRR extends LinearOpMode {
 
@@ -36,9 +33,6 @@ public class TeleOpRR extends LinearOpMode {
     public static double LOW_SH = .86;
     boolean bState;
 
-    // Плечо
-
-
     // Клешни
     private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false;
@@ -47,7 +41,7 @@ public class TeleOpRR extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lt = new Lift(this);
-       // DriveTrain dt = new DriveTrain(this);
+        // DriveTrain dt = new DriveTrain(this);
         Shoulder sl = new Shoulder(this);
         Claw cl = new Claw(this);
         cl.closeSh();
@@ -58,7 +52,6 @@ public class TeleOpRR extends LinearOpMode {
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
-
 
         waitForStart();
 
@@ -82,13 +75,13 @@ public class TeleOpRR extends LinearOpMode {
                     )
             );
 
-            if(gamepad1.left_bumper){
+            if (gamepad1.left_bumper) {
                 driveTrain.switchSlowMode();
             }
 
             driveTrain.update();
 
-            if(gamepad1.x) {
+            if (gamepad1.x) {
                 driveTrain.resetIMU();
             }
 
@@ -111,9 +104,8 @@ public class TeleOpRR extends LinearOpMode {
                 lt.unlockLift();
             }
 
-
             // Управление плечо
-            //по диапозону
+            //по диапазону
             if (gamepad2.dpad_down) {
                 sl.shoulderPlus();
                 sleep(5);
@@ -123,14 +115,14 @@ public class TeleOpRR extends LinearOpMode {
                 sleep(5);
             }
             //по позициям
-            if(gamepad2.y){
+            if (gamepad2.y) {
                 sl.shoulderPosition(HIGH_SH); //highest (для корзины)
             } else if (gamepad2.b) {
                 sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
-            } else if(gamepad2.a){
+            } else if (gamepad2.a) {
                 cl.closeLift();
                 sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
-            } else if(gamepad2.x){
+            } else if (gamepad2.x) {
                 cl.closeLift();
                 sl.shoulderPosition(SUB_SH); //lowest (для взятия пробы)
             }
@@ -145,8 +137,6 @@ public class TeleOpRR extends LinearOpMode {
             stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
             bState = gamepad2.b;
-
-
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ");

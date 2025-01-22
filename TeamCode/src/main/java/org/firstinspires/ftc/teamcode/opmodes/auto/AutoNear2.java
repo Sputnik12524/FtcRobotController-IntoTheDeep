@@ -15,8 +15,6 @@ public class AutoNear2 extends LinearOpMode {
     public static final double DISTANCE = 70;
     @Override
     public void runOpMode() throws InterruptedException {
-        //driveTrain = new DriveTrain(this);
-        //private DriveTrain driveTrain;
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE, DriveTrainMecanum.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
