@@ -16,19 +16,21 @@ public class Intake {
     private final CRServo  brushServo;
     private final Servo flipServoLeft;
     private final Servo flipServoRight;
-    private final Servo extensionServoLeft;
-    private final Servo extensionServoRight;
+    private final Servo extensionServoLeft; //0.06
+    private final Servo extensionServoRight; //0.06
 
     private final SamplesTaker samplesTaker;
 
 
 
 
-    public static double EXTENSION_MAX = 1;
-    public static double EXTENSION_MIN = 0;
+    public static double EXTENSION_MAX = 0.6;
+    public static double EXTENSION_MIN = 0.05;
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_K = 0.6;
-    public static double  FLIP_INTAKE = 0.75;
+    public static double EXT_START_POS = 0.065;
+
+    public static double  FLIP_INTAKE = 0.67;
     public static double  FLIP_OUTTAKE = 0;
     public static double FLIP_TIME = 700;
     public static double SPEED_BRUSH = 1;
@@ -48,10 +50,9 @@ public class Intake {
 
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
-        this.extensionServoLeft.setDirection(Servo.Direction.REVERSE);
+        this.extensionServoRight.setDirection(Servo.Direction.REVERSE);
 
         this.samplesTaker = new SamplesTaker();
-        samplesTaker.start();
 
 
     }
@@ -114,7 +115,7 @@ public class Intake {
         samplesTaker.needTake = true;
     }
 
-    class SamplesTaker extends Thread {
+    public class SamplesTaker extends Thread {
         boolean needTake = false;
 
         private ElapsedTime timer = new ElapsedTime();
