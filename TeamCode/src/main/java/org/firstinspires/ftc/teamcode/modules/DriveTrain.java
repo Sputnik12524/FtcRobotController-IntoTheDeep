@@ -11,11 +11,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Config
 public class DriveTrain {
-    private DcMotor leftFront;
-    private DcMotor rightFront;
-    private DcMotor leftBack;
-    private DcMotor rightBack;
-    private IMU imu;
+    private final DcMotor leftFront;
+    private final DcMotor rightFront;
+    private final DcMotor leftBack;
+    private final DcMotor rightBack;
+    public final IMU imu;
 
     static final double PI = Math.PI;
     static final double WHEEL_DIAMETER = 10.1; // wheel diameter given in centimeters
@@ -25,7 +25,7 @@ public class DriveTrain {
         return PULSES / (PI*WHEEL_DIAMETER) * centimeter;
     }
     private double multiplier = 1;
-    private LinearOpMode aggregate;
+    private final LinearOpMode aggregate;
 
     public DriveTrain(LinearOpMode aggregate) {
         leftFront = aggregate.hardwareMap.get(DcMotor.class, "left_front");
@@ -49,7 +49,7 @@ public class DriveTrain {
         this.aggregate = aggregate;
     }
 
-    public void driveStraight(double DRIVE_SPEED, double Distance){
+    public void driveStraight(double DRIVE_SPEED, double distance){
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,7 +65,7 @@ public class DriveTrain {
         leftBack.setPower(DRIVE_SPEED);
         rightBack.setPower(DRIVE_SPEED);
 
-        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(Distance));
+        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance));
 
         leftFront.setPower(0);
         rightFront.setPower(0);

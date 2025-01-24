@@ -1,37 +1,37 @@
-package org.firstinspires.ftc.teamcode.opmodes.tele;
+package org.firstinspires.ftc.teamcode.opmodes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name="TeleOp Test", group="Robot")
+@TeleOp(name="TeleOp Test", group="Robot")
 
 public class TeleOpSimple extends LinearOpMode {
 
-    private DriveTrain driveTrain;
-    private boolean stateX = false;
     private boolean stateLeftBumper = false;
-    private boolean stateRightBumper = false;
 
     @Override
     public void runOpMode() {
-        driveTrain = new DriveTrain(this);
+        DriveTrain driveTrain = new DriveTrain(this);
         waitForStart();
         while (opModeIsActive()) {
             // управление кб
             double main = gamepad1.left_stick_y;
-            double side = -gamepad1.left_stick_x;
+            double side = -gamepad1.left_stick_x * 1.1;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
-            driveTrain.setPower(main, side, rotate);
+            double den = Math.max(Math.abs(main) + Math.abs(side) + Math.abs(rotate), 1);
+            driveTrain.setPower(main / den, side / den, rotate / den);
 
             if(gamepad1.left_bumper && !stateLeftBumper) {
                 driveTrain.switchReverse();
             }
+            boolean stateRightBumper = false;
             if (gamepad1.right_bumper && !stateRightBumper) {
                 driveTrain.switchSlowMode();
             }
             stateLeftBumper = gamepad1.left_bumper;
-            stateX = gamepad2.x;
+            boolean stateX = gamepad2.x;
 
             telemetry.addData("main", main);
             telemetry.addData("side", side);
