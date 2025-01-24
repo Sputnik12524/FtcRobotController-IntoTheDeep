@@ -25,10 +25,10 @@ public class TestFieldCentricDrive extends LinearOpMode {
             double rotate = gamepad1.right_stick_x;
 
             if(gamepad1.left_bumper){
-                DriveTrain.imu.resetYaw();
+                drive.imu.resetYaw();
             }
 
-            double heading = DriveTrain.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            double heading = drive.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             double powerX = (x * Math.cos(heading) + (-y * Math.sin(heading)));
             double powerY = (x * Math.sin(heading) + y * Math.cos(heading));
 

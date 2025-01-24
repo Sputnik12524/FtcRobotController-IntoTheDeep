@@ -15,7 +15,7 @@ public class DriveTrain {
     private final DcMotor rightFront;
     private final DcMotor leftBack;
     private final DcMotor rightBack;
-    private final IMU imu;
+    public final IMU imu;
 
     static final double PI = Math.PI;
     static final double WHEEL_DIAMETER = 10.1; // wheel diameter given in centimeters

@@ -20,8 +20,8 @@ public class AutoBasket extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .back(19, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .back(19, driveTrain.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        driveTrain.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь поднимется подъемник");
