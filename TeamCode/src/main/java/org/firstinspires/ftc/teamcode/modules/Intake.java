@@ -21,11 +21,9 @@ public class Intake {
 
     private final SamplesTaker samplesTaker;
 
-
-
-
     public static double EXTENSION_MAX = 0.6;
     public static double EXTENSION_MIN = 0.05;
+
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_K = 0.6;
     public static double EXT_START_POS = 0.065;
@@ -34,10 +32,6 @@ public class Intake {
     public static double  FLIP_OUTTAKE = 0;
     public static double FLIP_TIME = 700;
     public static double SPEED_BRUSH = 1;
-
-
-
-
 
     public Intake(LinearOpMode opMode) {
         this.flipServoLeft = opMode.hardwareMap.servo.get("flipServoL");
@@ -55,19 +49,20 @@ public class Intake {
         this.extensionServoRight.setDirection(Servo.Direction.REVERSE);
 
         this.samplesTaker = new SamplesTaker();
-
-
     }
+
     public void brushIntake() {
         brushServoLeft.setPower(SPEED_BRUSH);
         brushServoRight.setPower(SPEED_BRUSH);
         brushServo.setPower(SPEED_BRUSH);
     }
+
     public void brushOuttake() {
         brushServoLeft.setPower(-SPEED_BRUSH);
         brushServoRight.setPower(-SPEED_BRUSH);
         brushServo.setPower(-SPEED_BRUSH);
     }
+
     public void brushStop() {
         brushServoLeft.setPower(0);
         brushServoRight.setPower(0);
@@ -86,16 +81,19 @@ public class Intake {
             extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k * EXT_K));
         }
     }
+
     public void extensionPosition(double position) {
         extensionServoLeft.setPosition(position);
         extensionServoRight.setPosition(position);
     }
+
     public void extensionMinus() {
         if (extensionServoRight.getPosition() > EXTENSION_MIN) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition()-EXTENSION_STEP);
             extensionServoRight.setPosition(extensionServoRight.getPosition()-EXTENSION_STEP);
         }
     }
+
     public void extensionPlus() {
         if (extensionServoRight.getPosition() < EXTENSION_MAX) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition()+EXTENSION_STEP);
@@ -136,6 +134,4 @@ public class Intake {
         }
 
     }
-
-
 }
