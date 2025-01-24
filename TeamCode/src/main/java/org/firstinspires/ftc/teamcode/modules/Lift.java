@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class Lift {
-    public final DcMotorEx liftMotor;
-    public final DigitalChannel magneticSensor;
+    private final DcMotorEx liftMotor;
+    private final DigitalChannel magneticSensor;
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
     private final LinearOpMode aggregate;
