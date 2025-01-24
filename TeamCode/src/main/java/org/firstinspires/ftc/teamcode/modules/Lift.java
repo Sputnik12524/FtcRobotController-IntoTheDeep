@@ -1,26 +1,19 @@
 package org.firstinspires.ftc.teamcode.modules;
 
-// import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-// import com.acmerobotics.dashboard.FtcDashboard;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.lang.annotation.Target;
-
-
 @Config
 public class Lift {
     public final DcMotorEx liftMotor;
-
     public final DigitalChannel magneticSensor;
+
     private boolean isOnLimits = false;
     private boolean unlockStatement = false;
     private final LinearOpMode aggregate;
@@ -33,7 +26,6 @@ public class Lift {
 
     public static double POS_LOWEST = 0;
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
-
     public static double POS_LOW_BASKET = -30;
     public static double POS_HIGH_BASKET = -70;
     public static double POS_SIDE = -4; // Берем с борта
@@ -75,7 +67,7 @@ public class Lift {
                 sError = sError + error * timer.seconds();
                 dError = error - previousError;
 
-                liftMotor.setPower(error * Kp + sError * Ki + dError * Kd / timer.seconds());
+                limits(error * Kp + sError * Ki + dError * Kd / timer.seconds());
                 timer.reset();
 
 
@@ -91,31 +83,6 @@ public class Lift {
             }
         }
     }
-
-//    public void setLiftMotorPower(double speed) {
-//        if (!unlockStatement) {
-//            double HIGH_POSITION = 3200;
-//            if (!magneticSensor.getState() && speed > 0) {
-//                isOnLimits = true;
-//                liftMotor.setPower(0);
-//                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            } else if (Math.abs(liftMotor.getCurrentPosition()) >= HIGH_POSITION && speed < 0) {
-//                liftMotor.setPower(0);
-//                isOnLimits = true;
-//            } else {
-//                liftMotor.setPower(speed);
-//                isOnLimits = false;
-//            }
-//        } else {
-//            liftMotor.setPower(speed);
-//        }
-//
-//        // telemetry.addData("encoder position: ", liftMotor.getCurrentPosition());
-//        // dashboardTelemetry.addData("Velocity:", liftMotor.getVelocity());
-//        // dashboardTelemetry.addData("Real Velocity:", speed * VELOCITY_COEF);
-//        // dashboardTelemetry.update();
-//
 
     public void setTarget(double newTarget) {
         target = newTarget;
@@ -179,7 +146,7 @@ public class Lift {
         liftMotor.setPower(speed);
     }
 
-    public void limits (double speed) {
+    public void limits(double speed) {
         if (!unlockStatement) {
             if (!magneticSensor.getState() && speed > 0) {
                 isOnLimits = true;
@@ -197,7 +164,4 @@ public class Lift {
             liftMotor.setPower(speed);
         }
     }
-
-
-
 }
