@@ -22,6 +22,7 @@ public class Lift {
     public static double Kd = 0;
     private double error, previousError, u;
     private double sError, dError = 0;
+    private double limits;
     private double target = 0; //target = -79 --> MAX POSITION!!!!!!!
 
     public static double POS_LOWEST = 0;
@@ -33,6 +34,7 @@ public class Lift {
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
     public static double POS_HIGH_SPECIMEN_BEFORE = -47; // Целимся для установки
     public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
+
 
 
     private boolean isStable;
@@ -66,8 +68,9 @@ public class Lift {
 
                 sError = sError + error * timer.seconds();
                 dError = error - previousError;
+                limits = error * Kp + sError * Ki + dError * Kd / timer.seconds();
 
-                limits(error * Kp + sError * Ki + dError * Kd / timer.seconds());
+                limits(limits);
                 timer.reset();
 
 
@@ -78,6 +81,7 @@ public class Lift {
                 FtcDashboard.getInstance().getTelemetry().addData("dError:", dError);
                 FtcDashboard.getInstance().getTelemetry().addData("Power:", getPower());
                 FtcDashboard.getInstance().getTelemetry().addData("Target", target);
+                FtcDashboard.getInstance().getTelemetry().addData("limits", limits);
                 FtcDashboard.getInstance().getTelemetry().addData("Pos", liftPos());
                 FtcDashboard.getInstance().getTelemetry().update();
             }
@@ -153,15 +157,23 @@ public class Lift {
                 liftMotor.setPower(0);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            } else if (Math.abs(liftMotor.getCurrentPosition()) >= POS_HIGHEST && speed < 0) {
+                aggregate.telemetry.addLine("Нижний лимит");
+                aggregate.telemetry.update();
+            } else if (liftPos() <= POS_HIGHEST && speed < 0) {
                 liftMotor.setPower(0);
                 isOnLimits = true;
+                aggregate.telemetry.addLine("Верхний лимит");
+                aggregate.telemetry.update();
             } else {
                 liftMotor.setPower(speed);
                 isOnLimits = false;
+                aggregate.telemetry.addLine("Работаю");
+                aggregate.telemetry.update();
             }
         } else {
             liftMotor.setPower(speed);
+            aggregate.telemetry.addLine("Работаю без лимита");
+            aggregate.telemetry.update();
         }
     }
 }
