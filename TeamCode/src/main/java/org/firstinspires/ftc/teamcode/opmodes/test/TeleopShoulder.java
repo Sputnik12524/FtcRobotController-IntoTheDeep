@@ -21,11 +21,11 @@ public class TeleopShoulder extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if (gamepad1.x) {
+            if (gamepad1.dpad_up) {
                 sl.shoulderPlus();
                 sleep(5);
             }
-            if (gamepad1.y) {
+            if (gamepad1.dpad_down) {
                 sl.shoulderMinus();
                 sleep(5);
             }
