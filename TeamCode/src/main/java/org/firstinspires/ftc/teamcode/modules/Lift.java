@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -33,6 +34,8 @@ public class Lift {
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
     public static double POS_HIGH_SPECIMEN_BEFORE = -47; // Целимся для установки
     public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
+
+
 
     private boolean isStable;
     public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
