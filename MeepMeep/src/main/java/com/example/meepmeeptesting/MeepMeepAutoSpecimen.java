@@ -17,41 +17,39 @@ public class MeepMeepAutoSpecimen {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(10, -56, 0))
                         .turn(Math.toRadians(-90))
-                        .forward(19)
+                        .back(19)
                         .waitSeconds(1)
-                        .turn(Math.toRadians(180))
                         .addDisplacementMarker(() -> {
-
                         })
                         .waitSeconds(1)
-                        .back(14)
+                        .back(11)
                         .addDisplacementMarker(() -> {
-
                         })
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
-
                         })
                         .forward(4)
                         .waitSeconds(1)
-                        .splineTo(new Vector2d(52,-53),-90)
-                        .turn(Math.toRadians(30))
-                        .waitSeconds(10)
+                        .splineTo(new Vector2d(40, -40), -90)
+                        .turn(Math.toRadians(170))
+                        .waitSeconds(5)
+                        //выдвижение + захват
+                        .turn(Math.toRadians(-145))
+                        .forward(14)
+                        .waitSeconds(5)
                         .addDisplacementMarker(() -> {
-
                         })
-
+                        //here will be capturing of the specimen
                         .back(3)
                         .turn(Math.toRadians(60))
-                        .back(46)
+                        .back(44)
                         .turn(Math.toRadians(-60))
                         .waitSeconds(10)
                         .addDisplacementMarker(() -> {
-
                         })
-
+                        //here will be scoring of the specimen
                         .forward(3)
-                        .splineTo(new Vector2d(52,-53),0)
+                        .splineTo(new Vector2d(52, -53), 0)
                         .turn(Math.toRadians(90))
                         .waitSeconds(1)
                         .build());

@@ -17,8 +17,11 @@ public class AutoSpecimen extends LinearOpMode {
         Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
 
-        TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .back(19, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+        TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
+                .back(19,
+                        DriveTrainMecanum.getVelocityConstraint(DriveConstants.MAX_VEL,
+                                DriveConstants.MAX_ANG_VEL,
+                                DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
@@ -28,36 +31,41 @@ public class AutoSpecimen extends LinearOpMode {
                 .waitSeconds(1)
                 .back(11)
                 .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь опустится подъемник");
-                    telemetry.update();
+                     telemetry.addLine("Здесь опустится подъемник");
+                     telemetry.update();
                 })
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь откроется клешня");
-                    telemetry.update();
+                     telemetry.addLine("Здесь откроется клешня");
+                     telemetry.update();
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(45, -55), -90)
-                .turn(Math.toRadians(30))
-                .forward(7, DriveTrainMecanum.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL,
-                        DriveConstants.TRACK_WIDTH), DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(10)
+                .splineTo(new Vector2d(40, -40), -90)
+                .turn(Math.toRadians(170))
+                .waitSeconds(5)
+                //выдвижение + захват
+                .turn(Math.toRadians(-145))
+                .forward(14,
+                        DriveTrainMecanum.getVelocityConstraint(25,
+                                DriveConstants.MAX_ANG_VEL,
+                                DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .turn(Math.toRadians(-10))
+                .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                //here will be capturing of the specimen
                 .back(3)
                 .turn(Math.toRadians(60))
-                .back(46)
+                .back(44)
                 .turn(Math.toRadians(-60))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
                     telemetry.addLine("Здесь мы зацепим специмен (lift down)");
                     telemetry.update();
                 })
-                //here will be scoring of the specimen
                 .forward(3)
                 .splineTo(new Vector2d(52, -53), 0)
                 .turn(Math.toRadians(90))
@@ -66,6 +74,6 @@ public class AutoSpecimen extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        driveTrain.followTrajectorySequence(traj);
+        driveTrain.followTrajectorySequence(trajectory);
     }
 }
