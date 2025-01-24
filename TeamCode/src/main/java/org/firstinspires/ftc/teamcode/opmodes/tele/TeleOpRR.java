@@ -150,7 +150,7 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addLine("Левый бампер - Смена поз. клешни (подъемник)");
 
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
-            telemetry.addData("Lift Motor Speed: ", lt.getSpeed());
+            telemetry.addData("Lift Motor Speed: ", lt.getPower());
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
             telemetry.addData("shoulder", sl.getPosition());
             telemetry.addData("W real", w_real);
