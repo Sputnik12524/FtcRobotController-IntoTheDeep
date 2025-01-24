@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
+import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
@@ -17,12 +18,8 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Config
 public class TeleOpRR extends LinearOpMode {
 
-    //КБ
-    private double straight;
-    private double side;
-    private double rotate;
     public static double VELO_SCALE_COEF = 0.00225;
-    public static double CORRECTION_COEF = 7; // need 10
+    public static double CORRECTION_COEF = 7;
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
@@ -65,11 +62,11 @@ public class TeleOpRR extends LinearOpMode {
             if (Math.abs(w_real) < 1) {
                 w_real = 0;
             }
-            rotate = CORRECTION_COEF * (w_target - w_real * VELO_SCALE_COEF) + w_target;
+            double rotate = CORRECTION_COEF * (w_target - w_real * VELO_SCALE_COEF) + w_target;
 
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
-                            gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
+                            -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
                             gamepad1.right_stick_x * DriveTrainMecanum.multiplier,
                             rotate * DriveTrainMecanum.multiplier
                     )
@@ -85,9 +82,6 @@ public class TeleOpRR extends LinearOpMode {
                 driveTrain.resetIMU();
             }
 
-//            if (gamepad2.y && !stateY) {
-//                lift.updatePIDF();
-//            }
             // Read pose
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
