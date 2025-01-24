@@ -118,7 +118,7 @@ public class Intake {
     public class SamplesTaker extends Thread {
         boolean needTake = false;
 
-        private ElapsedTime timer = new ElapsedTime();
+        private final ElapsedTime timer = new ElapsedTime();
         public void run () {
             while (!isInterrupted()) {
                 if (needTake) {
