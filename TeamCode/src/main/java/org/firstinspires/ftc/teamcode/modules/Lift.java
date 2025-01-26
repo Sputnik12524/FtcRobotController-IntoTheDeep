@@ -27,6 +27,8 @@ public class Lift {
 
     public static double POS_LOWEST = 0;
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
+    public static double POS_FOR_INTAKE = -10; //НАДО НАСТРОИТЬ
+
     public static double POS_LOW_BASKET = -30;
     public static double POS_HIGH_BASKET = -70;
     public static double POS_SIDE = -4; // Берем с борта

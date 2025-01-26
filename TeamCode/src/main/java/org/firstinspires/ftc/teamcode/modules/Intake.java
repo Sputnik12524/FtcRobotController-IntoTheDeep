@@ -19,7 +19,7 @@ public class Intake {
     private final Servo extensionServoLeft; //0.06
     private final Servo extensionServoRight; //0.06
 
-    private final SamplesTaker samplesTaker;
+    public final SamplesTaker samplesTaker;
 
     public static double EXTENSION_MAX = 0.6;
     public static double EXTENSION_MIN = 0.05;
