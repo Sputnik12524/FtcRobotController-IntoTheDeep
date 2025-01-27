@@ -30,7 +30,7 @@ public class Intake {
 
     public static double  FLIP_INTAKE = 0.67;
     public static double  FLIP_OUTTAKE = 0;
-    public static double FLIP_TIME = 700;
+    public static double FLIP_TIME = 250;
     public static double SPEED_BRUSH = 1;
 
     public Intake(LinearOpMode opMode) {

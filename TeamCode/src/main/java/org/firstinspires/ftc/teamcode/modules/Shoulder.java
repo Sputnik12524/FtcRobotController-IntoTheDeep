@@ -10,13 +10,12 @@ public class Shoulder {
 
     private final Servo servoShoulder;
 
-    public static double SHOULDER_MAX = 0;
-    public static double SHOULDER_MIN = 1;
+    public static double SHOULDER_MAX = 1;
+    public static double SHOULDER_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
     public static double POS_SH_BASKET = 0.5;
-    public static double POS_SH_FLAT = 0.05;
-    public static double POS_SH_FOR_INTAKE = 1;
+    public static double POS_SH_FOR_INTAKE = 0;
 
 
 

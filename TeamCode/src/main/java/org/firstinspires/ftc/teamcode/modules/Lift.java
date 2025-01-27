@@ -27,8 +27,8 @@ public class Lift {
 
     public static double POS_LOWEST = 0;
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
-    public static double POS_FOR_INTAKE = -10; //НАДО НАСТРОИТЬ
 
+    public static double POS_FOR_INTAKE = -10; //НАДО НАСТРОИТЬ
     public static double POS_LOW_BASKET = -30;
     public static double POS_HIGH_BASKET = -70;
     public static double POS_SIDE = -4; // Берем с борта
@@ -38,8 +38,9 @@ public class Lift {
     public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
 
 
-
     private boolean isStable;
+    public boolean StateSpecimenLow;
+    public boolean StateSpecimenHigh;
     public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
 
     public Lift(LinearOpMode opMode) {
@@ -92,6 +93,25 @@ public class Lift {
 
     public void setTarget(double newTarget) {
         target = newTarget;
+    }
+
+    public void switchSpecimenLow() {
+        if (!StateSpecimenLow) {
+            setTarget(POS_LOW_SPECIMEN_BEFORE);
+            StateSpecimenLow = true;
+        } else {
+            setTarget(POS_LOW_SPECIMEN_AFTER);
+            StateSpecimenLow = false;
+        }
+    }
+    public void switchSpecimenHigh() {
+        if (!StateSpecimenHigh) {
+            setTarget(POS_HIGH_SPECIMEN_BEFORE);
+            StateSpecimenHigh = true;
+        } else {
+            setTarget(POS_HIGH_SPECIMEN_AFTER);
+            StateSpecimenHigh = false;
+        }
     }
 
     public double getTarget() {
@@ -159,23 +179,23 @@ public class Lift {
                 liftMotor.setPower(0);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                aggregate.telemetry.addLine("Нижний лимит");
-                aggregate.telemetry.update();
+                //aggregate.telemetry.addLine("Нижний лимит");
+                //aggregate.telemetry.update();
             } else if (liftPos() <= POS_HIGHEST && speed < 0) {
                 liftMotor.setPower(0);
                 isOnLimits = true;
-                aggregate.telemetry.addLine("Верхний лимит");
-                aggregate.telemetry.update();
+                //aggregate.telemetry.addLine("Верхний лимит");
+                //aggregate.telemetry.update();
             } else {
                 liftMotor.setPower(speed);
                 isOnLimits = false;
-                aggregate.telemetry.addLine("Работаю");
-                aggregate.telemetry.update();
+                //aggregate.telemetry.addLine("Работаю");
+                //aggregate.telemetry.update();
             }
         } else {
             liftMotor.setPower(speed);
-            aggregate.telemetry.addLine("Работаю без лимита");
-            aggregate.telemetry.update();
+            //aggregate.telemetry.addLine("Работаю без лимита");
+            //aggregate.telemetry.update();
         }
     }
 }

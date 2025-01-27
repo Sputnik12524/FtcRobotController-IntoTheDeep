@@ -114,9 +114,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление плечо
             // по позициям
-            if (gamepad2.dpad_down) {
-                sl.shoulderPosition(sl.POS_SH_FLAT); //highest (для корзины)
-            } else if (gamepad2.dpad_right) {
+            if (gamepad2.dpad_right) {
                 sl.shoulderPosition(sl.POS_SH_FOR_INTAKE); //начальная позиция (внутри робота)
             } else if (gamepad2.dpad_up) {
                 cl.closeLift();
