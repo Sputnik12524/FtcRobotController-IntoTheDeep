@@ -24,6 +24,7 @@ public class Lift {
     private double sError, dError = 0;
     private double limits;
     private double target = 0; //target = -79 --> MAX POSITION!!!!!!!
+    public static double ERROR_ACCEPTABLE_MAX = -0.05;
 
     public static double POS_LOWEST = 0;
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
@@ -96,7 +97,7 @@ public class Lift {
     }
 
     public void switchSpecimenLow() {
-        if (!StateSpecimenLow) {
+        if (!StateSpecimenLow && error <= ERROR_ACCEPTABLE_MAX) {
             setTarget(POS_LOW_SPECIMEN_BEFORE);
             StateSpecimenLow = true;
         } else {
@@ -104,11 +105,12 @@ public class Lift {
             StateSpecimenLow = false;
         }
     }
+
     public void switchSpecimenHigh() {
-        if (!StateSpecimenHigh) {
+        if (!StateSpecimenHigh && error <= ERROR_ACCEPTABLE_MAX) {
             setTarget(POS_HIGH_SPECIMEN_BEFORE);
             StateSpecimenHigh = true;
-        } else {
+        } else if (error <= ERROR_ACCEPTABLE_MAX) {
             setTarget(POS_HIGH_SPECIMEN_AFTER);
             StateSpecimenHigh = false;
         }
@@ -179,23 +181,15 @@ public class Lift {
                 liftMotor.setPower(0);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                //aggregate.telemetry.addLine("Нижний лимит");
-                //aggregate.telemetry.update();
             } else if (liftPos() <= POS_HIGHEST && speed < 0) {
                 liftMotor.setPower(0);
                 isOnLimits = true;
-                //aggregate.telemetry.addLine("Верхний лимит");
-                //aggregate.telemetry.update();
             } else {
                 liftMotor.setPower(speed);
                 isOnLimits = false;
-                //aggregate.telemetry.addLine("Работаю");
-                //aggregate.telemetry.update();
             }
         } else {
             liftMotor.setPower(speed);
-            //aggregate.telemetry.addLine("Работаю без лимита");
-            //aggregate.telemetry.update();
         }
     }
 }

@@ -130,22 +130,24 @@ public class TeleOpRR extends LinearOpMode {
                     lt.setTarget(lt.POS_HIGH_BASKET);
                     break;
             }
+            if (gamepad1.dpad_right) {
+                lt.setTarget(lt.POS_LOWEST);
+            }
 
 
             // Управление плечо
             // по позициям
             if (gamepad2.b) {
-                cl.closeSh();
                 sl.shoulderPosition(sl.POS_SH_BASKET);
             } else if (gamepad2.a) {
                 sl.shoulderPosition(sl.POS_SH_FOR_INTAKE);
             }
 
             // Управление клешней.
-            if (gamepad2.right_bumper && !stateRightBumper) {
+            if (gamepad2.left_bumper && !stateRightBumper) {
                 cl.switchPositionShoulder();
             }
-            if (gamepad2.left_bumper && !stateLeftBumper) {
+            if (gamepad2.right_bumper && !stateLeftBumper) {
                 cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;

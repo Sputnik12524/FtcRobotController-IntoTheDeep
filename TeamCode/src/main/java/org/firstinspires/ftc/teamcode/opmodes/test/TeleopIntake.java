@@ -33,10 +33,10 @@ public class TeleopIntake extends LinearOpMode {
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(FLIP_INTAKE);
+                in.flipPosition(FLIP_OUTTAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(FLIP_OUTTAKE);
+                in.flipPosition(FLIP_INTAKE);
             }
 
             //выдвижение

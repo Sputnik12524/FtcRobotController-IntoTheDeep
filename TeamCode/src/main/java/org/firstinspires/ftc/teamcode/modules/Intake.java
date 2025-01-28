@@ -28,8 +28,8 @@ public class Intake {
     public static double EXT_K = 0.6;
     public static double EXT_START_POS = 0.065;
 
-    public static double  FLIP_INTAKE = 0.67;
-    public static double  FLIP_OUTTAKE = 0;
+    public static double  FLIP_INTAKE = 0.1;
+    public static double  FLIP_OUTTAKE = 0.83;
     public static double FLIP_TIME = 250;
     public static double SPEED_BRUSH = 1;
 
@@ -45,7 +45,7 @@ public class Intake {
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.brushServoRight.setDirection(CRServo.Direction.FORWARD);
         this.brushServo.setDirection(CRServo.Direction.REVERSE);
-        this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
+        this.flipServoRight.setDirection(Servo.Direction.REVERSE);
         this.extensionServoRight.setDirection(Servo.Direction.REVERSE);
 
         this.samplesTaker = new SamplesTaker();
