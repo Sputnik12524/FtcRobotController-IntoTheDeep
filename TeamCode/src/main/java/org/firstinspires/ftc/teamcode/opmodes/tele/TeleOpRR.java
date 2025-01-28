@@ -144,10 +144,10 @@ public class TeleOpRR extends LinearOpMode {
             }
 
             // Управление клешней.
-            if (gamepad2.left_bumper && !stateRightBumper) {
+            if (gamepad2.left_bumper && !stateLeftBumper) {
                 cl.switchPositionShoulder();
             }
-            if (gamepad2.right_bumper && !stateLeftBumper) {
+            if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;
