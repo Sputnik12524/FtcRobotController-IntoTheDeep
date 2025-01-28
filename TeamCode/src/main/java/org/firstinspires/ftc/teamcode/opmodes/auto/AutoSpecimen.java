@@ -18,7 +18,6 @@ public class AutoSpecimen extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
-        Intake intake = new Intake(this);
         Claw claw = new Claw(this);
 
         Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
@@ -52,16 +51,13 @@ public class AutoSpecimen extends LinearOpMode {
                 .forward(4)
                 .waitSeconds(1)
                 .splineTo(new Vector2d(40, -40), -90)
-                .turn(Math.toRadians(170))
-                .waitSeconds(5)
                 //выдвижение + захват
-                .turn(Math.toRadians(-145))
+                .turn(Math.toRadians(25))
                 .forward(14,
                         DriveTrainMecanum.getVelocityConstraint(25,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .turn(Math.toRadians(-10))
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_SIDE);
@@ -75,9 +71,6 @@ public class AutoSpecimen extends LinearOpMode {
                 .back(3)
                 .turn(Math.toRadians(60))
                 .back(44)
-                //.addDisplacementMarker(() -> {
-
-                //})
                 .turn(Math.toRadians(-60))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
@@ -97,6 +90,5 @@ public class AutoSpecimen extends LinearOpMode {
         if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectory);
         lift.liftMotorPowerDriver.interrupt();
-        intake.samplesTaker.interrupt();
     }
 }

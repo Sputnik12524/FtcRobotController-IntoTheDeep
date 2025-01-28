@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
+import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
@@ -21,6 +22,9 @@ public class AutoBasket extends LinearOpMode {
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
         Intake intake = new Intake(this);
+        Shoulder shoulder = new Shoulder(this);
+        intake.samplesTaker.start();
+        lift.liftMotorPowerDriver.start();
 
         Pose2d startPose = new Pose2d(-10,-57,Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);
@@ -67,6 +71,7 @@ public class AutoBasket extends LinearOpMode {
                 //scoring to basket
 
                 .turn(Math.toRadians(-20))
+                .back(7)
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_HIGH_BASKET);
@@ -80,6 +85,7 @@ public class AutoBasket extends LinearOpMode {
                 })
                 .splineTo(new Vector2d(-25,-9),0)
                 .build();
+        shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
         //здесь нужно поставить плечо в позицию, с которой скорим в корзины
         waitForStart();
         if(isStopRequested()) return;
