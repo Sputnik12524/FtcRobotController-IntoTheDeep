@@ -20,34 +20,35 @@ public class MeepMeepAutoSpecimen {
                         .back(19)
                         .waitSeconds(1)
                         .addDisplacementMarker(() -> {
+
                         })
                         .waitSeconds(1)
                         .back(11)
                         .addDisplacementMarker(() -> {
+
                         })
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
+
                         })
                         .forward(4)
                         .waitSeconds(1)
                         .splineTo(new Vector2d(40, -40), -90)
-                        .turn(Math.toRadians(170))
-                        .waitSeconds(5)
                         //выдвижение + захват
-                        .turn(Math.toRadians(-145))
+                        .turn(Math.toRadians(25))
                         .forward(14)
                         .waitSeconds(5)
                         .addDisplacementMarker(() -> {
+
                         })
-                        //here will be capturing of the specimen
                         .back(3)
                         .turn(Math.toRadians(60))
                         .back(44)
                         .turn(Math.toRadians(-60))
                         .waitSeconds(10)
                         .addDisplacementMarker(() -> {
+
                         })
-                        //here will be scoring of the specimen
                         .forward(3)
                         .splineTo(new Vector2d(52, -53), 0)
                         .turn(Math.toRadians(90))
