@@ -45,6 +45,8 @@ public class MeepMeepAutoBasket {
                         .turn(Math.toRadians(-20))
                         .back(7)
                         .waitSeconds(5)
+                        .forward(3)
+                        .waitSeconds(1)
                         .addDisplacementMarker(() -> {
 
                         })

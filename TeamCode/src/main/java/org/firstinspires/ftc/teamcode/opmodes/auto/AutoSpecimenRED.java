@@ -20,9 +20,12 @@ public class AutoSpecimenRED extends LinearOpMode {
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
         Shoulder shoulder = new Shoulder(this);
+        lift.liftMotorPowerDriver.start();
 
         Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
+        claw.strongCloseSh();
+        shoulder.shoulderPosition(0.1);
 
         TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
                 .back(10,
@@ -48,10 +51,10 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .waitSeconds(3)
                 .forward(4)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(40, -40), -90)
+                .splineTo(new Vector2d(40, -40), Math.toRadians(90))
                 //выдвижение + захват
                 .turn(Math.toRadians(25))
-                .forward(14,
+                .back(14,
                         DriveTrainMecanum.getVelocityConstraint(25,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
@@ -66,7 +69,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                .back(3)
+                .forward(3)
                 .turn(Math.toRadians(60))
                 .back(44)
                 .turn(Math.toRadians(-60))
@@ -78,8 +81,8 @@ public class AutoSpecimenRED extends LinearOpMode {
                     sleep(1000);
                     claw.openLift();
                 })
-                .forward(3)
-                .splineTo(new Vector2d(52, -53), 0)
+                .back(3)
+                .splineTo(new Vector2d(52, -53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
                 .build();

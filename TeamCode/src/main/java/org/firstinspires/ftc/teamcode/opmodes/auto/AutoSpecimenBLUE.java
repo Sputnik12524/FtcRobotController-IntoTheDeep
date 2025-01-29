@@ -20,6 +20,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
         Shoulder shoulder = new Shoulder(this);
+        lift.liftMotorPowerDriver.start();
 
         Pose2d startPose = new Pose2d(10, 57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
@@ -51,7 +52,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 })
                 .forward(4)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(40, 40), -90)
+                .splineTo(new Vector2d(40, 40), Math.toRadians(90))
                 //выдвижение + захват
                 .turn(Math.toRadians(25))
                 .forward(14,
@@ -82,7 +83,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     claw.openLift();
                 })
                 .forward(3)
-                .splineTo(new Vector2d(52, 53), 0)
+                .splineTo(new Vector2d(52, 53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
                 .build();

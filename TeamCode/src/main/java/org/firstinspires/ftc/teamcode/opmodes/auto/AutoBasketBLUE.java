@@ -62,7 +62,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(-45))
                // .forward(30)
-                .splineTo(new Vector2d(-52,40), 90)
+                .splineTo(new Vector2d(-52,40), Math.toRadians(90))
                 .turn(Math.toRadians(-45))
                 .waitSeconds(10)
                 .addDisplacementMarker(() -> {
@@ -90,7 +90,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     sleep(1000);
                     lift.setTarget(lift.POS_LOWEST);
                 })
-                .splineTo(new Vector2d(-25,-9),0)
+                .splineTo(new Vector2d(-25,-9),Math.toRadians(0))
                 .build();
         waitForStart();
         if(isStopRequested()) return;

@@ -57,7 +57,7 @@ public class AutoBasketRED extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-45))
-                .splineTo(new Vector2d(-52,-40), 90)
+                .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
                 .turn(Math.toRadians(-45))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
@@ -79,9 +79,10 @@ public class AutoBasketRED extends LinearOpMode {
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(shoulder.POS_SH_FOR_INTAKE);
+                    claw.closeSh();
+                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
                     sleep(1000);
                     lift.setTarget(lift.POS_HIGH_BASKET);
-                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
                     telemetry.addLine("Здесь поднимется подъемник с наклоненным плечом");
                     telemetry.update();
                     sleep(500);
@@ -90,11 +91,13 @@ public class AutoBasketRED extends LinearOpMode {
                     telemetry.update();
                     sleep(500);
                 })
-                .splineTo(new Vector2d(-25,-9),0)
+                .forward(3)
+                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_SIDE);
                     shoulder.shoulderPosition(0.4);
                 })
+                .splineTo(new Vector2d(-25,-9),Math.toRadians(0))
                 .build();
         waitForStart();
         if(isStopRequested()) return;
