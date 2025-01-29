@@ -6,39 +6,40 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
-import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
+import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-@Autonomous(name = "Auto Specimen", group = "Robot")
-public class AutoSpecimen extends LinearOpMode {
+@Autonomous(name = "Auto RED Specimen", group = "Robot")
+public class AutoSpecimenRED extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
+        Shoulder shoulder = new Shoulder(this);
 
         Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
 
         TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
-                .back(19,
+                .back(10,
                         DriveTrainMecanum.getVelocityConstraint(DriveConstants.MAX_VEL,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_BEFORE);
+                    lift.setTarget(lift.POS_LOW_SPECIMEN_BEFORE);
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(1)
                 .back(11)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
+                    shoulder.shoulderPosition(0.55);
                      telemetry.addLine("Здесь опустится подъемник");
                      telemetry.update();
                 })

@@ -34,7 +34,7 @@ public class MeepMeepAutoBasket {
                         .forward(4)
                         .waitSeconds(1)
                         .turn(Math.toRadians(-45))
-                        .forward(30)
+                       // .forward(30)
                         .splineTo(new Vector2d(-52,-40), 90)
                         .turn(Math.toRadians(-45))
                         .waitSeconds(10)

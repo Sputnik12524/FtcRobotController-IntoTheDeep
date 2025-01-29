@@ -77,5 +77,8 @@ public class Claw {
         clawServoLift.setPosition(CLAW_OPEN_LIFT);
         stateOpenShoulder = true;
     }
+    public void strongCloseSh() {
+        clawServoShoulder.setPosition(0.05);
+    }
 }
 
