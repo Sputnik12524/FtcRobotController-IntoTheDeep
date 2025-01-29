@@ -33,6 +33,8 @@ public class Intake {
     public static double FLIP_TIME = 350;
     public static double SPEED_BRUSH = 1;
 
+    public static double FLIP_INTAKE_NEARBY = 0.08;
+
     public Intake(LinearOpMode opMode) {
         this.flipServoLeft = opMode.hardwareMap.servo.get("flipServoL");
         this.flipServoRight = opMode.hardwareMap.servo.get("flipServoR");
@@ -52,15 +54,15 @@ public class Intake {
     }
 
     public void brushIntake() {
-        brushServoLeft.setPower(SPEED_BRUSH);
-        brushServoRight.setPower(SPEED_BRUSH);
-        brushServo.setPower(SPEED_BRUSH);
-    }
-
-    public void brushOuttake() {
         brushServoLeft.setPower(-SPEED_BRUSH);
         brushServoRight.setPower(-SPEED_BRUSH);
         brushServo.setPower(-SPEED_BRUSH);
+    }
+
+    public void brushOuttake() {
+        brushServoLeft.setPower(SPEED_BRUSH);
+        brushServoRight.setPower(SPEED_BRUSH);
+        brushServo.setPower(SPEED_BRUSH);
     }
 
     public void brushStop() {
@@ -134,11 +136,9 @@ public class Intake {
                 }
                 if (needTake) {
                     flipPosition(FLIP_INTAKE);
-                    brushIntake();
                     timer.reset();
                     while (timer.milliseconds() < FLIP_TIME );
-                    brushStop();
-                    extensionPosition(EXTENSION_MIN);
+                    extensionPosition(EXTENSION_MAX);
                     needTake = false;
                 }
             }

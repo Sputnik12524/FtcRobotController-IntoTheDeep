@@ -134,10 +134,10 @@ public class TeleOpRR extends LinearOpMode {
                     lt.setTarget(lt.POS_HIGH_BASKET);
                     break;
             }
-            if (gamepad1.dpad_left) {
+            if (gamepad2.dpad_left) {
                 posLift = 0;
             }
-            if (gamepad1.dpad_right) {
+            if (gamepad2.dpad_right) {
                 posLift = 5;
             }
 
@@ -198,8 +198,12 @@ public class TeleOpRR extends LinearOpMode {
             //многопоточность
             if (gamepad1.right_stick_button && in.getExtensionPositionR() >= 0.2) {
                 in.needOuttake();
+                brushInStatus = false;
+                brushOutStatus = false;
             } else if (gamepad1.right_stick_button && in.getExtensionPositionR() < 0.2) {
                 in.needTake();
+                brushInStatus = false;
+                brushOutStatus = false;
             }
 
 
