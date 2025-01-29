@@ -35,6 +35,9 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false;
 
+    private boolean brushInStatus = false;
+    private boolean brushOutStatus = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,9 +52,10 @@ public class TeleOpRR extends LinearOpMode {
         in.samplesTaker.start();
 
         cl.closeSh();
+        cl.openLift();
         sl.shoulderPosition(INITIAL_POSITION);
         in.extensionPosition(in.EXT_START_POS);
-        in.flipPosition(in.FLIP_INTAKE);
+        in.flipPosition(in.FLIP_OUTTAKE);
         lt.resetZero();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -75,7 +79,7 @@ public class TeleOpRR extends LinearOpMode {
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
-                            gamepad1.right_stick_x * DriveTrainMecanum.multiplier,
+                            gamepad1.left_stick_x * DriveTrainMecanum.multiplier,
                             rotate * DriveTrainMecanum.multiplier
                     )
             );
@@ -113,33 +117,38 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case (2):
                     lt.setTarget(lt.POS_LOW_SPECIMEN_BEFORE);
-                    if (gamepad2.dpad_left) {
-                        lt.switchSpecimenLow();
-                    }
+                    //if (gamepad2.dpad_left) {
+                    //    lt.switchSpecimenLow();
+                    //}
                     break;
                 case (3):
                     lt.setTarget(lt.POS_LOW_BASKET);
                     break;
                 case (4):
                     lt.setTarget(lt.POS_HIGH_SPECIMEN_BEFORE);
-                    if (gamepad2.dpad_left) {
-                        lt.switchSpecimenHigh();
-                    }
+                    //if (gamepad2.dpad_left) {
+                    //    lt.switchSpecimenHigh();
+                    //}
                     break;
                 case (5):
                     lt.setTarget(lt.POS_HIGH_BASKET);
                     break;
             }
+            if (gamepad1.dpad_left) {
+                posLift = 0;
+            }
             if (gamepad1.dpad_right) {
-                lt.setTarget(lt.POS_LOWEST);
+                posLift = 5;
             }
 
 
             // Управление плечо
             // по позициям
             if (gamepad2.b) {
+                cl.closeSh();
                 sl.shoulderPosition(sl.POS_SH_BASKET);
             } else if (gamepad2.a) {
+                cl.openSh();
                 sl.shoulderPosition(sl.POS_SH_FOR_INTAKE);
             }
 
@@ -157,13 +166,23 @@ public class TeleOpRR extends LinearOpMode {
 
             //  Управление захватом
             //щетка
-            if (gamepad1.a) {
+            if (gamepad1.a && !brushInStatus) {
                 in.brushIntake();
-            }
-            else if (gamepad1.b) {
-                in.brushOuttake();
-            } else {
+                brushInStatus = true;
+                brushOutStatus = false;
+
+            } else if (gamepad1.a && brushInStatus){
                 in.brushStop();
+                brushInStatus = false;
+            }
+
+            if (gamepad1.b && !brushOutStatus) {
+                in.brushOuttake();
+                brushOutStatus = true;
+                brushInStatus = false;
+            } else if (gamepad1.b && brushOutStatus){
+                in.brushStop();
+                brushOutStatus = false;
             }
 
             //переворот
@@ -177,9 +196,12 @@ public class TeleOpRR extends LinearOpMode {
             in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
 
             //многопоточность
-            if (gamepad1.right_stick_button) {
+            if (gamepad1.right_stick_button && in.getExtensionPositionR() >= 0.2) {
+                in.needOuttake();
+            } else if (gamepad1.right_stick_button && in.getExtensionPositionR() < 0.2) {
                 in.needTake();
             }
+
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");

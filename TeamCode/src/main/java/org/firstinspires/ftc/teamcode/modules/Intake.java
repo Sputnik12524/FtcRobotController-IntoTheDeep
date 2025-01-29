@@ -25,12 +25,12 @@ public class Intake {
     public static double EXTENSION_MIN = 0.05;
 
     public static double EXTENSION_STEP = 0.005;
-    public static double EXT_K = 0.6;
+    public static double EXT_K = 8;
     public static double EXT_START_POS = 0.065;
 
-    public static double  FLIP_INTAKE = 0.1;
-    public static double  FLIP_OUTTAKE = 0.83;
-    public static double FLIP_TIME = 250;
+    public static double  FLIP_INTAKE = 0.12;
+    public static double  FLIP_OUTTAKE = 0.8;
+    public static double FLIP_TIME = 350;
     public static double SPEED_BRUSH = 1;
 
     public Intake(LinearOpMode opMode) {
@@ -114,13 +114,24 @@ public class Intake {
     public void needTake () {
         samplesTaker.needTake = true;
     }
+    public void needOuttake () { samplesTaker.needOuttake = true; }
 
     public class SamplesTaker extends Thread {
-        boolean needTake = false;
+        volatile boolean needTake = false;
+        volatile boolean needOuttake = false;
 
         private final ElapsedTime timer = new ElapsedTime();
         public void run () {
             while (!isInterrupted()) {
+                if (needOuttake) {
+                    flipPosition(FLIP_OUTTAKE);
+                    brushIntake();
+                    timer.reset();
+                    while (timer.milliseconds() < FLIP_TIME );
+                    brushStop();
+                    extensionPosition(EXTENSION_MIN);
+                    needOuttake = false;
+                }
                 if (needTake) {
                     flipPosition(FLIP_INTAKE);
                     brushIntake();

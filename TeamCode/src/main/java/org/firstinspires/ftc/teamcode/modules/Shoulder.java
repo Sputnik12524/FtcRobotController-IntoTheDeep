@@ -17,9 +17,7 @@ public class Shoulder {
     public static double POS_SH_BASKET = 0.5;
     public static double POS_SH_FOR_INTAKE = 0;
 
-
-
-    public static double INITIAL_POSITION = 0.7;
+    public static double INITIAL_POSITION = 0.2;
 
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
