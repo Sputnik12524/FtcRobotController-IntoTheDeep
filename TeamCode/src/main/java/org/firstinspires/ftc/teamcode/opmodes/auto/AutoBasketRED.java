@@ -51,24 +51,21 @@ public class AutoBasketRED extends LinearOpMode {
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    telemetry.addLine("Здесь откроется клешня");
-                    telemetry.update();
-                })
                 .forward(4)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
+                    shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-45))
-               // .forward(30)
                 .splineTo(new Vector2d(-52,-40), 90)
                 .turn(Math.toRadians(-45))
-                .waitSeconds(10)
+                .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
                     intake.brushIntake();
                     sleep(500);
+                    intake.extensionPosition(0.05);
+                    intake.flipPosition(intake.FLIP_OUTTAKE);
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -81,16 +78,23 @@ public class AutoBasketRED extends LinearOpMode {
                 .back(7)
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(shoulder.POS_SH_FOR_INTAKE);
+                    sleep(1000);
                     lift.setTarget(lift.POS_HIGH_BASKET);
+                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
                     telemetry.addLine("Здесь поднимется подъемник с наклоненным плечом");
                     telemetry.update();
+                    sleep(500);
                     claw.openLift();
                     telemetry.addLine("Здесь откроется клешня");
                     telemetry.update();
-                    sleep(1000);
-                    lift.setTarget(lift.POS_LOWEST);
+                    sleep(500);
                 })
                 .splineTo(new Vector2d(-25,-9),0)
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(lift.POS_SIDE);
+                    shoulder.shoulderPosition(0.4);
+                })
                 .build();
         waitForStart();
         if(isStopRequested()) return;

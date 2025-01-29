@@ -33,22 +33,19 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_LOW_SPECIMEN_BEFORE);
+                    shoulder.shoulderPosition(.425);
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(1)
                 .back(11)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(0.55);
-                     telemetry.addLine("Здесь опустится подъемник");
+                    shoulder.shoulderPosition(0.65);
+                    claw.openLift();
+                    telemetry.addLine("Здесь опустится подъемник");
                      telemetry.update();
                 })
                 .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    claw.openLift();
-                     telemetry.addLine("Здесь откроется клешня");
-                     telemetry.update();
-                })
                 .forward(4)
                 .waitSeconds(1)
                 .splineTo(new Vector2d(40, -40), -90)
