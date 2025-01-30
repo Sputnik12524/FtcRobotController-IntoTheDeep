@@ -30,11 +30,11 @@ public class Shoulder {
     public static double CLAW_OPEN = 0.26;
     public static double CLAW_HALF_OPEN = 0.6;
 
-    public static double TIME = 350;
+    public static double CLOSING_TIME = 300;
     public boolean stateOpenShoulder;
 
     //Многопоточность
-    SampleShTaker sampleShTaker;
+    public final SampleShTaker sampleShTaker;
 
 
     public Shoulder(LinearOpMode opMode) {
@@ -112,7 +112,7 @@ public class Shoulder {
                 if (needToBasketSh) {
                     closeSh();
                     timer.reset();
-                    while (timer.milliseconds() < TIME) ;
+                    while (timer.milliseconds() < CLOSING_TIME) ;
                     clawServoShoulder.setPosition(POS_SH_BASKET);
                     needToBasketSh = false;
                 }

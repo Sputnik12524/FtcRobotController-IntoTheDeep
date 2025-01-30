@@ -38,8 +38,5 @@ public class Claw {
         clawServoLift.setPosition(CLAW_OPEN_LIFT);
         stateOpenLift = true;
     }
-    public void strongCloseSh() {
-        clawServoLift.setPosition(0.05);
-    }
 }
 

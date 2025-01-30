@@ -52,6 +52,7 @@ public class TeleOpRR extends LinearOpMode {
 
         lt.liftMotorPowerDriver.start();
         in.samplesTaker.start();
+        sl.sampleShTaker.start();
 
         sl.closeSh();
         cl.openLift();
@@ -147,8 +148,7 @@ public class TeleOpRR extends LinearOpMode {
             // Управление плечо
             // по позициям
             if (gamepad2.b) {
-                sl.closeSh();
-                sl.shoulderPosition(sl.POS_SH_BASKET); /** Переделываю на многопоточку **/
+                sl.needToBasketSh();
             } else if (gamepad2.a) {
                 sl.openSh();
                 sl.shoulderPosition(sl.POS_SH_FOR_INTAKE);
@@ -228,6 +228,7 @@ public class TeleOpRR extends LinearOpMode {
         }
         lt.liftMotorPowerDriver.interrupt();
         in.samplesTaker.interrupt();
+        sl.sampleShTaker.interrupt();
     }
 
     public static class PoseStorage {
