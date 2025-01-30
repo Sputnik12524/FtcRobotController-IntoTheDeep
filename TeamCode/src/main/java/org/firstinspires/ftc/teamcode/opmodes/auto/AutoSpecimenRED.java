@@ -24,7 +24,7 @@ public class AutoSpecimenRED extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(10, -57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
-        claw.strongCloseSh();
+        shoulder.strongCloseSh();
         shoulder.shoulderPosition(0.1);
 
         TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)

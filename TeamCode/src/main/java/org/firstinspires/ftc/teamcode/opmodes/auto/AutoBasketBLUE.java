@@ -31,29 +31,29 @@ public class AutoBasketBLUE extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        claw.strongCloseSh();
+        shoulder.strongCloseSh();
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(.7);
+                    lift.setTarget(-32);
+                })
                 .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.65);
-                    lift.setTarget(lift.POS_LOW_SPECIMEN_BEFORE);
-                    telemetry.addLine("Здесь поднимется подъемник");
-                    telemetry.update();
-                })
+              //here was a marker
                 .waitSeconds(1.5)
-                .back(17)
+                .back(17, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                .waitSeconds(4)
+                .waitSeconds(8)
                 .forward(4)
                 .addDisplacementMarker(() -> {
-                    sleep(1000);
+                    sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)

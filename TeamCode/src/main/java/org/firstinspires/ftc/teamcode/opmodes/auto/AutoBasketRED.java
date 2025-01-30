@@ -31,7 +31,7 @@ public class AutoBasketRED extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        claw.strongCloseSh();
+        shoulder.strongCloseSh();
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
