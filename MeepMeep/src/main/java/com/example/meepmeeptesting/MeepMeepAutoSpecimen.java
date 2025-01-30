@@ -17,7 +17,7 @@ public class MeepMeepAutoSpecimen {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(10, -56, 0))
                         .turn(Math.toRadians(-90))
-                        .back(19)
+                        .back(10)
                         .waitSeconds(1)
                         .addDisplacementMarker(() -> {
 
@@ -28,9 +28,6 @@ public class MeepMeepAutoSpecimen {
 
                         })
                         .waitSeconds(3)
-                        .addDisplacementMarker(() -> {
-
-                        })
                         .forward(4)
                         .waitSeconds(1)
                         .splineTo(new Vector2d(40, -40), Math.toRadians(90))
@@ -41,16 +38,15 @@ public class MeepMeepAutoSpecimen {
 
                         })
                         .forward(3)
-                        .turn(Math.toRadians(60))
-                        .forward(44)
-                        .turn(Math.toRadians(-60))
+                        .splineTo(new Vector2d(10,-40), Math.toRadians(-90))
+                        .back(7)
                         .waitSeconds(10)
                         .addDisplacementMarker(() -> {
 
                         })
-                        .back(3)
-                        .splineTo(new Vector2d(52, -53), 0)
-                        .turn(Math.toRadians(-90))
+                        .forward(5)
+                        .splineTo(new Vector2d(52, -53), Math.toRadians(0))
+                        .turn(Math.toRadians(90))
                         .waitSeconds(1)
                         .build());
 

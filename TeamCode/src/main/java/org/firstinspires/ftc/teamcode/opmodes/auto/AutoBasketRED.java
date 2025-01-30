@@ -23,6 +23,7 @@ public class AutoBasketRED extends LinearOpMode {
         Claw claw = new Claw(this);
         Intake intake = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
+
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
@@ -38,27 +39,29 @@ public class AutoBasketRED extends LinearOpMode {
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_LOW_SPECIMEN_BEFORE);
-                    shoulder.shoulderPosition(.425);
+                    shoulder.shoulderPosition(.65);
                     telemetry.addLine("Здесь поднимется подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(1.5)
-                .back(14)
+                .back(17)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.65);
-                    claw.openSh();
+                    sleep(100);
+                   // shoulder.shoulderPosition(.65);
+                    shoulder.openSh();
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                .waitSeconds(2)
+                .waitSeconds(4)
                 .forward(4)
                 .addDisplacementMarker(() -> {
+                    sleep(1000);
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-45))
                 .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
-                .turn(Math.toRadians(-45))
+                .turn(Math.toRadians(-25))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
@@ -71,15 +74,14 @@ public class AutoBasketRED extends LinearOpMode {
                 })
                 //capturing yellow sample
 
-                .back(3)
+                .back(4)
                 //scoring to basket
 
-                .turn(Math.toRadians(-20))
                 .back(7)
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(shoulder.POS_SH_FOR_INTAKE);
-                    claw.closeSh();
+                    shoulder.closeSh();
                     shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
                     sleep(1000);
                     lift.setTarget(lift.POS_HIGH_BASKET);
@@ -99,6 +101,7 @@ public class AutoBasketRED extends LinearOpMode {
                 })
                 .splineTo(new Vector2d(-25,-9),Math.toRadians(0))
                 .build();
+        intake.extensionPosition(.05);
         waitForStart();
         if(isStopRequested()) return;
         driveTrain.followTrajectorySequence(traj);

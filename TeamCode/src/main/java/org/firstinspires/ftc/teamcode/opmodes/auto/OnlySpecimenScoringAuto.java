@@ -42,7 +42,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 })
                 .forward(4)
                 .addDisplacementMarker( () -> {
-                    claw.openSh();
+                    shoulder.openSh();
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-120))
@@ -55,7 +55,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 .build();
 
         shoulder.shoulderPosition(0);
-        claw.closeSh();
+        shoulder.closeSh();
         lift.resetZero();
 
         waitForStart();

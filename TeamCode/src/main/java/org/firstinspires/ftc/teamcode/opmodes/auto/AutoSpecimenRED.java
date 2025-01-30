@@ -70,10 +70,9 @@ public class AutoSpecimenRED extends LinearOpMode {
                     telemetry.update();
                 })
                 .forward(3)
-                .turn(Math.toRadians(60))
-                .back(44)
-                .turn(Math.toRadians(-60))
-                .waitSeconds(10)
+                .splineTo(new Vector2d(10,-40), Math.toRadians(-90))
+                .back(7)
+                .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
                     telemetry.addLine("Здесь мы зацепим специмен (lift down)");
@@ -81,7 +80,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                     sleep(1000);
                     claw.openLift();
                 })
-                .back(3)
+                .forward(5)
                 .splineTo(new Vector2d(52, -53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
