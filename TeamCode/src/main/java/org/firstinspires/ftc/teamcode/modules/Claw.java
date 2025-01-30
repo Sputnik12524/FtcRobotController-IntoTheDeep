@@ -12,7 +12,7 @@ public class Claw {
     private final LinearOpMode opMode;
 
     public static double CLAW_CLOSE = 0.055;
-    public static double CLAW_OPEN = 0.3;
+    public static double CLAW_OPEN = 0.26;
     public static double CLAW_OPEN_LIFT = 0.45;
     public static double CLAW_CLOSE_LIFT = 0.145;
 

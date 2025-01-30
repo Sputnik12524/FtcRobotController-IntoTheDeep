@@ -26,7 +26,6 @@ public class TeleOpRR extends LinearOpMode {
 
     // Подъемник
     public static double LIFT_POWER_COEFFICIENT = 0.7;
-    boolean bState;
     private boolean statusDpadDownBefore = false;
     private boolean statusDpadUpBefore = false;
     private int posLift = 0;
@@ -35,8 +34,11 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false;
 
+    //щетки
     private boolean brushInStatus = false;
     private boolean brushOutStatus = false;
+    private boolean stateA = false;
+    private boolean stateB = false;
 
 
     @Override
@@ -146,7 +148,7 @@ public class TeleOpRR extends LinearOpMode {
             // по позициям
             if (gamepad2.b) {
                 cl.closeSh();
-                sl.shoulderPosition(sl.POS_SH_BASKET);
+                sl.shoulderPosition(sl.POS_SH_BASKET); /** Переделываю на многопоточку **/
             } else if (gamepad2.a) {
                 cl.openSh();
                 sl.shoulderPosition(sl.POS_SH_FOR_INTAKE);
@@ -161,29 +163,29 @@ public class TeleOpRR extends LinearOpMode {
             }
             stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
-            bState = gamepad2.b;
 
 
             //  Управление захватом
             //щетка
-            if (gamepad1.a && !brushInStatus) {
+            if (gamepad1.a && !brushInStatus && !stateA) {
                 in.brushIntake();
                 brushInStatus = true;
                 brushOutStatus = false;
 
-            } else if (gamepad1.a && brushInStatus){
+            } else if (gamepad1.a && brushInStatus && !stateA) {
                 in.brushStop();
                 brushInStatus = false;
             }
-
-            if (gamepad1.b && !brushOutStatus) {
+            if (gamepad1.b && !brushOutStatus && !stateB) {
                 in.brushOuttake();
                 brushOutStatus = true;
                 brushInStatus = false;
-            } else if (gamepad1.b && brushOutStatus){
+            } else if (gamepad1.b && brushOutStatus && !stateB) {
                 in.brushStop();
                 brushOutStatus = false;
             }
+            stateA = gamepad1.a;
+            stateB = gamepad1.b;
 
             //переворот
             if (gamepad1.y) {
@@ -224,7 +226,7 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
         }
-        lt.liftMotorPowerDriver.interrupt();;
+        lt.liftMotorPowerDriver.interrupt();
         in.samplesTaker.interrupt();
     }
 

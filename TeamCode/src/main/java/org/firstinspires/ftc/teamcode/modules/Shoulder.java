@@ -4,12 +4,16 @@ package org.firstinspires.ftc.teamcode.modules;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.modules.Claw;
+
 
 @Config
 public class Shoulder {
 
     private final Servo servoShoulder;
 
+    //Позиции плечо
     public static double SHOULDER_MAX = 1;
     public static double SHOULDER_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
@@ -41,4 +45,18 @@ public class Shoulder {
     public double getPosition() {
         return servoShoulder.getPosition();
     }
+
+    public class SamplesTaker extends Thread {
+        volatile boolean needSampleSh = false;
+        private final ElapsedTime timer = new ElapsedTime();
+        public void run () {
+            while (!isInterrupted()) {
+                if(needSampleSh) {
+
+                    needSampleSh = false;
+            }
+        }
+
+    }
+}
 }
