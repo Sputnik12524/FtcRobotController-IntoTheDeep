@@ -46,7 +46,7 @@ public class MainTeleOp extends LinearOpMode {
         Claw cl = new Claw(this);
         Intake in = new Intake(this);
 
-        cl.closeSh();
+        sl.closeSh();
         cl.openLift();
 
         lt.liftMotorPowerDriver.start();

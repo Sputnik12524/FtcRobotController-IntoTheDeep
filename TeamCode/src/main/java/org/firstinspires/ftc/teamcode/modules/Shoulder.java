@@ -28,28 +28,37 @@ public class Shoulder {
 
     public static double CLAW_CLOSE = 0.055;
     public static double CLAW_OPEN = 0.26;
-
     public static double CLAW_HALF_OPEN = 0.6;
+
+    public static double TIME = 350;
     public boolean stateOpenShoulder;
+
+    //Многопоточность
+    SampleShTaker sampleShTaker;
+
 
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
         clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
         servoShoulder.setDirection(Servo.Direction.REVERSE);
+
+        this.sampleShTaker = new SampleShTaker();
     }
 
-    public void shoulderPlus () {
+    //Методы плеча
+    public void shoulderPlus() {
         if (servoShoulder.getPosition() < SHOULDER_MAX) {
-            servoShoulder.setPosition(servoShoulder.getPosition()+SHOULDER_STEP);
-        }
-    }
-    public void shoulderMinus () {
-        if (servoShoulder.getPosition() > SHOULDER_MIN) {
-            servoShoulder.setPosition(servoShoulder.getPosition()-SHOULDER_STEP);
+            servoShoulder.setPosition(servoShoulder.getPosition() + SHOULDER_STEP);
         }
     }
 
-    public void shoulderPosition(double position){
+    public void shoulderMinus() {
+        if (servoShoulder.getPosition() > SHOULDER_MIN) {
+            servoShoulder.setPosition(servoShoulder.getPosition() - SHOULDER_STEP);
+        }
+    }
+
+    public void shoulderPosition(double position) {
         servoShoulder.setPosition(position);
     }
 
@@ -57,8 +66,7 @@ public class Shoulder {
         return servoShoulder.getPosition();
     }
 
-
-
+    //Методы клешни
 
     public void halfOpenSh() {
         clawServoShoulder.setPosition(CLAW_HALF_OPEN);
@@ -78,23 +86,38 @@ public class Shoulder {
         clawServoShoulder.setPosition(CLAW_CLOSE);
         stateOpenShoulder = false;
     }
+
     public void openSh() {
         clawServoShoulder.setPosition(CLAW_OPEN);
         stateOpenShoulder = true;
 
     }
 
-    public class SamplesTaker extends Thread {
-        volatile boolean needSampleSh = false;
-        private final ElapsedTime timer = new ElapsedTime();
-        public void run () {
-            while (!isInterrupted()) {
-                if(needSampleSh) {
-
-                    needSampleSh = false;
-            }
-        }
-
+    public void strongCloseSh() {
+        clawServoShoulder.setPosition(0.05);
     }
-}
+
+    //Многопоточность
+
+    public void needToBasketSh() {
+        sampleShTaker.needToBasketSh = true;
+    }
+
+    public class SampleShTaker extends Thread {
+        volatile boolean needToBasketSh = false;
+        private final ElapsedTime timer = new ElapsedTime();
+
+        public void run() {
+            while (!isInterrupted()) {
+                if (needToBasketSh) {
+                    closeSh();
+                    timer.reset();
+                    while (timer.milliseconds() < TIME) ;
+                    clawServoShoulder.setPosition(POS_SH_BASKET);
+                    needToBasketSh = false;
+                }
+            }
+
+        }
+    }
 }
