@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 public class Shoulder {
 
     private final Servo servoShoulder;
+    private final Servo clawServoShoulder;
 
     //Позиции плечо
     public static double SHOULDER_MAX = 1;
@@ -23,8 +24,17 @@ public class Shoulder {
 
     public static double INITIAL_POSITION = 0.2;
 
+    //Позиции клешни
+
+    public static double CLAW_CLOSE = 0.055;
+    public static double CLAW_OPEN = 0.26;
+
+    public static double CLAW_HALF_OPEN = 0.6;
+    public boolean stateOpenShoulder;
+
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
+        clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
         servoShoulder.setDirection(Servo.Direction.REVERSE);
     }
 
@@ -38,12 +48,40 @@ public class Shoulder {
             servoShoulder.setPosition(servoShoulder.getPosition()-SHOULDER_STEP);
         }
     }
+
     public void shoulderPosition(double position){
         servoShoulder.setPosition(position);
     }
 
     public double getPosition() {
         return servoShoulder.getPosition();
+    }
+
+
+
+
+    public void halfOpenSh() {
+        clawServoShoulder.setPosition(CLAW_HALF_OPEN);
+    }
+
+    public void switchPositionShoulder() {
+        if (!stateOpenShoulder) {
+            clawServoShoulder.setPosition(CLAW_OPEN);
+            stateOpenShoulder = true;
+        } else {
+            clawServoShoulder.setPosition(CLAW_CLOSE);
+            stateOpenShoulder = false;
+        }
+    }
+
+    public void closeSh() {
+        clawServoShoulder.setPosition(CLAW_CLOSE);
+        stateOpenShoulder = false;
+    }
+    public void openSh() {
+        clawServoShoulder.setPosition(CLAW_OPEN);
+        stateOpenShoulder = true;
+
     }
 
     public class SamplesTaker extends Thread {

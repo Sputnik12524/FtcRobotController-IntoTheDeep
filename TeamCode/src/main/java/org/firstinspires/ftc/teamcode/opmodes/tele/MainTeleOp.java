@@ -123,7 +123,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Управление клешней.
             if (gamepad2.right_bumper && !stateRightBumper) {
-                cl.switchPositionShoulder();
+                sl.switchPositionShoulder();
             }
             if (gamepad2.left_bumper && !stateLeftBumper) {
                 cl.switchPositionLift();
