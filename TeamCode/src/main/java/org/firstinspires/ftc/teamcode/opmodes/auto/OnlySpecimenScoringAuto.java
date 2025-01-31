@@ -27,31 +27,28 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         base.setPoseEstimate(startPose);
 
         TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
-                .forward(19, DriveTrainMecanum.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.5);
-                })
-                .turn(Math.toRadians(180))
-                .waitSeconds(1)
-                .back(19)
-                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
+                    lift.setTarget(-32);
                 })
-                .forward(4)
-                .addDisplacementMarker( () -> {
+                .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(2)
+                .waitSeconds(1.5)
+                .back(18, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addDisplacementMarker(() -> {
                     shoulder.openSh();
+                    telemetry.addLine("Здесь опустится подъемник");
+                    telemetry.update();
+                })
+                .waitSeconds(2)
+                .forward(4)
+                .addDisplacementMarker(() -> {
+                    sleep(500);
+                    shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)
-                .turn(Math.toRadians(-120))
-                .waitSeconds(1)
-                .back(50)
-                .waitSeconds(1)
-                .addDisplacementMarker( () -> {
-                    shoulder.shoulderPosition(0);
-                })
                 .build();
 
         shoulder.shoulderPosition(0);

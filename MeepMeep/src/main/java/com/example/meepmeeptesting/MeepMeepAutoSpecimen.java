@@ -30,9 +30,11 @@ public class MeepMeepAutoSpecimen {
                         .waitSeconds(3)
                         .forward(4)
                         .waitSeconds(1)
-                        .splineTo(new Vector2d(40, -40), Math.toRadians(90))
+                        .turn(Math.toRadians(60))
+                        .forward(25)
+                        .turn(Math.toRadians(120))
                         //выдвижение + захват
-                        .back(14)
+                        .back(9)
                         .waitSeconds(5)
                         .addDisplacementMarker(() -> {
 

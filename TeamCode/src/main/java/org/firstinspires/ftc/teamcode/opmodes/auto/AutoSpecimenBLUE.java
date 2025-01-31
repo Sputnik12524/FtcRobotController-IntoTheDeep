@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
+import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
@@ -20,61 +21,66 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
         Shoulder shoulder = new Shoulder(this);
+        Intake intake = new Intake(this);
         lift.liftMotorPowerDriver.start();
 
         Pose2d startPose = new Pose2d(10, 57, Math.toRadians(-90));
         driveTrain.setPoseEstimate(startPose);
+        shoulder.shoulderPosition(0.1);
+        shoulder.strongCloseSh();
+        intake.samplesTaker.start();
+        intake.extensionPosition(intake.EXTENSION_MIN);
 
         TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
-                .back(10,
-                        DriveTrainMecanum.getVelocityConstraint(DriveConstants.MAX_VEL,
-                                DriveConstants.MAX_ANG_VEL,
-                                DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_LOW_SPECIMEN_BEFORE);
-                    telemetry.addLine("Здесь поднимется подъемник");
+                    shoulder.shoulderPosition(.7);
+                    lift.setTarget(-32);
+                })
+                .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(2)
+                .waitSeconds(1.5)
+                .back(18, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addDisplacementMarker(() -> {
+                    shoulder.openSh();
+                    telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                .waitSeconds(1)
-                .back(11)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(0.55);
-                     telemetry.addLine("Здесь опустится подъемник");
-                     telemetry.update();
-                })
-                .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    claw.openLift();
-                     telemetry.addLine("Здесь откроется клешня");
-                     telemetry.update();
-                })
+                .waitSeconds(2)
                 .forward(4)
+                .addDisplacementMarker(() -> {
+                    sleep(500);
+                    shoulder.shoulderPosition(.1);
+                })
                 .waitSeconds(1)
-                .splineTo(new Vector2d(40, 40), Math.toRadians(90))
+                //here code for scoring specimen finishes
+                .turn(Math.toRadians(65))
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(lift.POS_SIDE);
+                    sleep(100);
+                })
+                .forward(30)
+                .turn(Math.toRadians(125))
                 //выдвижение + захват
-                .turn(Math.toRadians(25))
-                .forward(14,
+                .back(13,
                         DriveTrainMecanum.getVelocityConstraint(25,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(5)
+                .waitSeconds(2)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_SIDE);
-                    sleep(100);
                     claw.closeLift();
                     sleep(1000);
                     lift.setTarget(lift.POS_HIGH_SPECIMEN_BEFORE);
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                .back(3)
-                .turn(Math.toRadians(60))
-                .back(44)
-                .turn(Math.toRadians(-60))
-                .waitSeconds(10)
+                .forward(3)
+                .turn(Math.toRadians(85))
+                .forward(25)
+                .turn(Math.toRadians(-75))
+                .waitSeconds(4)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
                     telemetry.addLine("Здесь мы зацепим специмен (lift down)");
@@ -92,5 +98,6 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectory);
         lift.liftMotorPowerDriver.interrupt();
+        intake.samplesTaker.interrupt();
     }
 }

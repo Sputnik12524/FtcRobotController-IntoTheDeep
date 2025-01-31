@@ -32,6 +32,7 @@ public class AutoBasketBLUE extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
+        intake.extensionPosition(intake.EXTENSION_MIN);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
@@ -41,7 +42,6 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(2)
-              //here was a marker
                 .waitSeconds(1.5)
                 .back(17, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -50,32 +50,30 @@ public class AutoBasketBLUE extends LinearOpMode {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                .waitSeconds(8)
+                .waitSeconds(2)
                 .forward(4)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)
-                .turn(Math.toRadians(-45))
-                .splineTo(new Vector2d(52,40), Math.toRadians(90))
+                //here code for scoring the specimen finishes
+
+                .splineTo(new Vector2d(32,10), Math.toRadians(-90))
                 .turn(Math.toRadians(-25))
-                .waitSeconds(3)
+                .waitSeconds(2)
                 .addDisplacementMarker(() -> {
-                    intake.extensionPosition(0.5);
+                    intake.extensionPosition(intake.EXTENSION_MAX);
                     intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
+                    sleep(3000);
+                    intake.extensionPosition(intake.EXTENSION_MIN);
                     intake.flipPosition(intake.FLIP_OUTTAKE);
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
                 //capturing yellow sample
 
-                .back(4)
-                //scoring to basket
-
-                .back(7)
+                .back(11)
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(shoulder.POS_SH_FOR_INTAKE);
