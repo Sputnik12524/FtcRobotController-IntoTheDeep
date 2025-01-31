@@ -94,7 +94,7 @@ public class Shoulder {
     }
 
     public void strongCloseSh() {
-        clawServoShoulder.setPosition(0.05);
+        clawServoShoulder.setPosition(0.03);
     }
 
     //Многопоточность
