@@ -36,11 +36,11 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-32);
                 })
-                .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(15, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(2)
                 .waitSeconds(1.5)
-                .back(18, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(10, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
@@ -48,7 +48,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .forward(4)
+                .forward(6)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
@@ -63,8 +63,8 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .forward(30)
                 .turn(Math.toRadians(125))
                 //выдвижение + захват
-                .back(13,
-                        DriveTrainMecanum.getVelocityConstraint(25,
+               .back(15,
+                        DriveTrainMecanum.getVelocityConstraint(10,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -76,11 +76,13 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                .forward(3)
-                .turn(Math.toRadians(85))
+                /*.forward(5)
+                .waitSeconds(1)
+                .turn(Math.toRadians(150))
+                .waitSeconds(1)
                 .forward(25)
-                .turn(Math.toRadians(-75))
-                .waitSeconds(4)
+                .turn(Math.toRadians(-85))
+                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
                     telemetry.addLine("Здесь мы зацепим специмен (lift down)");
@@ -91,7 +93,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .forward(3)
                 .splineTo(new Vector2d(52, 53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
-                .waitSeconds(1)
+                .waitSeconds(1) */
                 .build();
 
         waitForStart();
