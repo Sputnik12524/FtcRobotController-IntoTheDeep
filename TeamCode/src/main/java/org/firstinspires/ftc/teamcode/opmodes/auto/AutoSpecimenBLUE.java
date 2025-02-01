@@ -36,13 +36,13 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-32);
                 })
-                .back(15, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(13, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(2)
-                .waitSeconds(1.5)
-                .back(10, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(.75);
                     shoulder.openSh();
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
@@ -61,9 +61,9 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     sleep(100);
                 })
                 .forward(30)
-                .turn(Math.toRadians(125))
+                .turn(Math.toRadians(125), 15, DriveConstants.MAX_ANG_ACCEL)
                 //выдвижение + захват
-               .back(15,
+               .back(20,
                         DriveTrainMecanum.getVelocityConstraint(10,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
@@ -76,10 +76,10 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                /*.forward(5)
+                .forward(5)
                 .waitSeconds(1)
                 .turn(Math.toRadians(150))
-                .waitSeconds(1)
+                /*.waitSeconds(1)
                 .forward(25)
                 .turn(Math.toRadians(-85))
                 .waitSeconds(1)
@@ -93,6 +93,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .forward(3)
                 .splineTo(new Vector2d(52, 53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
+
                 .waitSeconds(1) */
                 .build();
 

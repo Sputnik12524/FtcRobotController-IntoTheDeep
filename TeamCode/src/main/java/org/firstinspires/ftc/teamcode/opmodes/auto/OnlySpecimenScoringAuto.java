@@ -22,6 +22,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         claw = new Claw(this);
         Lift lift = new Lift(this);
         shoulder = new Shoulder(this);
+        lift.liftMotorPowerDriver.start();
 
         Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
@@ -31,13 +32,13 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-32);
                 })
-                .back(10, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(13, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(2)
-                .waitSeconds(1.5)
-                .back(18, DriveTrainMecanum.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(.75);
                     shoulder.openSh();
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
@@ -49,15 +50,20 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(lift.POS_LOWEST);
+                    lift.resetZero();
+                })
                 .build();
 
         shoulder.shoulderPosition(0);
         shoulder.closeSh();
-        lift.resetZero();
 
         waitForStart();
 
         if (isStopRequested());
         base.followTrajectorySequence(trajectoryToSubmarine1);
+
+        lift.liftMotorPowerDriver.interrupt();
     }
 }
