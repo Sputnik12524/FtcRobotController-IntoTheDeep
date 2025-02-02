@@ -93,9 +93,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                             telemetry.update();
                 })
                 .waitSeconds(1)
-                .addDisplacementMarker(( )-> {
-                    claw.openLift();
-                })
+                .addDisplacementMarker(( )-> { claw.openLift(); })
                 .forward(3)
                 .splineTo(new Vector2d(52, 53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
