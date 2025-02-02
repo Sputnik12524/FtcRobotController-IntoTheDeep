@@ -47,7 +47,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .forward(8)
+                .forward(10)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
@@ -59,6 +59,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 .waitSeconds(4)
                 .turn(Math.toRadians(65))
                 .forward(34)
+
                 .build();
 
         shoulder.shoulderPosition(0);

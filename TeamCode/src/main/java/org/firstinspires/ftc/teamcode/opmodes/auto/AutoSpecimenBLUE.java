@@ -15,25 +15,22 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 
 @Autonomous(name = "BLUE Auto Specimen", group = "Robot")
 public class AutoSpecimenBLUE extends LinearOpMode {
+    public Claw claw;
+    public Shoulder shoulder;
     @Override
     public void runOpMode() throws InterruptedException {
-        DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
+        DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
+        claw = new Claw(this);
         Lift lift = new Lift(this);
-        Claw claw = new Claw(this);
-        Shoulder shoulder = new Shoulder(this);
-        Intake intake = new Intake(this);
+        Intake in = new Intake(this);
+        shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(10, 57, Math.toRadians(-90));
-        driveTrain.setPoseEstimate(startPose);
-        shoulder.shoulderPosition(0.1);
-        shoulder.strongCloseSh();
-        intake.samplesTaker.start();
-        intake.extensionPosition(intake.EXTENSION_MIN);
-        claw.openLift();
-        driveTrain.imu.resetYaw();
+        Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));
+        base.setPoseEstimate(startPose);
+        base.imu.resetYaw();
 
-        TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-33);
@@ -50,63 +47,39 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .forward(8)
+                .forward(10)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(3)
-                //here code for scoring specimen finishes
-
-                .turn(Math.toRadians(55))
-                .forward(34)
-
-                .turn(Math.toRadians(-55))
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_SIDE);
-                    sleep(100);
-                })
-                //дальше второй
-               .back(15,
-                        DriveTrainMecanum.getVelocityConstraint(10,
-                                DriveConstants.MAX_ANG_VEL,
-                                DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-               .waitSeconds(2)
-               .addDisplacementMarker(() -> {
-                    claw.closeLift();
-                })
-                .waitSeconds(1)
-                .turn(Math.toRadians(55))
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_BEFORE);
-                    telemetry.addLine("Здесь клешня на каретке возьмет образец");
-                    telemetry.update();
-                })
-                .forward(30)
-                .waitSeconds(1)
-                .turn(Math.toRadians(-55))
-                .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                            lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
-                            telemetry.addLine("Здесь мы зацепим специмен (lift down)");
-                            telemetry.update();
-                })
-                .waitSeconds(1)
-                .addDisplacementMarker(( )-> { claw.openLift(); })
-                .forward(3)
-                .splineTo(new Vector2d(52, 53), Math.toRadians(0))
-                .turn(Math.toRadians(90))
                 .addDisplacementMarker(() -> {
                     lift.setTarget(0);
                 })
                 .waitSeconds(1)
+                .turn(Math.toRadians(-120))
+                .waitSeconds(1)
+                .back(34)
+                .waitSeconds(1)
+                .turn(Math.toRadians(60))
+                .waitSeconds(1)
+                .back(15, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    claw.closeLift();
+                })
+                .waitSeconds(1)
                 .build();
 
+        shoulder.shoulderPosition(0);
+        shoulder.closeSh();
+        in.extensionPosition(in.EXTENSION_MIN);
         waitForStart();
-        if (isStopRequested()) return;
-        driveTrain.followTrajectorySequence(trajectory);
+
+        if (isStopRequested());
+        base.followTrajectorySequence(trajectoryToSubmarine1);
+
         lift.liftMotorPowerDriver.interrupt();
-        intake.samplesTaker.interrupt();
     }
 }
