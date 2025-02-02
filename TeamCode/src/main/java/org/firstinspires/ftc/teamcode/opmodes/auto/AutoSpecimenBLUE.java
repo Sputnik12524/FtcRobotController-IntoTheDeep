@@ -30,11 +30,13 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         shoulder.strongCloseSh();
         intake.samplesTaker.start();
         intake.extensionPosition(intake.EXTENSION_MIN);
+        claw.openLift();
+        driveTrain.imu.resetYaw();
 
         TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
-                    lift.setTarget(-32);
+                    lift.setTarget(-33);
                 })
                 .back(13, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -42,59 +44,65 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.75);
                     shoulder.openSh();
+                    shoulder.shoulderPosition(.75);
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .forward(6)
+                .forward(8)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
-                .waitSeconds(1)
+                .waitSeconds(3)
                 //here code for scoring specimen finishes
-                .turn(Math.toRadians(65))
+
+                .turn(Math.toRadians(55))
+                .forward(34)
+
+                .turn(Math.toRadians(-55))
                 .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_SIDE);
                     sleep(100);
                 })
-                .forward(30)
-                .turn(Math.toRadians(125), 15, DriveConstants.MAX_ANG_ACCEL)
-                //выдвижение + захват
-               .back(20,
+                //дальше второй
+               .back(15,
                         DriveTrainMecanum.getVelocityConstraint(10,
                                 DriveConstants.MAX_ANG_VEL,
                                 DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(2)
-                .addDisplacementMarker(() -> {
+               .waitSeconds(2)
+               .addDisplacementMarker(() -> {
                     claw.closeLift();
-                    sleep(1000);
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(55))
+                .addDisplacementMarker(() -> {
                     lift.setTarget(lift.POS_HIGH_SPECIMEN_BEFORE);
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
-                .forward(5)
+                .forward(30)
                 .waitSeconds(1)
-                .turn(Math.toRadians(150))
-                /*.waitSeconds(1)
-                .forward(25)
-                .turn(Math.toRadians(-85))
+                .turn(Math.toRadians(-55))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
-                    telemetry.addLine("Здесь мы зацепим специмен (lift down)");
-                    telemetry.update();
-                    sleep(1000);
+                            lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
+                            telemetry.addLine("Здесь мы зацепим специмен (lift down)");
+                            telemetry.update();
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(( )-> {
                     claw.openLift();
                 })
                 .forward(3)
                 .splineTo(new Vector2d(52, 53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
-
-                .waitSeconds(1) */
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(0);
+                })
+                .waitSeconds(1)
                 .build();
 
         waitForStart();

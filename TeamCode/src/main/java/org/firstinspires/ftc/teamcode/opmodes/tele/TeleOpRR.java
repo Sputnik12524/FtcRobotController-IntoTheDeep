@@ -101,7 +101,7 @@ public class TeleOpRR extends LinearOpMode {
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
             // Управление подъемником
-            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 5) {
+            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 6) {
                 posLift += 1;
             }
             statusDpadUpBefore = gamepad2.dpad_up;
@@ -116,24 +116,27 @@ public class TeleOpRR extends LinearOpMode {
                     lt.setTarget(lt.POS_LOWEST);
                     break;
                 case (1):
-                    lt.setTarget(lt.POS_SIDE);
+                    lt.setTarget(lt.POS_SIDE_2);
                     break;
                 case (2):
+                    lt.setTarget(lt.POS_SIDE);
+                    break;
+                case (3):
                     lt.setTarget(lt.POS_LOW_SPECIMEN_BEFORE);
                     //if (gamepad2.dpad_left) {
                     //    lt.switchSpecimenLow();
                     //}
                     break;
-                case (3):
+                case (4):
                     lt.setTarget(lt.POS_LOW_BASKET);
                     break;
-                case (4):
+                case (5):
                     lt.setTarget(lt.POS_HIGH_SPECIMEN_BEFORE);
                     //if (gamepad2.dpad_left) {
                     //    lt.switchSpecimenHigh();
                     //}
                     break;
-                case (5):
+                case (6):
                     lt.setTarget(lt.POS_HIGH_BASKET);
                     break;
             }
