@@ -55,7 +55,7 @@ public class DriveTrainMecanum extends MecanumDrive {
     private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     private final List<DcMotorEx> motors;
     public final IMU imu;
-    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+    final IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
             DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
     private final VoltageSensor batteryVoltageSensor;
     private final List<Integer> lastEncPositions = new ArrayList<>();

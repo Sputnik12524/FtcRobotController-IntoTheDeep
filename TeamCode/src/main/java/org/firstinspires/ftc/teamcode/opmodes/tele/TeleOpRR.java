@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
-import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
@@ -123,18 +122,12 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case (3):
                     lt.setTarget(lt.POS_LOW_SPECIMEN_BEFORE);
-                    //if (gamepad2.dpad_left) {
-                    //    lt.switchSpecimenLow();
-                    //}
                     break;
                 case (4):
                     lt.setTarget(lt.POS_LOW_BASKET);
                     break;
                 case (5):
                     lt.setTarget(lt.POS_HIGH_SPECIMEN_BEFORE);
-                    //if (gamepad2.dpad_left) {
-                    //    lt.switchSpecimenHigh();
-                    //}
                     break;
                 case (6):
                     lt.setTarget(lt.POS_HIGH_BASKET);
@@ -209,6 +202,12 @@ public class TeleOpRR extends LinearOpMode {
                 in.needTake();
                 brushInStatus = false;
                 brushOutStatus = false;
+            }
+            if(gamepad2.x) {
+                posLift = 0;
+                lt.setTarget(0);
+                sleep(150);
+                lt.resetZero();
             }
 
 

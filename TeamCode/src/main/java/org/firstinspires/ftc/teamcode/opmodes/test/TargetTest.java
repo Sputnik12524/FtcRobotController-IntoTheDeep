@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.test;
 
 
-import static org.firstinspires.ftc.teamcode.modules.Lift.POS_LOW_BASKET;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 
 @TeleOp(name = "LiftTargetTest", group = "robot")

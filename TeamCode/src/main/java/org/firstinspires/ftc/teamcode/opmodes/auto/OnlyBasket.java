@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -9,7 +8,6 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 

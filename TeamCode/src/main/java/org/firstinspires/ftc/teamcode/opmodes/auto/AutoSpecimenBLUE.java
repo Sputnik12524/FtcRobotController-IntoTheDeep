@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -61,7 +60,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .waitSeconds(1)
                 .back(34)
                 .waitSeconds(1)
-                .turn(Math.toRadians(60))
+                .turn(Math.toRadians(45))
                 .waitSeconds(1)
                 .back(15, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -77,7 +76,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         in.extensionPosition(in.EXTENSION_MIN);
         waitForStart();
 
-        if (isStopRequested());
+        if(isStopRequested());
         base.followTrajectorySequence(trajectoryToSubmarine1);
 
         lift.liftMotorPowerDriver.interrupt();

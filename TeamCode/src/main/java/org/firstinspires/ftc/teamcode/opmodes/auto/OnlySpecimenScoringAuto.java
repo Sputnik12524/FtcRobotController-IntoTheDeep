@@ -14,13 +14,12 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 
 @Autonomous (name = "Only Specimen", group = "Robot")
 public class OnlySpecimenScoringAuto extends LinearOpMode {
-    private Claw claw;
     private Shoulder shoulder;
 
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
-        claw = new Claw(this);
+        Claw claw = new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
         shoulder = new Shoulder(this);
@@ -40,7 +39,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 .waitSeconds(2)
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addDisplacementMarker(() -> {
+                .addDisplacementMarker(     () -> {
                     shoulder.openSh();
                     shoulder.shoulderPosition(.75);
                     telemetry.addLine("Здесь опустится подъемник");
