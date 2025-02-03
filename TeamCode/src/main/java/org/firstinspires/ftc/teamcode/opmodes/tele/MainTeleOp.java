@@ -53,7 +53,7 @@ public class MainTeleOp extends LinearOpMode {
         in.samplesTaker.start();
 
         sl.shoulderPosition(INITIAL_POSITION);
-        in.extensionPosition(in.EXT_START_POS);
+        in.extensionPosition(Intake.EXT_START_POS);
         lt.resetZero();
 
         while (opModeInInit()) {
@@ -83,30 +83,30 @@ public class MainTeleOp extends LinearOpMode {
             switch (posLift) {
                 case (0):
                     if (gamepad2.y) {
-                        lt.setTarget(lt.POS_LOW_BASKET);
+                        lt.setTarget(Lift.POS_LOW_BASKET);
                     }
                     if (gamepad2.x) {
-                        lt.setTarget(lt.POS_HIGH_BASKET);
+                        lt.setTarget(Lift.POS_HIGH_BASKET);
                     }
                     if (gamepad2.a) {
-                        lt.setTarget(lt.POS_FOR_INTAKE);
+                        lt.setTarget(Lift.POS_FOR_INTAKE);
                     }
                     break;
                 case (1):
                     if (gamepad2.y) {
-                        lt.setTarget(lt.POS_LOW_SPECIMEN_BEFORE);
+                        lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
                     }
                     if (gamepad2.x) {
-                        lt.setTarget(lt.POS_LOW_SPECIMEN_AFTER);
+                        lt.setTarget(Lift.POS_LOW_SPECIMEN_AFTER);
                     }
                     if (gamepad2.a) {
-                        lt.setTarget(lt.POS_HIGH_SPECIMEN_BEFORE);
+                        lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                     }
                     if (gamepad2.b) {
-                        lt.setTarget(lt.POS_HIGH_SPECIMEN_AFTER);
+                        lt.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
                     }
                     if (gamepad2.dpad_right) {
-                        lt.setTarget(lt.POS_SIDE);
+                        lt.setTarget(Lift.POS_SIDE);
                     }
                     break;
             }
@@ -115,10 +115,10 @@ public class MainTeleOp extends LinearOpMode {
             // Управление плечо
             // по позициям
             if (gamepad2.dpad_right) {
-                sl.shoulderPosition(sl.POS_SH_FOR_INTAKE); //начальная позиция (внутри робота)
+                sl.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE); //начальная позиция (внутри робота)
             } else if (gamepad2.dpad_up) {
                 cl.closeLift();
-                sl.shoulderPosition(sl.POS_SH_BASKET); //lowest (для взятия пробы)
+                sl.shoulderPosition(Shoulder.POS_SH_BASKET); //lowest (для взятия пробы)
             }
 
             // Управление клешней.

@@ -41,7 +41,7 @@ public class TeleOpRR extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lt = new Lift(this);
         // DriveTrain dt = new DriveTrain(this);
@@ -56,8 +56,8 @@ public class TeleOpRR extends LinearOpMode {
         sl.closeSh();
         cl.openLift();
         sl.shoulderPosition(INITIAL_POSITION);
-        in.extensionPosition(in.EXT_START_POS);
-        in.flipPosition(in.FLIP_OUTTAKE);
+        in.extensionPosition(Intake.EXT_START_POS);
+        in.flipPosition(FLIP_OUTTAKE);
         lt.resetZero();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -112,25 +112,25 @@ public class TeleOpRR extends LinearOpMode {
 
             switch (posLift) {
                 case (0):
-                    lt.setTarget(lt.POS_LOWEST);
+                    lt.setTarget(Lift.POS_LOWEST);
                     break;
                 case (1):
-                    lt.setTarget(lt.POS_SIDE_2);
+                    lt.setTarget(Lift.POS_SIDE_2);
                     break;
                 case (2):
-                    lt.setTarget(lt.POS_SIDE);
+                    lt.setTarget(Lift.POS_SIDE);
                     break;
                 case (3):
-                    lt.setTarget(lt.POS_LOW_SPECIMEN_BEFORE);
+                    lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
                     break;
                 case (4):
-                    lt.setTarget(lt.POS_LOW_BASKET);
+                    lt.setTarget(Lift.POS_LOW_BASKET);
                     break;
                 case (5):
-                    lt.setTarget(lt.POS_HIGH_SPECIMEN_BEFORE);
+                    lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                     break;
                 case (6):
-                    lt.setTarget(lt.POS_HIGH_BASKET);
+                    lt.setTarget(Lift.POS_HIGH_BASKET);
                     break;
             }
             if (gamepad2.dpad_left) {
@@ -147,7 +147,7 @@ public class TeleOpRR extends LinearOpMode {
                 sl.needToBasketSh();
             } else if (gamepad2.a) {
                 sl.openSh();
-                sl.shoulderPosition(sl.POS_SH_FOR_INTAKE);
+                sl.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
             }
 
             // Управление клешней.

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 public class TestFieldCentricDrive extends LinearOpMode {
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrain drive = new DriveTrain(this);
         waitForStart();
         while (opModeIsActive()){

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 public class OnlyBasket extends LinearOpMode {
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
@@ -30,14 +30,14 @@ public class OnlyBasket extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXTENSION_MIN);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(3)
                 .back(34)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
-                    lift.setTarget(lift.POS_HIGH_BASKET);
+                    shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                    lift.setTarget(Lift.POS_HIGH_BASKET);
                     sleep(3000);
                 })
                 .waitSeconds(2)
@@ -49,7 +49,7 @@ public class OnlyBasket extends LinearOpMode {
                 .waitSeconds(6)
                 .forward(5)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_LOWEST);
+                    lift.setTarget(Lift.POS_LOWEST);
                     sleep(1000);
 
                 })

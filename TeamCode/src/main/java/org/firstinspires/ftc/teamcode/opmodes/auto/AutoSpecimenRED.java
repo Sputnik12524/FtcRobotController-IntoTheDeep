@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Autonomous(name = "Auto RED Specimen", group = "Robot")
 public class AutoSpecimenRED extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
@@ -29,7 +29,7 @@ public class AutoSpecimenRED extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
         intake.samplesTaker.start();
-        intake.extensionPosition(intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXTENSION_MIN);
         claw.openLift();
         driveTrain.imu.resetYaw();
 
@@ -63,7 +63,7 @@ public class AutoSpecimenRED extends LinearOpMode {
 
                 .turn(Math.toRadians(-55))
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_SIDE);
+                    lift.setTarget(Lift.POS_SIDE);
                     sleep(100);
                 })
                 //дальше второй
@@ -79,7 +79,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(55))
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_BEFORE);
+                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                     telemetry.addLine("Здесь клешня на каретке возьмет образец");
                     telemetry.update();
                 })
@@ -88,7 +88,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .turn(Math.toRadians(-55))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_HIGH_SPECIMEN_AFTER);
+                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
                     telemetry.addLine("Здесь мы зацепим специмен (lift down)");
                     telemetry.update();
                 })

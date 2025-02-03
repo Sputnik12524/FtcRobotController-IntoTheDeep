@@ -13,10 +13,10 @@ public class TeleopIntake extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Intake in = new Intake(this);
         in.samplesTaker.start();
-        in.extensionPosition(in.EXT_START_POS);
+        in.extensionPosition(Intake.EXT_START_POS);
 
         waitForStart();
         while (opModeIsActive()) {

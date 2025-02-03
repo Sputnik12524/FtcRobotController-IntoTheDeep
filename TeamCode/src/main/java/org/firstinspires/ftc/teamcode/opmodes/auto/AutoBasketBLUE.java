@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 public class AutoBasketBLUE extends LinearOpMode {
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
         Claw claw = new Claw(this);
@@ -32,7 +32,7 @@ public class AutoBasketBLUE extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXTENSION_MIN);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
@@ -63,11 +63,11 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .turn(Math.toRadians(-25))
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
-                    intake.extensionPosition(intake.EXTENSION_MAX);
+                    intake.extensionPosition(Intake.EXTENSION_MAX);
                     intake.brushIntake();
                     sleep(3000);
-                    intake.extensionPosition(intake.EXTENSION_MIN);
-                    intake.flipPosition(intake.FLIP_OUTTAKE);
+                    intake.extensionPosition(Intake.EXTENSION_MIN);
+                    intake.flipPosition(Intake.FLIP_OUTTAKE);
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -76,11 +76,11 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .back(11)
                 .waitSeconds(5)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(shoulder.POS_SH_FOR_INTAKE);
+                    shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
                     shoulder.closeSh();
-                    shoulder.shoulderPosition(shoulder.POS_SH_BASKET);
+                    shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
                     sleep(1000);
-                    lift.setTarget(lift.POS_HIGH_BASKET);
+                    lift.setTarget(Lift.POS_HIGH_BASKET);
                     telemetry.addLine("Здесь поднимется подъемник с наклоненным плечом");
                     telemetry.update();
                     sleep(500);
@@ -92,7 +92,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .forward(3)
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(lift.POS_SIDE);
+                    lift.setTarget(Lift.POS_SIDE);
                     shoulder.shoulderPosition(0.4);
                 })
                 .splineTo(new Vector2d(25,9),Math.toRadians(0))
