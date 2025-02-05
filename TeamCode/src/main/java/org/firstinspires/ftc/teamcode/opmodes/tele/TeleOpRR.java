@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_INTAKE;
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_OUTTAKE;
-import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,7 +20,6 @@ public class TeleOpRR extends LinearOpMode {
     public static double CORRECTION_COEF = 7;
 
     // Подъемник
-    public static double LIFT_POWER_COEFFICIENT = 0.7;
     private boolean statusDpadDownBefore = false;
     private boolean statusDpadUpBefore = false;
     private int posLift = 0;
@@ -55,9 +50,9 @@ public class TeleOpRR extends LinearOpMode {
 
         sl.closeSh();
         cl.openLift();
-        sl.shoulderPosition(INITIAL_POSITION);
+        sl.shoulderPosition(Shoulder.INITIAL_POSITION);
         in.extensionPosition(Intake.EXT_START_POS);
-        in.flipPosition(FLIP_OUTTAKE);
+        in.flipPosition(Intake.FLIP_OUTTAKE);
         lt.resetZero();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -185,10 +180,10 @@ public class TeleOpRR extends LinearOpMode {
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(FLIP_INTAKE);
+                in.flipPosition(Intake.FLIP_INTAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(FLIP_OUTTAKE);
+                in.flipPosition(Intake.FLIP_OUTTAKE);
             }
             //выдвижение
             in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика

@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_INTAKE;
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_OUTTAKE;
-import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,13 +15,11 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 public class MainTeleOp extends LinearOpMode {
 
     // КБ
-    private final boolean stateX = false;
     private boolean stateLeftBumperDT = false;
     private boolean stateRightBumperDT = false;
 
 
     // Подъемник
-    public static double LIFT_POWER_COEFFICIENT = 0.7;
     boolean bState;
 
     private boolean statusDpadLeftBefore = false;
@@ -52,7 +46,7 @@ public class MainTeleOp extends LinearOpMode {
         lt.liftMotorPowerDriver.start();
         in.samplesTaker.start();
 
-        sl.shoulderPosition(INITIAL_POSITION);
+        sl.shoulderPosition(Shoulder.INITIAL_POSITION);
         in.extensionPosition(Intake.EXT_START_POS);
         lt.resetZero();
 
@@ -145,10 +139,10 @@ public class MainTeleOp extends LinearOpMode {
             }
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(FLIP_INTAKE);
+                in.flipPosition(Intake.FLIP_INTAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(FLIP_OUTTAKE);
+                in.flipPosition(Intake.FLIP_OUTTAKE);
             }
             //выдвижение
             in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
