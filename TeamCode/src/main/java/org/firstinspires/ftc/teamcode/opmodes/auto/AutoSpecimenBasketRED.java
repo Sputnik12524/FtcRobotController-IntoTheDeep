@@ -5,56 +5,65 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-@Autonomous(name="BLUE Auto Specimen + Basket", group="Robot")
-public class AutoBasketBLUE extends LinearOpMode {
+@Autonomous(name="Auto RED Specimen + Basket", group="Robot")
+public class AutoSpecimenBasketRED extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
-        new Claw(this);
         Intake intake = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
 
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10,57,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-10,-57,Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(Intake.EXTENSION_MIN);
 
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeLeft(5)
-                .back(34)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
-                    lift.setTarget(Lift.POS_HIGH_BASKET);
-                    sleep(3000);
+                    shoulder.shoulderPosition(.7);
+                    lift.setTarget(-33);
+                })
+                .back(13, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(2)
+                .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .addDisplacementMarker(     () -> {
+                    shoulder.openSh();
+                    shoulder.shoulderPosition(.75);
+                    telemetry.addLine("Здесь опустится подъемник");
+                    telemetry.update();
                 })
                 .waitSeconds(2)
-                .turn(Math.toRadians(30))
+                .forward(10)
                 .addDisplacementMarker(() -> {
-                    shoulder.openSh();
                     sleep(500);
+                    shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(3)
-                .forward(6)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_LOWEST);
-                    sleep(1000);
+                    lift.setTarget(0);
                 })
-                // здесь код со скорингом предзагруженной пробы
-                .turn(Math.toRadians(100))
+                .waitSeconds(4)
+                .turn(Math.toRadians(65))
+                .forward(34)
+// specimen finished
+                .turn(Math.toRadians(-45))
+                .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
+                .turn(Math.toRadians(-25))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
@@ -121,7 +130,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_LOWEST);
                     shoulder.shoulderPosition(0);
                 })
-                .splineTo(new Vector2d(25, 9), Math.toRadians(0))
+                .splineTo(new Vector2d(-25, -9), Math.toRadians(0))
                 .build();
         intake.extensionPosition(.05);
         waitForStart();

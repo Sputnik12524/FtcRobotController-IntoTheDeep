@@ -17,38 +17,58 @@ public class MeepMeepAutoSpecimen {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(10, -56, 0))
                         .turn(Math.toRadians(-90))
-                        .back(10)
-                        .waitSeconds(1)
                         .addDisplacementMarker(() -> {
-
+                           /* shoulder.shoulderPosition(.7);
+                            lift.setTarget(-33); */
                         })
-                        .waitSeconds(1)
-                        .back(11)
+                        .back(13) //, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .waitSeconds(2)
+                        .back(12) //, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                         .addDisplacementMarker(() -> {
-
+                          /*  shoulder.openSh();
+                            shoulder.shoulderPosition(.75);
+                            telemetry.addLine("Здесь опустится подъемник");
+                            telemetry.update(); */
+                        })
+                        .waitSeconds(2)
+                        .forward(10)
+                        .addDisplacementMarker(() -> {
+                           // sleep(500);
+                           // shoulder.shoulderPosition(.1);
                         })
                         .waitSeconds(3)
-                        .forward(4)
-                        .waitSeconds(1)
-                        .turn(Math.toRadians(60))
-                        .forward(25)
-                        .turn(Math.toRadians(120))
-                        //выдвижение + захват
-                        .back(9)
-                        .waitSeconds(5)
                         .addDisplacementMarker(() -> {
-
+                            //lift.setTarget(0);
                         })
-                        .forward(3)
-                        .splineTo(new Vector2d(10,-40), Math.toRadians(-90))
-                        .back(7)
-                        .waitSeconds(10)
+                        .waitSeconds(1)
+                        .turn(Math.toRadians(-110))
+                        .waitSeconds(1)
+                        .back(34)
+                        .waitSeconds(1)
+                        .turn(Math.toRadians(-70))
+                        .back(5) //, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .waitSeconds(1)
                         .addDisplacementMarker(() -> {
-
+                            //claw.closeLift();
+                        })
+                        .waitSeconds(1)
+                        .forward(5)
+                        .turn(Math.toRadians(-110))
+                        .back(34)
+                        .turn(Math.toRadians(-70))
+                        .back(5)
+                        .addDisplacementMarker(() -> {
+                            //lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE)
+                        })
+                        .addTemporalMarker(3, () -> {
+                            //claw.openLift();
                         })
                         .forward(5)
                         .splineTo(new Vector2d(52, -53), Math.toRadians(0))
                         .turn(Math.toRadians(90))
+                        .addDisplacementMarker(() -> {
+                           // lift.setTarget(0);
+                        })
                         .waitSeconds(1)
                         .build());
 

@@ -18,7 +18,7 @@ public class OnlyBasket extends LinearOpMode {
     public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
-        Claw claw = new Claw(this);
+        new Claw(this);
         Intake intake = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
 

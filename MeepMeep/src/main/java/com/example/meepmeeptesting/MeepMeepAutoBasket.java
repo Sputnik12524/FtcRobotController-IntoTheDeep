@@ -15,47 +15,50 @@ public class MeepMeepAutoBasket {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
 
                 .setConstraints(52, 52, Math.toRadians(180), Math.toRadians(180), 13)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-10, 57, 0))
-                        .turn(Math.toRadians(90))
-                        .back(10)
-                        .waitSeconds(1)
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-12, -57, 0))
+                        // .turn(Math.toRadians(-90))
+                        .strafeLeft(5)
+                        .back(34)
                         .addDisplacementMarker(() -> {
 
                         })
-                        .waitSeconds(1.5)
-                        .back(17)
+                        .waitSeconds(2)
+                        .turn(Math.toRadians(30))
                         .addDisplacementMarker(() -> {
 
                         })
-                        .waitSeconds(4)
-                        .forward(4)
+                        .waitSeconds(3)
+                        .forward(6)
                         .addDisplacementMarker(() -> {
 
                         })
-                        .waitSeconds(1)
-                        .turn(Math.toRadians(-45))
-                        .splineTo(new Vector2d(-52,40), Math.toRadians(90))
-                        .turn(Math.toRadians(-25))
+                        // здесь код со скорингом предзагруженной пробы
+                        .turn(Math.toRadians(100))
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
 
                         })
                         //capturing yellow sample
-
-                        .back(4)
+                        .turn(Math.toRadians(-100))
+                        .waitSeconds(2)
+                        .back(5)
                         //scoring to basket
-
-                        .back(7)
-                        .waitSeconds(5)
                         .addDisplacementMarker(() -> {
 
                         })
-                        .forward(3)
-                        .waitSeconds(1)
+                        .forward(5)
+                        .waitSeconds(3)
+                        .turn(Math.toRadians(100))
                         .addDisplacementMarker(() -> {
 
                         })
-                        .splineTo(new Vector2d(-25,9),Math.toRadians(0))
+                        .turn(Math.toRadians(-100))
+                        .back(5)
+                        .waitSeconds(3)
+                        .addDisplacementMarker(() -> {
+
+                        })
+                        .splineTo(new Vector2d(-25,-9),Math.toRadians(0))
                         .build());
 
 

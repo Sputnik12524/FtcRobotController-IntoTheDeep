@@ -19,7 +19,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
-        Claw claw = new Claw(this);
+        new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
         shoulder = new Shoulder(this);
