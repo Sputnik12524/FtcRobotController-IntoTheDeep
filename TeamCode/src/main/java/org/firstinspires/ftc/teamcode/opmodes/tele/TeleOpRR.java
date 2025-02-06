@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
-import static org.firstinspires.ftc.teamcode.modules.Shoulder.INITIAL_POSITION;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
-import org.firstinspires.ftc.teamcode.modules.DriveTrain;
+import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
@@ -22,28 +20,39 @@ public class TeleOpRR extends LinearOpMode {
     public static double CORRECTION_COEF = 7;
 
     // Подъемник
-    public static double LIFT_POWER_COEFFICIENT = 0.7;
-    public static double HIGH_SH = .4;
-    public static double MID_SH = 0;
-
-    public static double SUB_SH = .7;
-    public static double LOW_SH = .86;
-    boolean bState;
+    private boolean statusDpadDownBefore = false;
+    private boolean statusDpadUpBefore = false;
+    private int posLift = 0;
 
     // Клешни
     private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false;
 
+    //щетки
+    private boolean brushInStatus = false;
+    private boolean brushOutStatus = false;
+    private boolean stateA = false;
+    private boolean stateB = false;
+
+
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lt = new Lift(this);
         // DriveTrain dt = new DriveTrain(this);
         Shoulder sl = new Shoulder(this);
+        Intake in = new Intake(this);
         Claw cl = new Claw(this);
-        cl.closeSh();
 
-        sl.shoulderPosition(INITIAL_POSITION);
+        lt.liftMotorPowerDriver.start();
+        in.samplesTaker.start();
+        sl.sampleShTaker.start();
+
+        sl.closeSh();
+        cl.openLift();
+        sl.shoulderPosition(Shoulder.INITIAL_POSITION);
+        in.extensionPosition(Intake.EXT_START_POS);
+        in.flipPosition(Intake.FLIP_OUTTAKE);
         lt.resetZero();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -67,7 +76,7 @@ public class TeleOpRR extends LinearOpMode {
             driveTrain.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
-                            gamepad1.right_stick_x * DriveTrainMecanum.multiplier,
+                            gamepad1.left_stick_x * DriveTrainMecanum.multiplier,
                             rotate * DriveTrainMecanum.multiplier
                     )
             );
@@ -78,7 +87,7 @@ public class TeleOpRR extends LinearOpMode {
 
             driveTrain.update();
 
-            if (gamepad1.x) {
+            if (gamepad1.dpad_left) {
                 driveTrain.resetIMU();
             }
 
@@ -86,68 +95,121 @@ public class TeleOpRR extends LinearOpMode {
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
             // Управление подъемником
-            double speed = gamepad2.right_stick_y;
-            lt.kolxoz(speed * 0.5);
-            // lt.setLiftMotorPower(speed * LIFT_POWER_COEFFICIENT);
-            boolean stateB = gamepad2.b;
-            boolean stateA = gamepad2.a;
-            if (gamepad2.dpad_left && !stateB) {
-                lt.resetZero();
+            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 6) {
+                posLift += 1;
             }
-            if (gamepad2.dpad_right && !stateA) {
-                lt.unlockLift();
+            statusDpadUpBefore = gamepad2.dpad_up;
+            if (gamepad2.dpad_down && !statusDpadDownBefore && posLift > 0) {
+                posLift -= 1;
+            }
+            statusDpadDownBefore = gamepad2.dpad_down;
+
+
+            switch (posLift) {
+                case (0):
+                    lt.setTarget(Lift.POS_LOWEST);
+                    break;
+                case (1):
+                    lt.setTarget(Lift.POS_SIDE_2);
+                    break;
+                case (2):
+                    lt.setTarget(Lift.POS_SIDE);
+                    break;
+                case (3):
+                    lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
+                    break;
+                case (4):
+                    lt.setTarget(Lift.POS_LOW_BASKET);
+                    break;
+                case (5):
+                    lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
+                    break;
+                case (6):
+                    lt.setTarget(Lift.POS_HIGH_BASKET);
+                    break;
+            }
+            if (gamepad2.dpad_left) {
+                posLift = 0;
+            }
+            if (gamepad2.dpad_right) {
+                posLift = 5;
             }
 
+
             // Управление плечо
-            //по диапазону
-            if (gamepad2.dpad_down) {
-                sl.shoulderPlus();
-                sleep(5);
-            }
-            if (gamepad2.dpad_up) {
-                sl.shoulderMinus();
-                sleep(5);
-            }
-            //по позициям
-            if (gamepad2.y) {
-                sl.shoulderPosition(HIGH_SH); //highest (для корзины)
-            } else if (gamepad2.b) {
-                sl.shoulderPosition(MID_SH); //начальная позиция (внутри робота)
+            // по позициям
+            if (gamepad2.b) {
+                sl.needToBasketSh();
             } else if (gamepad2.a) {
-                cl.closeLift();
-                sl.shoulderPosition(LOW_SH); //lowest (для взятия пробы)
-            } else if (gamepad2.x) {
-                cl.closeLift();
-                sl.shoulderPosition(SUB_SH); //lowest (для взятия пробы)
+                sl.openSh();
+                sl.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
             }
 
             // Управление клешней.
-            if (gamepad2.right_bumper && !stateRightBumper) {
-                cl.switchPositionShoulder();
-            }
             if (gamepad2.left_bumper && !stateLeftBumper) {
+                sl.switchPositionShoulder();
+            }
+            if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionLift();
             }
             stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
-            bState = gamepad2.b;
+
+
+            //  Управление захватом
+            //щетка
+            if (gamepad1.a && !brushInStatus && !stateA) {
+                in.brushIntake();
+                brushInStatus = true;
+                brushOutStatus = false;
+
+            } else if (gamepad1.a && brushInStatus && !stateA) {
+                in.brushStop();
+                brushInStatus = false;
+            }
+            if (gamepad1.b && !brushOutStatus && !stateB) {
+                in.brushOuttake();
+                brushOutStatus = true;
+                brushInStatus = false;
+            } else if (gamepad1.b && brushOutStatus && !stateB) {
+                in.brushStop();
+                brushOutStatus = false;
+            }
+            stateA = gamepad1.a;
+            stateB = gamepad1.b;
+
+            //переворот
+            if (gamepad1.y) {
+                in.flipPosition(Intake.FLIP_INTAKE);
+            }
+            if (gamepad1.x) {
+                in.flipPosition(Intake.FLIP_OUTTAKE);
+            }
+            //выдвижение
+            in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
+
+            //многопоточность
+            if (gamepad1.right_stick_button && in.getExtensionPositionR() >= 0.2) {
+                in.needOuttake();
+                brushInStatus = false;
+                brushOutStatus = false;
+            } else if (gamepad1.right_stick_button && in.getExtensionPositionR() < 0.2) {
+                in.needTake();
+                brushInStatus = false;
+                brushOutStatus = false;
+            }
+            if(gamepad2.x) {
+                posLift = 0;
+                lt.setTarget(0);
+                sleep(150);
+                lt.resetZero();
+            }
+
 
             // Print pose to telemetry
-            telemetry.addLine("УПРАВЛЕНИЕ");
-            telemetry.addLine("1-ый геймпад:");
-            telemetry.addLine("Левый/Правый стик - езда");
-            telemetry.addLine("Левый/Правый триггер - повороты");
-            telemetry.addLine("Правый бампер - Противоположное движение");
-            telemetry.addLine("Левый бампер - Замедленное движение");
-            telemetry.addLine("2-й геймпад:");
-            telemetry.addLine("Правый стик - Подъемник");
-            telemetry.addLine("B - Подъемник reset 0");
-            telemetry.addLine("A - Подъемник Unlock");
-            telemetry.addLine("Крестовина вверх - Плечо поднято");
-            telemetry.addLine("Крестовина вниз  - Плечо опущено");
-            telemetry.addLine("Крестовина влево - Плечо образец");
-            telemetry.addLine("Правый бампер - Смена поз. клешни (плечо)");
-            telemetry.addLine("Левый бампер - Смена поз. клешни (подъемник)");
+            telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
+
+            telemetry.addData("PosLift:", posLift);
 
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getPower());
@@ -161,10 +223,14 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
         }
+        lt.liftMotorPowerDriver.interrupt();
+        in.samplesTaker.interrupt();
+        sl.sampleShTaker.interrupt();
     }
 
-    static class PoseStorage {
+    public static class PoseStorage {
         public static Pose2d currentPose = new Pose2d();
     }
+
 }
 

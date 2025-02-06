@@ -42,8 +42,8 @@ import java.util.List;
 public class DriveTrainMecanum extends MecanumDrive {
     public static double multiplier = 1;
     private final LinearOpMode aggregate;
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(13, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, 0); //kP = 11
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(17, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0); //kP = 11
     public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -55,7 +55,7 @@ public class DriveTrainMecanum extends MecanumDrive {
     private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     private final List<DcMotorEx> motors;
     public final IMU imu;
-    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+    final IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
             DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
     private final VoltageSensor batteryVoltageSensor;
     private final List<Integer> lastEncPositions = new ArrayList<>();

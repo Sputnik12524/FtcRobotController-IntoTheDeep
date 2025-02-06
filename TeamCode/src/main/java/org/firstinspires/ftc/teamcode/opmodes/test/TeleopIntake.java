@@ -11,13 +11,12 @@ import org.firstinspires.ftc.teamcode.modules.Intake;
 @TeleOp(name = "IntakeTest", group = "Robot")
 public class TeleopIntake extends LinearOpMode {
 
-  //  Intake.SamplesTaker samplesTaker;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Intake in = new Intake(this);
-       // samplesTaker.start();
-        in.extensionPosition(in.EXT_START_POS);
+        in.samplesTaker.start();
+        in.extensionPosition(Intake.EXT_START_POS);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -34,10 +33,10 @@ public class TeleopIntake extends LinearOpMode {
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(FLIP_INTAKE);
+                in.flipPosition(FLIP_OUTTAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(FLIP_OUTTAKE);
+                in.flipPosition(FLIP_INTAKE);
             }
 
             //выдвижение
@@ -50,10 +49,10 @@ public class TeleopIntake extends LinearOpMode {
                 in.extensionMinus();
             }
 
-//             //многопоточность
-//            if (gamepad1.right_bumper) {
-//                in.needTake();
-//            }
+             //многопоточность
+            if (gamepad1.right_bumper) {
+                in.needTake();
+            }
 
             telemetry.addData("Позиция сервомотора переворота (RIGHT): ", in.getFlipPositionR());
             telemetry.addData("Позиция сервомотора переворота (LEFT): ", in.getFlipPositionL());
@@ -70,6 +69,6 @@ public class TeleopIntake extends LinearOpMode {
 
 
         }
-     // samplesTaker.interrupt();
+      in.samplesTaker.interrupt();
     }
 }

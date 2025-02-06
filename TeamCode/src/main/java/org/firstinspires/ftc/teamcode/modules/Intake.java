@@ -19,19 +19,21 @@ public class Intake {
     private final Servo extensionServoLeft; //0.06
     private final Servo extensionServoRight; //0.06
 
-    private final SamplesTaker samplesTaker;
+    public final SamplesTaker samplesTaker;
 
     public static double EXTENSION_MAX = 0.6;
     public static double EXTENSION_MIN = 0.05;
 
     public static double EXTENSION_STEP = 0.005;
-    public static double EXT_K = 0.6;
+    public static double EXT_K = 8;
     public static double EXT_START_POS = 0.065;
 
-    public static double  FLIP_INTAKE = 0.67;
-    public static double  FLIP_OUTTAKE = 0;
-    public static double FLIP_TIME = 700;
-    public static double SPEED_BRUSH = 1;
+    public static double  FLIP_INTAKE = 0.12;
+    public static double  FLIP_OUTTAKE = 0.8;
+    public static double FLIP_TIME = 350;
+    public static final double SPEED_BRUSH = 1;
+
+    public static double FLIP_INTAKE_NEARBY = 0.08;
 
     public Intake(LinearOpMode opMode) {
         this.flipServoLeft = opMode.hardwareMap.servo.get("flipServoL");
@@ -45,22 +47,22 @@ public class Intake {
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.brushServoRight.setDirection(CRServo.Direction.FORWARD);
         this.brushServo.setDirection(CRServo.Direction.REVERSE);
-        this.flipServoLeft.setDirection(Servo.Direction.REVERSE);
+        this.flipServoRight.setDirection(Servo.Direction.REVERSE);
         this.extensionServoRight.setDirection(Servo.Direction.REVERSE);
 
         this.samplesTaker = new SamplesTaker();
     }
 
     public void brushIntake() {
-        brushServoLeft.setPower(SPEED_BRUSH);
-        brushServoRight.setPower(SPEED_BRUSH);
-        brushServo.setPower(SPEED_BRUSH);
-    }
-
-    public void brushOuttake() {
         brushServoLeft.setPower(-SPEED_BRUSH);
         brushServoRight.setPower(-SPEED_BRUSH);
         brushServo.setPower(-SPEED_BRUSH);
+    }
+
+    public void brushOuttake() {
+        brushServoLeft.setPower(SPEED_BRUSH);
+        brushServoRight.setPower(SPEED_BRUSH);
+        brushServo.setPower(SPEED_BRUSH);
     }
 
     public void brushStop() {
@@ -114,20 +116,29 @@ public class Intake {
     public void needTake () {
         samplesTaker.needTake = true;
     }
+    public void needOuttake () { samplesTaker.needOuttake = true; }
 
     public class SamplesTaker extends Thread {
-        boolean needTake = false;
+        volatile boolean needTake = false;
+        volatile boolean needOuttake = false;
 
         private final ElapsedTime timer = new ElapsedTime();
         public void run () {
             while (!isInterrupted()) {
-                if (needTake) {
-                    flipPosition(FLIP_INTAKE);
+                if (needOuttake) {
+                    flipPosition(FLIP_OUTTAKE);
                     brushIntake();
                     timer.reset();
                     while (timer.milliseconds() < FLIP_TIME );
                     brushStop();
                     extensionPosition(EXTENSION_MIN);
+                    needOuttake = false;
+                }
+                if (needTake) {
+                    flipPosition(FLIP_INTAKE);
+                    timer.reset();
+                    while (timer.milliseconds() < FLIP_TIME );
+                    extensionPosition(EXTENSION_MAX);
                     needTake = false;
                 }
             }

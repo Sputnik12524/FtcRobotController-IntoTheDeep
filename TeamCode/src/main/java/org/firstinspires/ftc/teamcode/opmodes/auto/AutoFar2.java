@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 public class AutoFar2 extends LinearOpMode {
     public static final double DISTANCE = 45;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE,

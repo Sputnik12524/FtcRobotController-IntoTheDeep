@@ -8,18 +8,18 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous (name = "Only Specimen", group = "Robot")
-public class OnlySpecimenScoringAuto extends LinearOpMode {
-    private Shoulder shoulder;
-
+@Autonomous(name = "BLUE Auto Specimen", group = "Robot")
+public class AutoSpecimenBLUE extends LinearOpMode {
+    public Claw claw;
+    public Shoulder shoulder;
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
-        Claw claw = new Claw(this);
+        claw = new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
         shoulder = new Shoulder(this);
@@ -39,7 +39,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 .waitSeconds(2)
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addDisplacementMarker(     () -> {
+                .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     shoulder.shoulderPosition(.75);
                     telemetry.addLine("Здесь опустится подъемник");
@@ -55,10 +55,20 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     lift.setTarget(0);
                 })
-                .waitSeconds(4)
-                .turn(Math.toRadians(65))
-                .forward(34)
-
+                .waitSeconds(1)
+                .turn(Math.toRadians(-120))
+                .waitSeconds(1)
+                .back(34)
+                .waitSeconds(1)
+                .turn(Math.toRadians(45))
+                .waitSeconds(1)
+                .back(15, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    claw.closeLift();
+                })
+                .waitSeconds(1)
                 .build();
 
         shoulder.shoulderPosition(0);
@@ -66,7 +76,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         in.extensionPosition(Intake.EXTENSION_MIN);
         waitForStart();
 
-        if (isStopRequested());
+        if(isStopRequested());
         base.followTrajectorySequence(trajectoryToSubmarine1);
 
         lift.liftMotorPowerDriver.interrupt();

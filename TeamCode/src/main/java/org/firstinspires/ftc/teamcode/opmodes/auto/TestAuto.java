@@ -15,7 +15,7 @@ public class TestAuto extends LinearOpMode {
     public static double x_distance = 43.2;
     public static double y_distance = 30;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
 
         Pose2d startPose = new Pose2d(-11,-53,0);
