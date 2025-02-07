@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto RED Specimen + Basket", group = "Robot")
+@Autonomous(name = "Auto RED Basket", group = "Robot")
 public class AutoBasketRED extends LinearOpMode {
 
     @Override
@@ -30,7 +30,7 @@ public class AutoBasketRED extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
 
-        TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeLeft(5)
                 .back(34)
                 .addDisplacementMarker(() -> {
@@ -50,7 +50,8 @@ public class AutoBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_LOWEST);
                     sleep(1000);
                 })
-                // здесь код со скорингом предзагруженной пробы
+                .build();
+        TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
                 .turn(Math.toRadians(100))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
@@ -85,6 +86,8 @@ public class AutoBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_LOWEST);
                     shoulder.shoulderPosition(0);
                 })
+                .build();
+        TrajectorySequence trajectoryThirdSample = driveTrain.trajectorySequenceBuilder(trajectorySecondSample.end())
                 .forward(5)
                 .waitSeconds(3)
                 .turn(Math.toRadians(100))
@@ -124,7 +127,12 @@ public class AutoBasketRED extends LinearOpMode {
         intake.extensionPosition(.05);
         waitForStart();
         if (isStopRequested()) return;
-        driveTrain.followTrajectorySequence(traj);
+        driveTrain.followTrajectorySequence(trajectoryFirstSample);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectorySecondSample);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectoryThirdSample);
+        sleep(1000);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }

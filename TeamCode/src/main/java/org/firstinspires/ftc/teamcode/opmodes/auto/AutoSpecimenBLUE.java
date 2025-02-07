@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -29,7 +30,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         base.setPoseEstimate(startPose);
         base.imu.resetYaw();
 
-        TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-33);
@@ -55,6 +56,8 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     lift.setTarget(0);
                 })
+                .build();
+        TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
                 .waitSeconds(1)
                 .turn(Math.toRadians(-120))
                 .waitSeconds(1)
@@ -69,6 +72,29 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     claw.closeLift();
                 })
                 .waitSeconds(1)
+                .forward(5)
+                .build();
+        TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
+                .turn(Math.toRadians(-110))
+                .back(34)
+                .turn(Math.toRadians(-70))
+                .back(5)
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
+                })
+                .addTemporalMarker(3, () -> {
+                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
+                    claw.openLift();
+                })
+                .forward(5)
+                .build();
+        TrajectorySequence trajectoryEnd = base.trajectorySequenceBuilder(trajectoryScoringSecondSpecimen.end())
+                .splineTo(new Vector2d(52, -53), Math.toRadians(0))
+                .turn(Math.toRadians(90))
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(0);
+                })
+                .waitSeconds(1)
                 .build();
 
         shoulder.shoulderPosition(0);
@@ -77,8 +103,14 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         waitForStart();
 
         if(isStopRequested());
-        base.followTrajectorySequence(trajectoryToSubmarine1);
-
+        base.followTrajectorySequence(trajectorySpecimen);
+        sleep(1000);
+        base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
+        sleep(1000);
+        base.followTrajectorySequence(trajectoryScoringSecondSpecimen);
+        sleep(1000);
+        base.followTrajectorySequence(trajectoryEnd);
+        sleep(1000);
         lift.liftMotorPowerDriver.interrupt();
     }
 }

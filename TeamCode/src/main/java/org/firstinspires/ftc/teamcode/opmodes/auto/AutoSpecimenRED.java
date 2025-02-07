@@ -33,7 +33,7 @@ public class AutoSpecimenRED extends LinearOpMode {
         claw.openLift();
         driveTrain.imu.resetYaw();
 
-        TrajectorySequence trajectory = driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajectoryFirstSpecimen = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-33);
@@ -58,18 +58,23 @@ public class AutoSpecimenRED extends LinearOpMode {
                     lift.setTarget(0);
                 })
                 .waitSeconds(1)
+                .build();
+        TrajectorySequence trajectoryCaptureSecondSpecimen = driveTrain.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
                 .turn(Math.toRadians(-110))
                 .waitSeconds(1)
                 .back(34)
                 .waitSeconds(1)
                 .turn(Math.toRadians(-70))
-                .back(5, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .back(5, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     claw.closeLift();
                 })
                 .waitSeconds(1)
                 .forward(5)
+                .build();
+        TrajectorySequence trajectoryScoringSecondSpecimen = driveTrain.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
                 .turn(Math.toRadians(-110))
                 .back(34)
                 .turn(Math.toRadians(-70))
@@ -82,6 +87,8 @@ public class AutoSpecimenRED extends LinearOpMode {
                     claw.openLift();
                 })
                 .forward(5)
+                .build();
+        TrajectorySequence trajectoryEnd = driveTrain.trajectorySequenceBuilder(trajectoryScoringSecondSpecimen.end())
                 .splineTo(new Vector2d(52, -53), Math.toRadians(0))
                 .turn(Math.toRadians(90))
                 .addDisplacementMarker(() -> {
@@ -92,7 +99,13 @@ public class AutoSpecimenRED extends LinearOpMode {
 
         waitForStart();
         if (isStopRequested()) return;
-        driveTrain.followTrajectorySequence(trajectory);
+        driveTrain.followTrajectorySequence(trajectoryFirstSpecimen);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectoryScoringSecondSpecimen);
+        sleep(100);
+        driveTrain.followTrajectorySequence(trajectoryEnd);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }

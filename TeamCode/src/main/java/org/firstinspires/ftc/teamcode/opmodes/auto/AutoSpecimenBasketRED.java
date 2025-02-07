@@ -31,7 +31,7 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
 
-        TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence trajectorySpecimen = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-33);
@@ -59,8 +59,9 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                 })
                 .waitSeconds(4)
                 .turn(Math.toRadians(65))
+                .build();
+        TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(trajectorySpecimen.end())
                 .forward(34)
-// specimen finished
                 .turn(Math.toRadians(-45))
                 .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
                 .turn(Math.toRadians(-25))
@@ -99,6 +100,8 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                 })
                 .forward(5)
                 .waitSeconds(3)
+                .build();
+        TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
                 .turn(Math.toRadians(100))
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
@@ -135,7 +138,12 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
         intake.extensionPosition(.05);
         waitForStart();
         if(isStopRequested()) return;
-        driveTrain.followTrajectorySequence(traj);
+        driveTrain.followTrajectorySequence(trajectorySpecimen);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectoryFirstSample);
+        sleep(1000);
+        driveTrain.followTrajectorySequence(trajectorySecondSample);
+        sleep(1000);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }
