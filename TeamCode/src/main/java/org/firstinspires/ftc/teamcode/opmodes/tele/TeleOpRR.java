@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
@@ -16,13 +17,19 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Config
 public class TeleOpRR extends LinearOpMode {
 
+    public enum lift_positions {
+        LIFT_ZERO, LIFT_FIND_ZERO, ZERO_FOUND,
+        LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
+        LIFT_TO_BASKET
+    }
     public static double VELO_SCALE_COEF = 0.00225;
     public static double CORRECTION_COEF = 7;
 
     // Подъемник
-    private boolean statusDpadDownBefore = false;
-    private boolean statusDpadUpBefore = false;
-    private int posLift = 0;
+
+    ElapsedTime liftTimer = new ElapsedTime();
+
+    lift_positions posLift = lift_positions.LIFT_ZERO;
 
     // Клешни
     private boolean stateLeftBumper = false;
@@ -33,6 +40,17 @@ public class TeleOpRR extends LinearOpMode {
     private boolean brushOutStatus = false;
     private boolean stateA = false;
     private boolean stateB = false;
+
+
+    public void liftSwitch() {
+        switch (posLift) {
+            case LIFT_ZERO:
+
+
+        }
+
+
+    }
 
 
     @Override
@@ -94,45 +112,11 @@ public class TeleOpRR extends LinearOpMode {
             // Read pose
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
-            // Управление подъемником
-            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 6) {
-                posLift += 1;
-            }
-            statusDpadUpBefore = gamepad2.dpad_up;
-            if (gamepad2.dpad_down && !statusDpadDownBefore && posLift > 0) {
-                posLift -= 1;
-            }
-            statusDpadDownBefore = gamepad2.dpad_down;
+            // Автомат для подъемника
+            public void liftSwitch() {
+                switch (liftState)
 
 
-            switch (posLift) {
-                case (0):
-                    lt.setTarget(Lift.POS_LOWEST);
-                    break;
-                case (1):
-                    lt.setTarget(Lift.POS_SIDE_2);
-                    break;
-                case (2):
-                    lt.setTarget(Lift.POS_SIDE);
-                    break;
-                case (3):
-                    lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
-                    break;
-                case (4):
-                    lt.setTarget(Lift.POS_LOW_BASKET);
-                    break;
-                case (5):
-                    lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
-                    break;
-                case (6):
-                    lt.setTarget(Lift.POS_HIGH_BASKET);
-                    break;
-            }
-            if (gamepad2.dpad_left) {
-                posLift = 0;
-            }
-            if (gamepad2.dpad_right) {
-                posLift = 5;
             }
 
 
@@ -198,18 +182,11 @@ public class TeleOpRR extends LinearOpMode {
                 brushInStatus = false;
                 brushOutStatus = false;
             }
-            if(gamepad2.x) {
-                posLift = 0;
-                lt.setTarget(0);
-                sleep(150);
-                lt.resetZero();
-            }
 
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
 
-            telemetry.addData("PosLift:", posLift);
 
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getPower());

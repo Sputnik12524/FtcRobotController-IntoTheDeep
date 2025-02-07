@@ -174,6 +174,47 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("shoulder", sl.getPosition());
             telemetry.update();
 
+            // Управление подъемником
+            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 6) {
+                posLift += 1;
+            }
+            statusDpadUpBefore = gamepad2.dpad_up;
+            if (gamepad2.dpad_down && !statusDpadDownBefore && posLift > 0) {
+                posLift -= 1;
+            }
+            statusDpadDownBefore = gamepad2.dpad_down;
+
+
+            switch (posLift) {
+                case (0):
+                    lt.setTarget(Lift.POS_LOWEST);
+                    break;
+                case (1):
+                    lt.setTarget(Lift.POS_SIDE_2);
+                    break;
+                case (2):
+                    lt.setTarget(Lift.POS_SIDE);
+                    break;
+                case (3):
+                    lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
+                    break;
+                case (4):
+                    lt.setTarget(Lift.POS_LOW_BASKET);
+                    break;
+                case (5):
+                    lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
+                    break;
+                case (6):
+                    lt.setTarget(Lift.POS_HIGH_BASKET);
+                    break;
+            }
+            if (gamepad2.dpad_left) {
+                posLift = 0;
+            }
+            if (gamepad2.dpad_right) {
+                posLift = 5;
+            }
+
         }
     }
 }
