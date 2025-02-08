@@ -211,11 +211,15 @@ public class TeleOpRR extends LinearOpMode {
                         TARGET_FSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
                     }
-                    if (gamepad2.left_bumper)
-
+                    if (gamepad2.left_bumper) {
+                        TARGET_FSM = 0;
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
                     break;
                 case LIFT_TO_SPECIMEN_BEFORE:
+                    if (gamepad2.dpad_up) {
 
+                    }
                     break;
                 case LIFT_TO_SPECIMEN_AFTER:
 
