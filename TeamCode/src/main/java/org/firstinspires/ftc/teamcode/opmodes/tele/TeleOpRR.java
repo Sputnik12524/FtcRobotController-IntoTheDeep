@@ -41,7 +41,7 @@ public class TeleOpRR extends LinearOpMode {
 
     /// Колесная база
     public static double VELO_SCALE_COEF = 0.00225;
-    public static double CORRECTION_COEF = 7;
+    public static double CORRECTION_COEF = 20;
 
 
     /// Подъемник
