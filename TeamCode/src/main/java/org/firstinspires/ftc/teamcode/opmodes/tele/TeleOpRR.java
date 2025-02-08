@@ -18,10 +18,11 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 public class TeleOpRR extends LinearOpMode {
 
     public enum LiftPositions {
-        LIFT_ZERO, LIFT_FIND_ZERO, ZERO_FOUND,
+        LIFT_ZERO, FIND_ZERO, ZERO_FOUND,
         LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
         LIFT_TO_BASKET
     }
+
     public enum ShoulderClawPositions {
         START_POSE,
         MOVING_TO_INTAKE, MOVED_TO_INTAKE,
@@ -38,6 +39,7 @@ public class TeleOpRR extends LinearOpMode {
     /// Подъемник
     ElapsedTime liftTimer = new ElapsedTime();
     LiftPositions posLift = LiftPositions.LIFT_ZERO;
+    private static double TARGET_FSM = 0;
 
     /// Плечо и клешня
     ElapsedTime shoulderTimer = new ElapsedTime();
@@ -62,7 +64,6 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateB1 = false;
 
     private boolean flag;
-
 
 
     @Override
@@ -129,7 +130,6 @@ public class TeleOpRR extends LinearOpMode {
             // Автомат для подъемника
 
 
-
             // Автомат для плеча с клешней
             switch (posShoulder) {
                 case START_POSE:
@@ -151,7 +151,7 @@ public class TeleOpRR extends LinearOpMode {
                     if (shoulderTimer.seconds() >= SH_TIME_TO_BASKET) {
                         posShoulder = ShoulderClawPositions.MOVED_TO_BASKET;
                     }
-                break;
+                    break;
                 case MOVED_TO_BASKET:
                     if (gamepad2.b && !stateB2) {
                         CLAW_SH_FSM = Shoulder.CLAW_OPEN;
@@ -190,6 +190,44 @@ public class TeleOpRR extends LinearOpMode {
             stateA2 = gamepad2.a;
             stateB2 = gamepad2.b;
             sl.shoulderPosition();
+
+            switch (posLift) {
+                case LIFT_ZERO:
+                    if (gamepad2.dpad_up) {
+                        TARGET_FSM = Lift.POS_HIGH_BASKET;
+                        posLift = LiftPositions.LIFT_TO_BASKET;
+                    }
+                    if (gamepad2.dpad_right) {
+                        TARGET_FSM = Lift.POS_SIDE;
+                        posLift = LiftPositions.LIFT_TO_SIDE;
+                    }
+                    break;
+                case FIND_ZERO:
+                    break;
+                case ZERO_FOUND:
+                    break;
+                case LIFT_TO_SIDE:
+                    if (gamepad2.dpad_up) {
+                        TARGET_FSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                        posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+                    }
+                    if (gamepad2.left_bumper)
+
+                    break;
+                case LIFT_TO_SPECIMEN_BEFORE:
+
+                    break;
+                case LIFT_TO_SPECIMEN_AFTER:
+
+                    break;
+                case LIFT_TO_BASKET:
+                    if (gamepad2.dpad_down) {
+                     TARGET_FSM = 0;
+                     posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    break;
+            }
+
 
             // Управление клешней.
             if (gamepad2.left_bumper && !stateLeftBumper) {
