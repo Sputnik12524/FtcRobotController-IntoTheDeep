@@ -33,8 +33,8 @@ public class TeleOpRR extends LinearOpMode {
 
     public enum IntakePositions {
         INTAKE_POS, OUTTAKE_POS,
-        EXTENDING_OUT, EXTENDED_OUT,
-        FLIPPING_IN, FLIPPED_IN, EXTENDING_IN
+        EXTENDING_OUT,
+        FLIPPING_IN, EXTENDING_IN
 
     }
 
@@ -46,7 +46,7 @@ public class TeleOpRR extends LinearOpMode {
     /// Подъемник
     ElapsedTime liftTimer = new ElapsedTime();
     LiftPositions posLift = LiftPositions.LIFT_ZERO;
-    private static double TARGET_FSM = 0;
+    double targetLiftFSM = 0;
     private boolean stateDpadUp2 = false;
     private boolean stateDpadDown2 = false;
     private boolean stateDpadLeft2 = false;
@@ -56,8 +56,8 @@ public class TeleOpRR extends LinearOpMode {
     /// Плечо и клешня
     ElapsedTime shoulderTimer = new ElapsedTime();
     ShoulderClawPositions posShoulder = ShoulderClawPositions.START_POSE;
-    public double SHOULDER_FSM = 0;
-    public double CLAW_SH_FSM = 0;
+    double shoulderFSM = 0;
+    double clawShFSM = 0;
     public static double SH_TIME_TO_BASKET = 2;
     public static double SH_TIME_TO_INTAKE = 0.5;
     public static double CL_TIME_CLOSING = 1.5;
@@ -67,8 +67,8 @@ public class TeleOpRR extends LinearOpMode {
     /// Выдвижной ахват
     ElapsedTime intakeTimer = new ElapsedTime();
     IntakePositions posIntake = IntakePositions.INTAKE_POS;
-    public double EXT_FSM = 0;
-    public double FLIP_FSM = 0;
+    double extFSM = 0;
+    double flipFSM = 0;
     public static double EXT_TIME = 2;
     public static double FLIP_TIME = 1;
 
@@ -148,56 +148,56 @@ public class TeleOpRR extends LinearOpMode {
             switch (posLift) {
                 case LIFT_ZERO:
                     if (gamepad2.dpad_up && !stateDpadUp2) {
-                        TARGET_FSM = Lift.POS_HIGH_BASKET;
+                        targetLiftFSM = Lift.POS_HIGH_BASKET;
                         posLift = LiftPositions.LIFT_TO_BASKET;
                     }
                     if (gamepad2.dpad_right && !stateDpadRight2) {
-                        TARGET_FSM = Lift.POS_SIDE;
+                        targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
                     break;
                 case LIFT_TO_BASKET:
                     if (gamepad2.dpad_down && !stateDpadDown2) {
-                        TARGET_FSM = 0;
+                        targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     break;
 
                 case LIFT_TO_SIDE:
                     if (gamepad2.dpad_up && !stateDpadUp2) {
-                        TARGET_FSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
                     }
                     if (gamepad2.dpad_left && !stateDpadLeft2) {
-                        TARGET_FSM = 0;
+                        targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     break;
                 case LIFT_TO_SPECIMEN_BEFORE:
                     if (gamepad2.dpad_down && !stateDpadDown2) {
-                        TARGET_FSM = Lift.POS_HIGH_SPECIMEN_AFTER;
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_AFTER;
                     }
                     if (gamepad2.dpad_right && !stateDpadRight2) {
-                        TARGET_FSM = Lift.POS_SIDE;
+                        targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
                     if (gamepad2.dpad_left && !stateDpadRight2) {
-                        TARGET_FSM = 0;
+                        targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     break;
                 case LIFT_TO_SPECIMEN_AFTER:
                     if (gamepad2.dpad_up && !stateDpadUp2) {
-                        TARGET_FSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
                     }
                     if (gamepad2.dpad_right && !stateDpadRight2) {
-                        TARGET_FSM = Lift.POS_SIDE;
+                        targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
                     if (gamepad2.dpad_left && !stateDpadRight2) {
-                        TARGET_FSM = 0;
+                        targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     break;
@@ -208,7 +208,7 @@ public class TeleOpRR extends LinearOpMode {
                 case ZERO_FOUND:
                     break;
             }
-            lt.setTarget(TARGET_FSM);
+            lt.setTarget(targetLiftFSM);
             stateDpadUp2 = gamepad2.dpad_up;
             stateDpadDown2 = gamepad2.dpad_down;
             stateDpadLeft2 = gamepad2.dpad_left;
@@ -229,15 +229,15 @@ public class TeleOpRR extends LinearOpMode {
                 case START_POSE:
                     if ((gamepad2.a || flag) && !stateA2) {
                         shoulderTimer.reset();
-                        CLAW_SH_FSM = Shoulder.CLAW_OPEN;
-                        SHOULDER_FSM = Shoulder.POS_SH_FOR_INTAKE;
+                        clawShFSM = Shoulder.CLAW_OPEN;
+                        shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
                         flag = false;
                         posShoulder = ShoulderClawPositions.MOVING_TO_INTAKE;
                     }
                     if (gamepad2.b && !stateB2) {
                         shoulderTimer.reset();
-                        CLAW_SH_FSM = Shoulder.CLAW_CLOSE;
-                        SHOULDER_FSM = Shoulder.POS_SH_BASKET;
+                        clawShFSM = Shoulder.CLAW_CLOSE;
+                        shoulderFSM = Shoulder.POS_SH_BASKET;
                         posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
                     }
                     break;
@@ -248,13 +248,13 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case MOVED_TO_BASKET:
                     if (gamepad2.b && !stateB2) {
-                        CLAW_SH_FSM = Shoulder.CLAW_OPEN;
+                        clawShFSM = Shoulder.CLAW_OPEN;
                         posShoulder = ShoulderClawPositions.CLAW_OPEN;
                     }
                     break;
                 case CLAW_OPEN:
                     if (gamepad2.a && !stateA2) {
-                        SHOULDER_FSM = Shoulder.INITIAL_POSITION;
+                        shoulderFSM = Shoulder.INITIAL_POSITION;
                         posShoulder = ShoulderClawPositions.START_POSE;
                     }
 
@@ -267,7 +267,7 @@ public class TeleOpRR extends LinearOpMode {
                 case MOVED_TO_INTAKE:
                     if (gamepad2.b && !stateB2) {
                         shoulderTimer.reset();
-                        CLAW_SH_FSM = Shoulder.CLAW_CLOSE;
+                        clawShFSM = Shoulder.CLAW_CLOSE;
                         posShoulder = ShoulderClawPositions.CLAW_CLOSING;
                     }
                     break;
@@ -278,13 +278,13 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case CLAW_CLOSED:
                     shoulderTimer.reset();
-                    SHOULDER_FSM = Shoulder.POS_SH_BASKET;
+                    shoulderFSM = Shoulder.POS_SH_BASKET;
                     posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
                     break;
             }
             stateA2 = gamepad2.a;
             stateB2 = gamepad2.b;
-            sl.shoulderPosition(SHOULDER_FSM);
+            sl.shoulderPosition(shoulderFSM);
 
 
 
@@ -294,7 +294,7 @@ public class TeleOpRR extends LinearOpMode {
                 case INTAKE_POS:
                     if (gamepad1.right_stick_button) {
                         intakeTimer.reset();
-                        EXT_FSM = Intake.EXTENSION_MAX;
+                        extFSM = Intake.EXTENSION_MAX;
                         posIntake = IntakePositions.EXTENDING_OUT;
                         flag = false;
                     }
@@ -305,20 +305,20 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case EXTENDING_OUT:
                     if (intakeTimer.seconds() >= EXT_TIME) {
-                        FLIP_FSM = Intake.FLIP_OUTTAKE;
-                        posIntake = IntakePositions.EXTENDED_OUT;
+                        flipFSM = Intake.FLIP_OUTTAKE;
+                        posIntake = IntakePositions.OUTTAKE_POS;
                     }
                     break;
                 case OUTTAKE_POS:
                     if (gamepad1.right_stick_button) {
                         intakeTimer.reset();
-                        FLIP_FSM = Intake.FLIP_INTAKE;
+                        flipFSM = Intake.FLIP_INTAKE;
                         in.brushIntake();
                         brushInStatus = true;
                         brushOutStatus = false;
                     }
                     if (in.getExtensionPositionR() < NECESSARY_EXT_POS) {
-                        FLIP_FSM = Intake.FLIP_INTAKE;
+                        flipFSM = Intake.FLIP_INTAKE;
                         in.brushStop();
                         brushInStatus = false;
                         brushOutStatus = false;
@@ -333,7 +333,7 @@ public class TeleOpRR extends LinearOpMode {
                         in.brushStop();
                         brushInStatus = false;
                         brushOutStatus = false;
-                        EXT_FSM = Intake.EXTENSION_MIN;
+                        extFSM = Intake.EXTENSION_MIN;
                         posIntake = IntakePositions.EXTENDING_IN;
                     }
                     break;
@@ -344,8 +344,8 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
             }
-            in.extensionPosition(EXT_FSM);
-            in.flipPosition(FLIP_FSM);
+            in.extensionPosition(extFSM);
+            in.flipPosition(flipFSM);
 
             //выдвижение
             in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика

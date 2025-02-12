@@ -173,8 +173,6 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
             telemetry.addData("shoulder", sl.getPosition());
             telemetry.update();
-
-
         }
     }
 }
