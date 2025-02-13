@@ -56,8 +56,8 @@ public class TeleOpRR extends LinearOpMode {
     /// Плечо и клешня
     ElapsedTime shoulderTimer = new ElapsedTime();
     ShoulderClawPositions posShoulder = ShoulderClawPositions.START_POSE;
-    double shoulderFSM = 0;
-    double clawShFSM = 0;
+    double shoulderFSM = Shoulder.INITIAL_POSITION;
+    double clawShFSM = Shoulder.CLAW_CLOSE;
     public static double SH_TIME_TO_BASKET = 2;
     public static double SH_TIME_TO_INTAKE = 0.5;
     public static double CL_TIME_CLOSING = 1.5;
@@ -67,8 +67,8 @@ public class TeleOpRR extends LinearOpMode {
     /// Выдвижной ахват
     ElapsedTime intakeTimer = new ElapsedTime();
     IntakePositions posIntake = IntakePositions.INTAKE_POS;
-    double extFSM = 0;
-    double flipFSM = 0;
+    double extFSM = Intake.EXTENSION_MIN;
+    double flipFSM = Intake.FLIP_INTAKE;
     public static double EXT_TIME = 2;
     public static double FLIP_TIME = 1;
 
@@ -104,6 +104,7 @@ public class TeleOpRR extends LinearOpMode {
         lt.resetZero();
         liftTimer.reset();
         shoulderTimer.reset();
+        intakeTimer.reset();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
