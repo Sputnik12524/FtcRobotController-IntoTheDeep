@@ -61,7 +61,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
 
                 .build();
 
-        shoulder.shoulderPosition(0);
+        shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXTENSION_MIN);
         waitForStart();

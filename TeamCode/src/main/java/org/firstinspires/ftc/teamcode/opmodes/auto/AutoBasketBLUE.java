@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name="BLUE Auto Basket", group="Robot")
+@Autonomous(name = "BLUE Auto Basket", group = "Robot")
 public class AutoBasketBLUE extends LinearOpMode {
 
     @Override
@@ -26,7 +26,7 @@ public class AutoBasketBLUE extends LinearOpMode {
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10,57,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-10, 57, Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
@@ -55,7 +55,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 })
                 .build();
         TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
-                .turn(Math.toRadians(100))
+                .turn(Math.toRadians(90))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
@@ -67,7 +67,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     telemetry.update();
                 })
                 //capturing yellow sample
-                .turn(Math.toRadians(-100))
+                .turn(Math.toRadians(-90))
                 .waitSeconds(2)
                 .back(5)
                 //scoring to basket
@@ -81,7 +81,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
+                .addTemporalMarker(5, () -> {
                     shoulder.openSh();
                 })
                 .waitSeconds(2)
@@ -116,7 +116,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
+                .addTemporalMarker(5, () -> {
                     shoulder.openSh();
                 })
                 .waitSeconds(2)
@@ -124,11 +124,12 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_LOWEST);
                     shoulder.shoulderPosition(0);
                 })
-                .splineTo(new Vector2d(25, 9), Math.toRadians(0))
+                .turn(Math.toRadians(35))
+                .forward(46)
                 .build();
         intake.extensionPosition(.05);
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectoryFirstSample);
         sleep(1000);
         driveTrain.followTrajectorySequence(trajectorySecondSample);

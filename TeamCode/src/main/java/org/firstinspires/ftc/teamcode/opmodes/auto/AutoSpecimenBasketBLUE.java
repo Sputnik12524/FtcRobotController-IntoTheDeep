@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-@Autonomous(name="BLUE Auto Specimen + Basket", group="Robot")
+@Autonomous(name = "BLUE Auto Specimen + Basket", group = "Robot")
 public class AutoSpecimenBasketBLUE extends LinearOpMode {
 
     @Override
@@ -27,7 +27,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10,57,Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-10, 57, Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
@@ -44,7 +44,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .waitSeconds(2)
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addDisplacementMarker(     () -> {
+                .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     shoulder.shoulderPosition(.75);
                     telemetry.addLine("Здесь опустится подъемник");
@@ -64,10 +64,9 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .turn(Math.toRadians(65))
                 .build();
         TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(trajectorySpecimen.end())
-                .forward(34)
-                .turn(Math.toRadians(-45))
-                .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
-                .turn(Math.toRadians(-25))
+                .forward(5)
+                .splineTo(new Vector2d(52, 52), Math.toRadians(90))
+                .turn(Math.toRadians(-195))
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
@@ -79,7 +78,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     telemetry.update();
                 })
                 //capturing yellow sample
-                .turn(Math.toRadians(-100))
+                .turn(Math.toRadians(-25))
                 .waitSeconds(2)
                 .back(5)
                 //scoring to basket
@@ -92,8 +91,8 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
-                .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
+                .waitSeconds(3)
+                .addTemporalMarker(5, () -> {
                     shoulder.openSh();
                 })
                 .waitSeconds(2)
@@ -105,7 +104,8 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .waitSeconds(3)
                 .build();
         TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
-                .turn(Math.toRadians(100))
+                .turn(Math.toRadians(60))
+                .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
                     intake.brushIntake();
@@ -115,7 +115,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
-                .turn(Math.toRadians(-100))
+                .turn(Math.toRadians(-60))
                 .back(5)
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
@@ -128,7 +128,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
+                .addTemporalMarker(5, () -> {
                     shoulder.openSh();
                 })
                 .waitSeconds(2)
@@ -136,11 +136,11 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_LOWEST);
                     shoulder.shoulderPosition(0);
                 })
-                .splineTo(new Vector2d(25, 9), Math.toRadians(0))
+                .forward(46)
                 .build();
         intake.extensionPosition(.05);
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectorySpecimen);
         sleep(1000);
         driveTrain.followTrajectorySequence(trajectoryFirstSample);

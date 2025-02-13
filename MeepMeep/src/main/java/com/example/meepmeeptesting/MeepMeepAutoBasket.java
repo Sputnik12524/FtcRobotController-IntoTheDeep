@@ -15,51 +15,101 @@ public class MeepMeepAutoBasket {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
 
                 .setConstraints(52, 52, Math.toRadians(180), Math.toRadians(180), 13)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-12, -57, 0))
-                        // .turn(Math.toRadians(-90))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(12, 57, 0))
+                        .turn(Math.toRadians(-180))
                         .strafeLeft(5)
                         .back(34)
                         .addDisplacementMarker(() -> {
-
+                            /*shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                            lift.setTarget(Lift.POS_HIGH_BASKET);
+                            sleep(3000);*/
                         })
                         .waitSeconds(2)
                         .turn(Math.toRadians(30))
                         .addDisplacementMarker(() -> {
-
+                            //shoulder.openSh();
+                            //sleep(500);
                         })
                         .waitSeconds(3)
                         .forward(6)
                         .addDisplacementMarker(() -> {
-
+                           // lift.setTarget(Lift.POS_LOWEST);
+                           // sleep(1000);
                         })
-                        // здесь код со скорингом предзагруженной пробы
-                        .turn(Math.toRadians(100))
-                        .waitSeconds(3)
-                        .addDisplacementMarker(() -> {
-
-                        })
-                        //capturing yellow sample
-                        .turn(Math.toRadians(-100))
-                        .waitSeconds(2)
-                        .back(5)
-                        //scoring to basket
-                        .addDisplacementMarker(() -> {
-
-                        })
-                        .forward(5)
-                        .waitSeconds(3)
-                        .turn(Math.toRadians(100))
-                        .addDisplacementMarker(() -> {
-
-                        })
-                        .turn(Math.toRadians(-100))
-                        .back(5)
-                        .waitSeconds(3)
-                        .addDisplacementMarker(() -> {
-
-                        })
-                        .splineTo(new Vector2d(-25,-9),Math.toRadians(0))
-                        .build());
+                      //  .build();
+       // TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
+                .turn(Math.toRadians(90))
+                .waitSeconds(3)
+                .addDisplacementMarker(() -> {
+                   /* intake.extensionPosition(0.5);
+                    intake.brushIntake();
+                    sleep(500);
+                    intake.extensionPosition(0.05);
+                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
+                    telemetry.update(); */
+                })
+                //capturing yellow sample
+                .turn(Math.toRadians(-90))
+                .waitSeconds(2)
+                .back(5)
+                //scoring to basket
+                .addDisplacementMarker(() -> {
+                    //shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
+                    //shoulder.closeSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    //shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                    //lift.setTarget(Lift.POS_HIGH_BASKET);
+                })
+                .waitSeconds(5)
+                .addTemporalMarker(5,() -> {
+                   // shoulder.openSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    //lift.setTarget(Lift.POS_LOWEST);
+                    //shoulder.shoulderPosition(0);
+                })
+                //.build();
+        //TrajectorySequence trajectoryThirdSample = driveTrain.trajectorySequenceBuilder(trajectorySecondSample.end())
+                .forward(5)
+                .waitSeconds(3)
+                .turn(Math.toRadians(100))
+                .addDisplacementMarker(() -> {
+                    /*intake.extensionPosition(0.5);
+                    intake.brushIntake();
+                    sleep(500);
+                    intake.extensionPosition(0.05);
+                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
+                    telemetry.update();*/
+                })
+                .turn(Math.toRadians(-100))
+                .back(5)
+                .waitSeconds(3)
+                .addDisplacementMarker(() -> {
+                   // shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
+                    //shoulder.closeSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    //shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                    //lift.setTarget(Lift.POS_HIGH_BASKET);
+                })
+                .waitSeconds(5)
+                .addTemporalMarker(5,() -> {
+                    //shoulder.openSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    //lift.setTarget(Lift.POS_LOWEST);
+                    //shoulder.shoulderPosition(0);
+                })
+                        .turn(Math.toRadians(35))
+                .forward(46)
+                .build());
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
