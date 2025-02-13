@@ -1,14 +1,22 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 
+import android.graphics.Color;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 @Config
 public class Intake {
+    public enum Color {
+        RED, BLUE, YELLOW, NONE
+    }
 
     private final CRServo brushServoLeft;
     private final CRServo  brushServoRight;
@@ -20,6 +28,16 @@ public class Intake {
     private final Servo extensionServoRight; //0.06
 
     public final SamplesTaker samplesTaker;
+
+    NormalizedColorSensor colorSensor;
+    public static double RED_MAX = 150;
+    public static double RED_MIN = 120;
+    public static double BLUE_MAX = 235;
+    public static double BLUE_MIN = 225;
+    public static double YELLOW_MAX = 75;
+    public static double YELLOW_MIN = 70;
+    public static float GAIN = 2;
+
 
     public static double EXTENSION_MAX = 0.6;
     public static double EXTENSION_MIN = 0.05;
@@ -43,6 +61,8 @@ public class Intake {
         this.brushServoLeft = opMode.hardwareMap.crservo.get("brushServoL");
         this.brushServoRight = opMode.hardwareMap.crservo.get("brushServoR");
         this.brushServo = opMode.hardwareMap.crservo.get("brushServo");
+        this.colorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class ,"sensor_color");
+        colorSensor.setGain(GAIN);
 
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.brushServoRight.setDirection(CRServo.Direction.FORWARD);
@@ -144,5 +164,21 @@ public class Intake {
             }
         }
 
+    }
+
+    public Color getColorSample() {
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        final float[] hsvValues = new float[3]; // 0 - Оттенок / 1 - Насыщенность / 2 - Яркость
+        android.graphics.Color.colorToHSV(colors.toColor(), hsvValues);
+        if (hsvValues[1] >= 0.8) {
+            if (hsvValues[0] <= BLUE_MAX && hsvValues[0] >= BLUE_MIN) {
+                return Color.BLUE;
+            } else if (hsvValues[0] <= YELLOW_MAX && hsvValues[0] >= YELLOW_MIN) {
+                return Color.YELLOW;
+            } else if (hsvValues[0] <= RED_MAX && hsvValues[0] >= RED_MIN) {
+                return Color.RED;
+            }
+        }
+        return Color.NONE;
     }
 }

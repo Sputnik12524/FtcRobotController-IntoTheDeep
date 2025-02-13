@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
@@ -208,6 +209,8 @@ public class TeleOpRR extends LinearOpMode {
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
+
+            telemetry.addData("Color:", in.getColorSample());
 
             telemetry.addData("PosLift:", posLift);
 
