@@ -51,11 +51,11 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
-                .waitSeconds(3)
+                .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(0);
                 })
-                .waitSeconds(4)
+                .waitSeconds(2)
                 .turn(Math.toRadians(65))
                 .forward(34)
 

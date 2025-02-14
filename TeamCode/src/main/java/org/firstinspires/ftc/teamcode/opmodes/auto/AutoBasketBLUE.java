@@ -32,23 +32,23 @@ public class AutoBasketBLUE extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
         intake.extensionPosition(Intake.EXTENSION_MIN);
-
+//1. отьезжает когда должен скорить в корзину    2. выдвигает слишком поздно 3. не поднимает подъемник (точнее поднимает со скоростью 0)
+//
         TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeLeft(5)
+                .strafeRight(5)
                 .back(34)
+                .turn(Math.toRadians(30))
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     sleep(3000);
                 })
                 .waitSeconds(2)
-                .turn(Math.toRadians(30))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     sleep(500);
                 })
                 .waitSeconds(3)
-                .forward(6)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
                     sleep(1000);
@@ -56,7 +56,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .build();
         TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
                 .turn(Math.toRadians(90))
-                .waitSeconds(3)
+                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
                     intake.brushIntake();
@@ -69,7 +69,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 //capturing yellow sample
                 .turn(Math.toRadians(-90))
                 .waitSeconds(2)
-                .back(5)
+                .back(2)
                 //scoring to basket
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);

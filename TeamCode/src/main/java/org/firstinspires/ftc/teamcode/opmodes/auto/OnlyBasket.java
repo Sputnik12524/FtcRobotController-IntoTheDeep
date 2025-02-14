@@ -35,24 +35,23 @@ public class OnlyBasket extends LinearOpMode {
         TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(3)
                 .back(34)
+                .turn(Math.toRadians(30))
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     sleep(3000);
                 })
-                .waitSeconds(2)
-                .turn(Math.toRadians(30))
+                .waitSeconds(3)
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     sleep(500);
                 })
-                .waitSeconds(6)
+                .waitSeconds(2)
                 .forward(5)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
-                    sleep(1000);
-
                 })
+                .waitSeconds(1)
                 .build();
         intake.extensionPosition(.05);
         waitForStart();
