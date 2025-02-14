@@ -394,6 +394,11 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+
+            telemetry.addData("Состояние Lift:", posLift);
+            telemetry.addData("Состояние Shoulder:", posShoulder);
+            telemetry.addData("Состояние Intake", posIntake);
+
             telemetry.update();
         }
     }
