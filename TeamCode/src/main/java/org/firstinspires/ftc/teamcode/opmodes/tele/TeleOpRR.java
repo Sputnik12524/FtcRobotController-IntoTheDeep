@@ -57,10 +57,8 @@ public class TeleOpRR extends LinearOpMode {
     ElapsedTime shoulderTimer = new ElapsedTime();
     ShoulderClawPositions posShoulder = ShoulderClawPositions.START_POSE;
     double shoulderFSM = Shoulder.INITIAL_POSITION;
-    double clawShFSM = Shoulder.CLAW_CLOSE;
-    public static double SH_TIME_TO_BASKET = 2;
+    public static double SH_TIME_TO_BASKET = 1;
     public static double SH_TIME_TO_INTAKE = 0.5;
-    public static double CL_TIME_CLOSING = 1.5;
     private boolean stateA2 = false;
     private boolean stateB2 = false;
 
@@ -100,11 +98,13 @@ public class TeleOpRR extends LinearOpMode {
         cl.openLift();
         sl.shoulderPosition(Shoulder.INITIAL_POSITION);
         in.extensionPosition(Intake.EXT_START_POS);
-        in.flipPosition(Intake.FLIP_OUTTAKE);
+        in.flipPosition(Intake.FLIP_INTAKE);
         lt.resetZero();
         liftTimer.reset();
         shoulderTimer.reset();
         intakeTimer.reset();
+
+        lt.liftMotorPowerDriver.start();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
@@ -228,16 +228,16 @@ public class TeleOpRR extends LinearOpMode {
             /// Автомат для плеча с клешней
             switch (posShoulder) {
                 case START_POSE:
-                    if ((gamepad2.a || flag) && !stateA2) {
+                    if (gamepad2.a && flag && !stateA2) {
                         shoulderTimer.reset();
-                        clawShFSM = Shoulder.CLAW_OPEN;
+                        sl.openSh();
                         shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
                         flag = false;
                         posShoulder = ShoulderClawPositions.MOVING_TO_INTAKE;
                     }
                     if (gamepad2.b && !stateB2) {
                         shoulderTimer.reset();
-                        clawShFSM = Shoulder.CLAW_CLOSE;
+                        sl.closeSh();
                         shoulderFSM = Shoulder.POS_SH_BASKET;
                         posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
                     }
@@ -249,7 +249,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case MOVED_TO_BASKET:
                     if (gamepad2.b && !stateB2) {
-                        clawShFSM = Shoulder.CLAW_OPEN;
+                        sl.openSh();
                         posShoulder = ShoulderClawPositions.CLAW_OPEN;
                     }
                     break;
@@ -268,7 +268,7 @@ public class TeleOpRR extends LinearOpMode {
                 case MOVED_TO_INTAKE:
                     if (gamepad2.b && !stateB2) {
                         shoulderTimer.reset();
-                        clawShFSM = Shoulder.CLAW_CLOSE;
+                        sl.closeSh();
                         posShoulder = ShoulderClawPositions.CLAW_CLOSING;
                     }
                     break;
@@ -313,10 +313,11 @@ public class TeleOpRR extends LinearOpMode {
                 case OUTTAKE_POS:
                     if (gamepad1.right_stick_button) {
                         intakeTimer.reset();
-                        flipFSM = Intake.FLIP_INTAKE;
+                        flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
                         brushInStatus = true;
                         brushOutStatus = false;
+                        posIntake = IntakePositions.FLIPPING_IN;
                     }
                     if (in.getExtensionPositionR() < NECESSARY_EXT_POS) {
                         flipFSM = Intake.FLIP_INTAKE;
@@ -349,7 +350,7 @@ public class TeleOpRR extends LinearOpMode {
             in.flipPosition(flipFSM);
 
             //выдвижение
-            in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
+            extFSM += -gamepad1.right_stick_y * Intake.EXT_K * Intake.EXTENSION_STEP;
             //щетка
             if (gamepad1.a && !brushInStatus && !stateA1) {
                 in.brushIntake();
@@ -373,10 +374,10 @@ public class TeleOpRR extends LinearOpMode {
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(Intake.FLIP_INTAKE);
+                flipFSM = Intake.FLIP_OUTTAKE;
             }
             if (gamepad1.x) {
-                in.flipPosition(Intake.FLIP_OUTTAKE);
+                flipFSM = Intake.FLIP_INTAKE;
             }
 
 
@@ -401,8 +402,8 @@ public class TeleOpRR extends LinearOpMode {
 
             telemetry.update();
         }
+        lt.liftMotorPowerDriver.interrupt();
     }
-
     public static class PoseStorage {
         public static Pose2d currentPose = new Pose2d();
     }
