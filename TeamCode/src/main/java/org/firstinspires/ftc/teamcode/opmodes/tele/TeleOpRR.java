@@ -211,6 +211,9 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
 
             telemetry.addData("Color:", in.getColorSample());
+            telemetry.addData("Hue:", in.hsvValues[0]);
+            telemetry.addData("Saturation:", in.hsvValues[1]);
+            telemetry.addData("Value:", in.hsvValues[2]);
 
             telemetry.addData("PosLift:", posLift);
 

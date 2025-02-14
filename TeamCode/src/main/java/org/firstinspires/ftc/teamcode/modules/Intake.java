@@ -30,13 +30,12 @@ public class Intake {
     public final SamplesTaker samplesTaker;
 
     NormalizedColorSensor colorSensor;
-    public static double RED_MAX = 150;
-    public static double RED_MIN = 120;
-    public static double BLUE_MAX = 235;
-    public static double BLUE_MIN = 225;
-    public static double YELLOW_MAX = 75;
-    public static double YELLOW_MIN = 70;
+    public static double BLUE_MAX = 280;
+    public static double BLUE_MIN = 210;
+    public static double YELLOW_MAX = 110;
+    public static double YELLOW_MIN = 60;
     public static float GAIN = 2;
+    public final float[] hsvValues = new float[3]; // 0 - Оттенок / 1 - Насыщенность / 2 - Яркость
 
 
     public static double EXTENSION_MAX = 0.6;
@@ -168,16 +167,13 @@ public class Intake {
 
     public Color getColorSample() {
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
-        final float[] hsvValues = new float[3]; // 0 - Оттенок / 1 - Насыщенность / 2 - Яркость
         android.graphics.Color.colorToHSV(colors.toColor(), hsvValues);
-        if (hsvValues[1] >= 0.8) {
+        if (hsvValues[1] >= 0.5) {
             if (hsvValues[0] <= BLUE_MAX && hsvValues[0] >= BLUE_MIN) {
                 return Color.BLUE;
             } else if (hsvValues[0] <= YELLOW_MAX && hsvValues[0] >= YELLOW_MIN) {
                 return Color.YELLOW;
-            } else if (hsvValues[0] <= RED_MAX && hsvValues[0] >= RED_MIN) {
-                return Color.RED;
-            }
+            } else return Color.RED;
         }
         return Color.NONE;
     }
