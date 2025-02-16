@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 public class TeleOpRR extends LinearOpMode {
 
     public enum LiftPositions {
-        LIFT_ZERO, FIND_ZERO, ZERO_FOUND,
+        LIFT_ZERO, WAIT_UPDATE, ZERO_UPDATE,
         LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
         LIFT_TO_BASKET
     }
@@ -32,7 +32,7 @@ public class TeleOpRR extends LinearOpMode {
     }
 
     public enum IntakePositions {
-        INTAKE_POS, OUTTAKE_POS,
+        OUTTAKE_POS, INTAKE_POS,
         EXTENDING_OUT,
         FLIPPING_IN, EXTENDING_IN
 
@@ -47,10 +47,13 @@ public class TeleOpRR extends LinearOpMode {
     ElapsedTime liftTimer = new ElapsedTime();
     LiftPositions posLift = LiftPositions.LIFT_ZERO;
     double targetLiftFSM = 0;
+    public static double UPDATE_ZERO_TIME = 0.2;
     private boolean stateDpadUp2 = false;
     private boolean stateDpadDown2 = false;
     private boolean stateDpadLeft2 = false;
     private boolean stateDpadRight2 = false;
+    private boolean stateLeftBumber = false;
+    private boolean stateRightBumper = false; // Клешня для образцов
 
 
     /// Плечо и клешня
@@ -64,11 +67,11 @@ public class TeleOpRR extends LinearOpMode {
 
     /// Выдвижной ахват
     ElapsedTime intakeTimer = new ElapsedTime();
-    IntakePositions posIntake = IntakePositions.INTAKE_POS;
+    IntakePositions posIntake = IntakePositions.OUTTAKE_POS;
     double extFSM = Intake.EXTENSION_MIN;
-    double flipFSM = Intake.FLIP_INTAKE;
-    public static double EXT_TIME = 2;
-    public static double FLIP_TIME = 1;
+    double flipFSM = Intake.FLIP_OUTTAKE;
+    public static double EXT_TIME = 1;
+    public static double FLIP_TIME = 0.5;
 
     public static double NECESSARY_EXT_POS = 0.2;
 
@@ -77,12 +80,9 @@ public class TeleOpRR extends LinearOpMode {
     private boolean brushOutStatus = false;
     private boolean stateA1 = false;
     private boolean stateB1 = false;
+    private boolean stateStickRb = false;
 
     private boolean flag;
-
-    /// Клешня для образцов
-    private boolean stateRightBumper = false;
-//    private boolean stateLeftBumper = false;
 
 
     @Override
@@ -98,7 +98,7 @@ public class TeleOpRR extends LinearOpMode {
         cl.openLift();
         sl.shoulderPosition(Shoulder.INITIAL_POSITION);
         in.extensionPosition(Intake.EXT_START_POS);
-        in.flipPosition(Intake.FLIP_INTAKE);
+        in.flipPosition(Intake.FLIP_OUTTAKE);
         lt.resetZero();
         liftTimer.reset();
         shoulderTimer.reset();
@@ -156,11 +156,17 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
+                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
                 case LIFT_TO_BASKET:
                     if (gamepad2.dpad_down && !stateDpadDown2) {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                        posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
 
@@ -172,6 +178,9 @@ public class TeleOpRR extends LinearOpMode {
                     if (gamepad2.dpad_left && !stateDpadLeft2) {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                        posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
                 case LIFT_TO_SPECIMEN_BEFORE:
@@ -187,6 +196,9 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
+                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
                 case LIFT_TO_SPECIMEN_AFTER:
                     if (gamepad2.dpad_up && !stateDpadUp2) {
@@ -201,12 +213,22 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
+                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
-
-
-                case FIND_ZERO:
+                case WAIT_UPDATE:
+                    if (lt.isMagneting()) {
+                        lt.resetZero();
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (Math.abs(lt.getError()) <= 0.05) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
-                case ZERO_FOUND:
+                case ZERO_UPDATE:
+                    targetLiftFSM += 1;
+                    posLift = LiftPositions.WAIT_UPDATE;
                     break;
             }
             lt.setTarget(targetLiftFSM);
@@ -232,7 +254,6 @@ public class TeleOpRR extends LinearOpMode {
                         shoulderTimer.reset();
                         sl.openSh();
                         shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
-                        flag = false;
                         posShoulder = ShoulderClawPositions.MOVING_TO_INTAKE;
                     }
                     if (gamepad2.b && !stateB2) {
@@ -292,26 +313,29 @@ public class TeleOpRR extends LinearOpMode {
 
             ///Выдвижной захват
             switch (posIntake) {
-                case INTAKE_POS:
-                    if (gamepad1.right_stick_button) {
+                case OUTTAKE_POS: //Инит поза
+                    flag = true;
+                    if (gamepad1.right_stick_button && stateStickRb) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
                         posIntake = IntakePositions.EXTENDING_OUT;
-                        flag = false;
+                        flag = true;
                     }
                     if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
-                        posIntake = IntakePositions.OUTTAKE_POS;
-                        flag = false;
+                        posIntake = IntakePositions.INTAKE_POS;
                     }
                     break;
                 case EXTENDING_OUT:
+                    flag = false;
                     if (intakeTimer.seconds() >= EXT_TIME) {
-                        flipFSM = Intake.FLIP_OUTTAKE;
-                        posIntake = IntakePositions.OUTTAKE_POS;
+                        flipFSM = Intake.FLIP_INTAKE;
+                        posIntake = IntakePositions.INTAKE_POS;
+                        flag = false;
                     }
                     break;
-                case OUTTAKE_POS:
-                    if (gamepad1.right_stick_button) {
+                case INTAKE_POS: //Берем пробы
+                    flag = false;
+                    if (gamepad1.right_stick_button && stateStickRb) {
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
@@ -319,17 +343,15 @@ public class TeleOpRR extends LinearOpMode {
                         brushOutStatus = false;
                         posIntake = IntakePositions.FLIPPING_IN;
                     }
-                    if (in.getExtensionPositionR() < NECESSARY_EXT_POS) {
-                        flipFSM = Intake.FLIP_INTAKE;
+                    if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
                         in.brushStop();
                         brushInStatus = false;
                         brushOutStatus = false;
-
-                        flag = true;
-                        posIntake = IntakePositions.INTAKE_POS;
+                        posIntake = IntakePositions.OUTTAKE_POS;
                     }
                     break;
                 case FLIPPING_IN:
+                    flag = false;
                     if (intakeTimer.seconds() >= FLIP_TIME) {
                         intakeTimer.reset();
                         in.brushStop();
@@ -340,14 +362,15 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case EXTENDING_IN:
+                    flag = false;
                     if (intakeTimer.seconds() >= EXT_TIME) {
-                        flag = true;
-                        posIntake = IntakePositions.INTAKE_POS;
+                        posIntake = IntakePositions.OUTTAKE_POS;
                     }
                     break;
             }
             in.extensionPosition(extFSM);
             in.flipPosition(flipFSM);
+            stateStickRb = gamepad1.right_stick_button;
 
             //выдвижение
             extFSM += -gamepad1.right_stick_y * Intake.EXT_K * Intake.EXTENSION_STEP;

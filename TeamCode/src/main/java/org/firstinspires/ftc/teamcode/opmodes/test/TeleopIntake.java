@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.modules.Intake;
 @TeleOp(name = "IntakeTest", group = "Robot")
 public class TeleopIntake extends LinearOpMode {
 
+    private double k = 0.5;
+
 
     @Override
     public void runOpMode() {
@@ -40,7 +42,7 @@ public class TeleopIntake extends LinearOpMode {
             }
 
             //выдвижение
-            in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
+            in.extUpdatePosition(-gamepad1.right_stick_y * k); //с помощью стика
 
             if (gamepad1.dpad_up) { //с помощью крестовины
                 in.extensionPlus();
