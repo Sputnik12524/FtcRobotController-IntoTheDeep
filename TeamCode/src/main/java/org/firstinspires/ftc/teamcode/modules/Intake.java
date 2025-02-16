@@ -35,7 +35,7 @@ public class Intake {
     public static double YELLOW_MAX = 110;
     public static double YELLOW_MIN = 60;
     public static float GAIN = 2;
-    public final float[] hsvValues = new float[3]; // 0 - Оттенок / 1 - Насыщенность / 2 - Яркость
+    private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
     public static double EXTENSION_MAX = 0.6;
@@ -177,4 +177,7 @@ public class Intake {
         }
         return Color.NONE;
     }
+    public double getHue() { return hsvValues[0]; }
+    public double getSaturation() { return hsvValues[1]; }
+    public double getValue() { return  hsvValues[2]; }
 }
