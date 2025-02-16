@@ -1,14 +1,22 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 
+import android.graphics.Color;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 @Config
 public class Intake {
+    public enum Color {
+        RED, BLUE, YELLOW, NONE
+    }
 
     private final CRServo brushServoLeft;
     private final CRServo  brushServoRight;
@@ -20,6 +28,15 @@ public class Intake {
     private final Servo extensionServoRight; //0.06
 
     public final SamplesTaker samplesTaker;
+
+    NormalizedColorSensor colorSensor;
+    public static double BLUE_MAX = 280;
+    public static double BLUE_MIN = 210;
+    public static double YELLOW_MAX = 110;
+    public static double YELLOW_MIN = 60;
+    public static float GAIN = 2;
+    private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
+
 
     public static double EXTENSION_MAX = 0.6;
     public static double EXTENSION_MIN = 0.05;
@@ -43,6 +60,8 @@ public class Intake {
         this.brushServoLeft = opMode.hardwareMap.crservo.get("brushServoL");
         this.brushServoRight = opMode.hardwareMap.crservo.get("brushServoR");
         this.brushServo = opMode.hardwareMap.crservo.get("brushServo");
+        this.colorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class ,"sensor_color");
+        colorSensor.setGain(GAIN);
 
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
         this.brushServoRight.setDirection(CRServo.Direction.FORWARD);
@@ -145,4 +164,20 @@ public class Intake {
         }
 
     }
+
+    public Color getColorSample() {
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+        android.graphics.Color.colorToHSV(colors.toColor(), hsvValues);
+        if (hsvValues[1] >= 0.5) {
+            if (hsvValues[0] <= BLUE_MAX && hsvValues[0] >= BLUE_MIN) {
+                return Color.BLUE;
+            } else if (hsvValues[0] <= YELLOW_MAX && hsvValues[0] >= YELLOW_MIN) {
+                return Color.YELLOW;
+            } else return Color.RED;
+        }
+        return Color.NONE;
+    }
+    public double getHue() { return hsvValues[0]; }
+    public double getSaturation() { return hsvValues[1]; }
+    public double getValue() { return  hsvValues[2]; }
 }

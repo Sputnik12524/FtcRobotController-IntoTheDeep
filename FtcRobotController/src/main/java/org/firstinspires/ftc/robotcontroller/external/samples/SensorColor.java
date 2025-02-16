@@ -65,7 +65,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 @TeleOp(name = "Sensor: Color", group = "Sensor")
-@Disabled
 public class SensorColor extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
@@ -196,9 +195,9 @@ public class SensorColor extends LinearOpMode {
               .addData("Green", "%.3f", colors.green)
               .addData("Blue", "%.3f", colors.blue);
       telemetry.addLine()
-              .addData("Hue", "%.3f", hsvValues[0])
-              .addData("Saturation", "%.3f", hsvValues[1])
-              .addData("Value", "%.3f", hsvValues[2]);
+              .addData("Hue", "%.3f", hsvValues[0]) //Оттенок цвета
+              .addData("Saturation", "%.3f", hsvValues[1]) //Насыщенность цвета
+              .addData("Value", "%.3f", hsvValues[2]); //Яркость
       telemetry.addData("Alpha", "%.3f", colors.alpha);
 
       /* If this color sensor also has a distance sensor, display the measured distance.
@@ -216,6 +215,11 @@ public class SensorColor extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
         }
       });
+      if (gamepad1.dpad_up) {
+        ((SwitchableLight)colorSensor).enableLight(true);
+      } else if (gamepad1.dpad_down) {
+        ((SwitchableLight)colorSensor).enableLight(false);
+      }
     }
   }
 }

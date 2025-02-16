@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -407,7 +408,11 @@ public class TeleOpRR extends LinearOpMode {
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
 
-
+            telemetry.addData("Color:", in.getColorSample());
+            telemetry.addData("Hue:", in.getHue());
+            telemetry.addData("Saturation:", in.getSaturation());
+            telemetry.addData("Value:", in.getValue());
+            telemetry.addData("PosLift:", posLift);
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getPower());
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
