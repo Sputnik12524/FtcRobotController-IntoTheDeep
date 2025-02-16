@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 
-import android.graphics.Color;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;

@@ -38,6 +38,9 @@ public class TeleOpRR extends LinearOpMode {
         FLIPPING_IN, EXTENDING_IN
 
     }
+    public enum BadColor {
+        BC
+    }
 
     /// Колесная база
     public static double VELO_SCALE_COEF = 0.00225;
@@ -109,6 +112,15 @@ public class TeleOpRR extends LinearOpMode {
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
+
+        while (opModeInInit()) {
+            if (gamepad1.x) {
+
+            }
+            if (gamepad1.b) {
+
+            }
+        }
 
         waitForStart();
 
