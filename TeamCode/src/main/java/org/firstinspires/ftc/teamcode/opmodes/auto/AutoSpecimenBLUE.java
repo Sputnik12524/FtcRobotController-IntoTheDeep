@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -27,7 +26,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(9, -54, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-9, 54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
         base.imu.resetYaw();
         claw.openLift();
@@ -35,11 +34,10 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
-                    lift.setTarget(-33);
+                    lift.setTarget(-34);
                 })
                 .back(13, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(2)
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
@@ -48,58 +46,48 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                .waitSeconds(1)
+                //.waitSeconds(1)
                 .forward(5)
                 .addDisplacementMarker(() -> {
-                    sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
-                .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(0);
-                })
+                .waitSeconds(0.5)
+                .addDisplacementMarker(() -> lift.setTarget(0)) //statement lambda was replaced with expression lambda
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
-                .waitSeconds(1)
                 .turn(Math.toRadians(-120))
                 .back(34)
-                .waitSeconds(1)
-                .turn(Math.toRadians(-60))
-                .back(3, DriveTrainMecanum.getVelocityConstraint(15,
+                .turn(Math.toRadians(-50))
+                .back(12, DriveTrainMecanum.getVelocityConstraint(4,
                                 DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .forward(0.7)
                 .addDisplacementMarker(() -> {
                     claw.closeLift();
+                    sleep(1000);
+                    lift.setTarget(-65);
                 })
-                .forward(5)
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
                 .waitSeconds(1)
-                .turn(Math.toRadians(-120))
-                .back(34)
-                .turn(Math.toRadians(-90))
+                .forward(5)
+                .turn(Math.toRadians(-135))
+                .back(45)
+                .turn(Math.toRadians(-50))
+                .back(7,DriveTrainMecanum.getVelocityConstraint(15,
+                                DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
-                })
-                .back(8)//wasn't tested
-                .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
+                    lift.setTarget(-60);
                     claw.openLift();
                 })
-                .forward(5)
-                .waitSeconds(0.5)
-                .build();
-        //если не успеем паркануться, то перенести лифт таргет 0 в предыдущую траджектори, а следующую убрать
-        TrajectorySequence trajectoryEnd = base.trajectorySequenceBuilder(trajectoryScoringSecondSpecimen.end())
+                .forward(6)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(0);
                 })
                 .waitSeconds(1)
-                .turn(Math.toRadians(45))
-                .forward(40)
                 .build();
-
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXTENSION_MIN);
@@ -112,7 +100,6 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         sleep(500);
         base.followTrajectorySequence(trajectoryScoringSecondSpecimen);
         sleep(500);
-        base.followTrajectorySequence(trajectoryEnd);
         sleep(1000);
         lift.liftMotorPowerDriver.interrupt();
     }
