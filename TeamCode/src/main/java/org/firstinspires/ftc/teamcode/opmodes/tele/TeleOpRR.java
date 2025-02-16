@@ -35,7 +35,8 @@ public class TeleOpRR extends LinearOpMode {
     public enum IntakePositions {
         OUTTAKE_POS, INTAKE_POS,
         EXTENDING_OUT,
-        FLIPPING_IN, EXTENDING_IN
+        FLIPPING_IN, EXTENDING_IN,
+        REMOVE_TRASH,
 
     }
     public enum BadColor {
@@ -75,8 +76,11 @@ public class TeleOpRR extends LinearOpMode {
     double flipFSM = Intake.FLIP_OUTTAKE;
     public static double EXT_TIME = 1;
     public static double FLIP_TIME = 0.5;
+    public static double BRUSH_TIME = 0.6;
 
     public static double NECESSARY_EXT_POS = 0.2;
+
+    public Intake.Color BADCOLOR;
 
 
     private boolean brushInStatus = false;
@@ -115,10 +119,10 @@ public class TeleOpRR extends LinearOpMode {
 
         while (opModeInInit()) {
             if (gamepad1.x) {
-
+                BADCOLOR = Intake.Color.RED;
             }
             if (gamepad1.b) {
-
+                BADCOLOR = Intake.Color.BLUE;
             }
         }
 
@@ -328,6 +332,7 @@ public class TeleOpRR extends LinearOpMode {
             switch (posIntake) {
                 case OUTTAKE_POS: //Инит поза
                     flag = true;
+
                     if (gamepad1.right_stick_button && stateStickRb) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
@@ -348,7 +353,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
-                    if (gamepad1.right_stick_button && stateStickRb) {
+                    if (gamepad1.right_stick_button && stateStickRb || (in.getColorSample() != BADCOLOR)) {
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
@@ -361,6 +366,21 @@ public class TeleOpRR extends LinearOpMode {
                         brushInStatus = false;
                         brushOutStatus = false;
                         posIntake = IntakePositions.OUTTAKE_POS;
+                    }
+                    if (in.getColorSample() == BADCOLOR) {
+                        intakeTimer.reset();
+                        in.brushOuttake();
+                        brushInStatus = false;
+                        brushOutStatus = true;
+                        posIntake = IntakePositions.REMOVE_TRASH;
+                    }
+                    break;
+                case REMOVE_TRASH:
+                    if (intakeTimer.seconds() >= BRUSH_TIME) {
+                        in.brushStop();
+                        brushInStatus = false;
+                        brushOutStatus = false;
+                        posIntake = IntakePositions.INTAKE_POS;
                     }
                     break;
                 case FLIPPING_IN:
