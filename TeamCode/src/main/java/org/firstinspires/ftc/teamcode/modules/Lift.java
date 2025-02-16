@@ -56,7 +56,7 @@ public class Lift {
     private double liftPos() {
         int stepsPerRevolution = 420;
         int D = 3;
-        return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0);
+        return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0) * 2;
     }
 
     public class LiftMotorPowerDriver extends Thread {
@@ -120,6 +120,7 @@ public class Lift {
     public double getTarget() {
         return target;
     }
+    public double getError() { return error; }
 
     public double getPower() {
         return liftMotor.getPower();
