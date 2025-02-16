@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -38,9 +37,6 @@ public class TeleOpRR extends LinearOpMode {
         FLIPPING_IN, EXTENDING_IN,
         REMOVE_TRASH,
 
-    }
-    public enum BadColor {
-        BC
     }
 
     /// Колесная база
@@ -80,7 +76,7 @@ public class TeleOpRR extends LinearOpMode {
 
     public static double NECESSARY_EXT_POS = 0.2;
 
-    public Intake.Color BADCOLOR;
+    public Intake.Color badColor;
 
 
     private boolean brushInStatus = false;
@@ -119,10 +115,10 @@ public class TeleOpRR extends LinearOpMode {
 
         while (opModeInInit()) {
             if (gamepad1.x) {
-                BADCOLOR = Intake.Color.RED;
+                badColor = Intake.Color.RED;
             }
             if (gamepad1.b) {
-                BADCOLOR = Intake.Color.BLUE;
+                badColor = Intake.Color.BLUE;
             }
         }
 
@@ -353,7 +349,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
-                    if (gamepad1.right_stick_button && stateStickRb || (in.getColorSample() != BADCOLOR)) {
+                    if (gamepad1.right_stick_button && stateStickRb || (in.getColorSample() != badColor) || (in.getColorSample() != Intake.Color.NONE)) {
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
@@ -367,7 +363,7 @@ public class TeleOpRR extends LinearOpMode {
                         brushOutStatus = false;
                         posIntake = IntakePositions.OUTTAKE_POS;
                     }
-                    if (in.getColorSample() == BADCOLOR) {
+                    if (in.getColorSample() == badColor) {
                         intakeTimer.reset();
                         in.brushOuttake();
                         brushInStatus = false;
