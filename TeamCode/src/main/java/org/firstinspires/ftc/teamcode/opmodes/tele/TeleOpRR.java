@@ -44,20 +44,19 @@ public class TeleOpRR extends LinearOpMode {
 
 
     /// Подъемник
-    ElapsedTime liftTimer = new ElapsedTime();
+    private final ElapsedTime liftTimer = new ElapsedTime();
     LiftPositions posLift = LiftPositions.LIFT_ZERO;
     double targetLiftFSM = 0;
-    public static double UPDATE_ZERO_TIME = 0.2;
     private boolean stateDpadUp2 = false;
     private boolean stateDpadDown2 = false;
     private boolean stateDpadLeft2 = false;
     private boolean stateDpadRight2 = false;
-    private boolean stateLeftBumber = false;
+    private boolean stateLeftBumper = false;
     private boolean stateRightBumper = false; // Клешня для образцов
 
 
     /// Плечо и клешня
-    ElapsedTime shoulderTimer = new ElapsedTime();
+    private final ElapsedTime shoulderTimer = new ElapsedTime();
     ShoulderClawPositions posShoulder = ShoulderClawPositions.START_POSE;
     double shoulderFSM = Shoulder.INITIAL_POSITION;
     public static double SH_TIME_TO_BASKET = 1;
@@ -66,7 +65,7 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateB2 = false;
 
     /// Выдвижной ахват
-    ElapsedTime intakeTimer = new ElapsedTime();
+    private final ElapsedTime intakeTimer = new ElapsedTime();
     IntakePositions posIntake = IntakePositions.OUTTAKE_POS;
     double extFSM = Intake.EXTENSION_MIN;
     double flipFSM = Intake.FLIP_OUTTAKE;
@@ -156,7 +155,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
-                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
@@ -165,7 +164,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
-                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
@@ -179,7 +178,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
-                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
@@ -196,7 +195,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
-                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
@@ -213,7 +212,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
-                    if (gamepad2.left_stick_button && !stateLeftBumber) {
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
@@ -236,6 +235,7 @@ public class TeleOpRR extends LinearOpMode {
             stateDpadDown2 = gamepad2.dpad_down;
             stateDpadLeft2 = gamepad2.dpad_left;
             stateDpadRight2 = gamepad2.dpad_right;
+            stateLeftBumper = gamepad2.left_bumper;
 
             // Управление клешней подъемника
             if (gamepad2.right_bumper && !stateRightBumper) {
