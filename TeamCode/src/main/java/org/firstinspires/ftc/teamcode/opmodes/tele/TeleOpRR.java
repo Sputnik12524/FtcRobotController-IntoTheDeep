@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
@@ -17,23 +18,71 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Config
 public class TeleOpRR extends LinearOpMode {
 
+    public enum LiftPositions {
+        LIFT_ZERO, WAIT_UPDATE, ZERO_UPDATE,
+        LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
+        LIFT_TO_BASKET
+    }
+
+    public enum ShoulderClawPositions {
+        START_POSE,
+        MOVING_TO_INTAKE, MOVED_TO_INTAKE,
+        CLAW_CLOSING, CLAW_CLOSED,
+        MOVING_TO_BASKET, MOVED_TO_BASKET, CLAW_OPEN
+
+    }
+
+    public enum IntakePositions {
+        OUTTAKE_POS, INTAKE_POS,
+        EXTENDING_OUT,
+        FLIPPING_IN, EXTENDING_IN
+
+    }
+
+    /// Колесная база
     public static double VELO_SCALE_COEF = 0.00225;
     public static double CORRECTION_COEF = 7;
 
-    // Подъемник
-    private boolean statusDpadDownBefore = false;
-    private boolean statusDpadUpBefore = false;
-    private int posLift = 0;
 
-    // Клешни
+    /// Подъемник
+    private final ElapsedTime liftTimer = new ElapsedTime();
+    LiftPositions posLift = LiftPositions.LIFT_ZERO;
+    double targetLiftFSM = 0;
+    private boolean stateDpadUp2 = false;
+    private boolean stateDpadDown2 = false;
+    private boolean stateDpadLeft2 = false;
+    private boolean stateDpadRight2 = false;
     private boolean stateLeftBumper = false;
-    private boolean stateRightBumper = false;
+    private boolean stateRightBumper = false; // Клешня для образцов
 
-    //щетки
+
+    /// Плечо и клешня
+    private final ElapsedTime shoulderTimer = new ElapsedTime();
+    ShoulderClawPositions posShoulder = ShoulderClawPositions.START_POSE;
+    double shoulderFSM = Shoulder.INITIAL_POSITION;
+    public static double SH_TIME_TO_BASKET = 1;
+    public static double SH_TIME_TO_INTAKE = 0.5;
+    private boolean stateA2 = false;
+    private boolean stateB2 = false;
+
+    /// Выдвижной ахват
+    private final ElapsedTime intakeTimer = new ElapsedTime();
+    IntakePositions posIntake = IntakePositions.OUTTAKE_POS;
+    double extFSM = Intake.EXTENSION_MIN;
+    double flipFSM = Intake.FLIP_OUTTAKE;
+    public static double EXT_TIME = 1;
+    public static double FLIP_TIME = 0.5;
+
+    public static double NECESSARY_EXT_POS = 0.2;
+
+
     private boolean brushInStatus = false;
     private boolean brushOutStatus = false;
-    private boolean stateA = false;
-    private boolean stateB = false;
+    private boolean stateA1 = false;
+    private boolean stateB1 = false;
+    private boolean stateStickRb = false;
+
+    private boolean flag;
 
 
     @Override
@@ -45,16 +94,17 @@ public class TeleOpRR extends LinearOpMode {
         Intake in = new Intake(this);
         Claw cl = new Claw(this);
 
-        lt.liftMotorPowerDriver.start();
-        in.samplesTaker.start();
-        sl.sampleShTaker.start();
-
         sl.closeSh();
         cl.openLift();
         sl.shoulderPosition(Shoulder.INITIAL_POSITION);
         in.extensionPosition(Intake.EXT_START_POS);
         in.flipPosition(Intake.FLIP_OUTTAKE);
         lt.resetZero();
+        liftTimer.reset();
+        shoulderTimer.reset();
+        intakeTimer.reset();
+
+        lt.liftMotorPowerDriver.start();
 
         driveTrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = driveTrain.getPoseEstimate();
@@ -95,115 +145,263 @@ public class TeleOpRR extends LinearOpMode {
             // Read pose
             Pose2d poseEstimate = driveTrain.getPoseEstimate();
 
-            // Управление подъемником
-            if (gamepad2.dpad_up && !statusDpadUpBefore && posLift < 6) {
-                posLift += 1;
-            }
-            statusDpadUpBefore = gamepad2.dpad_up;
-            if (gamepad2.dpad_down && !statusDpadDownBefore && posLift > 0) {
-                posLift -= 1;
-            }
-            statusDpadDownBefore = gamepad2.dpad_down;
-
-
+            /// Автомат для подъемника
             switch (posLift) {
-                case (0):
-                    lt.setTarget(Lift.POS_LOWEST);
+                case LIFT_ZERO:
+                    if (gamepad2.dpad_up && !stateDpadUp2) {
+                        targetLiftFSM = Lift.POS_HIGH_BASKET;
+                        posLift = LiftPositions.LIFT_TO_BASKET;
+                    }
+                    if (gamepad2.dpad_right && !stateDpadRight2) {
+                        targetLiftFSM = Lift.POS_SIDE;
+                        posLift = LiftPositions.LIFT_TO_SIDE;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
-                case (1):
-                    lt.setTarget(Lift.POS_SIDE_2);
+                case LIFT_TO_BASKET:
+                    if (gamepad2.dpad_down && !stateDpadDown2) {
+                        targetLiftFSM = 0;
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
                     break;
-                case (2):
-                    lt.setTarget(Lift.POS_SIDE);
-                    break;
-                case (3):
-                    lt.setTarget(Lift.POS_LOW_SPECIMEN_BEFORE);
-                    break;
-                case (4):
-                    lt.setTarget(Lift.POS_LOW_BASKET);
-                    break;
-                case (5):
-                    lt.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
-                    break;
-                case (6):
-                    lt.setTarget(Lift.POS_HIGH_BASKET);
-                    break;
-            }
-            if (gamepad2.dpad_left) {
-                posLift = 0;
-            }
-            if (gamepad2.dpad_right) {
-                posLift = 5;
-            }
 
-
-            // Управление плечо
-            // по позициям
-            if (gamepad2.b) {
-                sl.needToBasketSh();
-            } else if (gamepad2.a) {
-                sl.openSh();
-                sl.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
+                case LIFT_TO_SIDE:
+                    if (gamepad2.dpad_up && !stateDpadUp2) {
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                        posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+                    }
+                    if (gamepad2.dpad_left && !stateDpadLeft2) {
+                        targetLiftFSM = 0;
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
+                    break;
+                case LIFT_TO_SPECIMEN_BEFORE:
+                    if (gamepad2.dpad_down && !stateDpadDown2) {
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
+                        posLift = LiftPositions.LIFT_TO_SPECIMEN_AFTER;
+                    }
+                    if (gamepad2.dpad_right && !stateDpadRight2) {
+                        targetLiftFSM = Lift.POS_SIDE;
+                        posLift = LiftPositions.LIFT_TO_SIDE;
+                    }
+                    if (gamepad2.dpad_left && !stateDpadRight2) {
+                        targetLiftFSM = 0;
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
+                    break;
+                case LIFT_TO_SPECIMEN_AFTER:
+                    if (gamepad2.dpad_up && !stateDpadUp2) {
+                        targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                        posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+                    }
+                    if (gamepad2.dpad_right && !stateDpadRight2) {
+                        targetLiftFSM = Lift.POS_SIDE;
+                        posLift = LiftPositions.LIFT_TO_SIDE;
+                    }
+                    if (gamepad2.dpad_left && !stateDpadRight2) {
+                        targetLiftFSM = 0;
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (gamepad2.left_stick_button && !stateLeftBumper) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
+                    break;
+                case WAIT_UPDATE:
+                    if (lt.isMagneting()) {
+                        lt.resetZero();
+                        posLift = LiftPositions.LIFT_ZERO;
+                    }
+                    if (Math.abs(lt.getError()) <= 0.05) {
+                        posLift = LiftPositions.ZERO_UPDATE;
+                    }
+                    break;
+                case ZERO_UPDATE:
+                    targetLiftFSM += 1;
+                    posLift = LiftPositions.WAIT_UPDATE;
+                    break;
             }
+            lt.setTarget(targetLiftFSM);
+            stateDpadUp2 = gamepad2.dpad_up;
+            stateDpadDown2 = gamepad2.dpad_down;
+            stateDpadLeft2 = gamepad2.dpad_left;
+            stateDpadRight2 = gamepad2.dpad_right;
+            stateLeftBumper = gamepad2.left_bumper;
 
-            // Управление клешней.
-            if (gamepad2.left_bumper && !stateLeftBumper) {
-                sl.switchPositionShoulder();
-            }
+            // Управление клешней подъемника
             if (gamepad2.right_bumper && !stateRightBumper) {
                 cl.switchPositionLift();
             }
-            stateLeftBumper = gamepad2.left_bumper;
             stateRightBumper = gamepad2.right_bumper;
 
 
-            //  Управление захватом
+
+
+
+            /// Автомат для плеча с клешней
+            switch (posShoulder) {
+                case START_POSE:
+                    if (gamepad2.a && flag && !stateA2) {
+                        shoulderTimer.reset();
+                        sl.openSh();
+                        shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
+                        posShoulder = ShoulderClawPositions.MOVING_TO_INTAKE;
+                    }
+                    if (gamepad2.b && !stateB2) {
+                        shoulderTimer.reset();
+                        sl.closeSh();
+                        shoulderFSM = Shoulder.POS_SH_BASKET;
+                        posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
+                    }
+                    break;
+                case MOVING_TO_BASKET:
+                    if (shoulderTimer.seconds() >= SH_TIME_TO_BASKET) {
+                        posShoulder = ShoulderClawPositions.MOVED_TO_BASKET;
+                    }
+                    break;
+                case MOVED_TO_BASKET:
+                    if (gamepad2.b && !stateB2) {
+                        sl.openSh();
+                        posShoulder = ShoulderClawPositions.CLAW_OPEN;
+                    }
+                    break;
+                case CLAW_OPEN:
+                    if (gamepad2.a && !stateA2) {
+                        shoulderFSM = Shoulder.INITIAL_POSITION;
+                        posShoulder = ShoulderClawPositions.START_POSE;
+                    }
+
+                    break;
+                case MOVING_TO_INTAKE:
+                    if (shoulderTimer.seconds() >= SH_TIME_TO_INTAKE) {
+                        posShoulder = ShoulderClawPositions.MOVED_TO_INTAKE;
+                    }
+                    break;
+                case MOVED_TO_INTAKE:
+                    if (gamepad2.b && !stateB2) {
+                        shoulderTimer.reset();
+                        sl.closeSh();
+                        posShoulder = ShoulderClawPositions.CLAW_CLOSING;
+                    }
+                    break;
+                case CLAW_CLOSING:
+                    if (shoulderTimer.seconds() >= SH_TIME_TO_BASKET) {
+                        posShoulder = ShoulderClawPositions.CLAW_CLOSED;
+                    }
+                    break;
+                case CLAW_CLOSED:
+                    shoulderTimer.reset();
+                    shoulderFSM = Shoulder.POS_SH_BASKET;
+                    posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
+                    break;
+            }
+            stateA2 = gamepad2.a;
+            stateB2 = gamepad2.b;
+            sl.shoulderPosition(shoulderFSM);
+
+
+
+
+            ///Выдвижной захват
+            switch (posIntake) {
+                case OUTTAKE_POS: //Инит поза
+                    flag = true;
+                    if (gamepad1.right_stick_button && stateStickRb) {
+                        intakeTimer.reset();
+                        extFSM = Intake.EXTENSION_MAX;
+                        posIntake = IntakePositions.EXTENDING_OUT;
+                        flag = true;
+                    }
+                    if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
+                        posIntake = IntakePositions.INTAKE_POS;
+                    }
+                    break;
+                case EXTENDING_OUT:
+                    flag = false;
+                    if (intakeTimer.seconds() >= EXT_TIME) {
+                        flipFSM = Intake.FLIP_INTAKE;
+                        posIntake = IntakePositions.INTAKE_POS;
+                        flag = false;
+                    }
+                    break;
+                case INTAKE_POS: //Берем пробы
+                    flag = false;
+                    if (gamepad1.right_stick_button && stateStickRb) {
+                        intakeTimer.reset();
+                        flipFSM = Intake.FLIP_OUTTAKE;
+                        in.brushIntake();
+                        brushInStatus = true;
+                        brushOutStatus = false;
+                        posIntake = IntakePositions.FLIPPING_IN;
+                    }
+                    if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                        in.brushStop();
+                        brushInStatus = false;
+                        brushOutStatus = false;
+                        posIntake = IntakePositions.OUTTAKE_POS;
+                    }
+                    break;
+                case FLIPPING_IN:
+                    flag = false;
+                    if (intakeTimer.seconds() >= FLIP_TIME) {
+                        intakeTimer.reset();
+                        in.brushStop();
+                        brushInStatus = false;
+                        brushOutStatus = false;
+                        extFSM = Intake.EXTENSION_MIN;
+                        posIntake = IntakePositions.EXTENDING_IN;
+                    }
+                    break;
+                case EXTENDING_IN:
+                    flag = false;
+                    if (intakeTimer.seconds() >= EXT_TIME) {
+                        posIntake = IntakePositions.OUTTAKE_POS;
+                    }
+                    break;
+            }
+            in.extensionPosition(extFSM);
+            in.flipPosition(flipFSM);
+            stateStickRb = gamepad1.right_stick_button;
+
+            //выдвижение
+            extFSM += -gamepad1.right_stick_y * Intake.EXT_K * Intake.EXTENSION_STEP;
             //щетка
-            if (gamepad1.a && !brushInStatus && !stateA) {
+            if (gamepad1.a && !brushInStatus && !stateA1) {
                 in.brushIntake();
                 brushInStatus = true;
                 brushOutStatus = false;
 
-            } else if (gamepad1.a && brushInStatus && !stateA) {
+            } else if (gamepad1.a && brushInStatus && !stateA1) {
                 in.brushStop();
                 brushInStatus = false;
             }
-            if (gamepad1.b && !brushOutStatus && !stateB) {
+            if (gamepad1.b && !brushOutStatus && !stateB1) {
                 in.brushOuttake();
                 brushOutStatus = true;
                 brushInStatus = false;
-            } else if (gamepad1.b && brushOutStatus && !stateB) {
+            } else if (gamepad1.b && brushOutStatus && !stateB1) {
                 in.brushStop();
                 brushOutStatus = false;
             }
-            stateA = gamepad1.a;
-            stateB = gamepad1.b;
+            stateA1 = gamepad1.a;
+            stateB1 = gamepad1.b;
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(Intake.FLIP_INTAKE);
+                flipFSM = Intake.FLIP_OUTTAKE;
             }
             if (gamepad1.x) {
-                in.flipPosition(Intake.FLIP_OUTTAKE);
-            }
-            //выдвижение
-            in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
-
-            //многопоточность
-            if (gamepad1.right_stick_button && in.getExtensionPositionR() >= 0.2) {
-                in.needOuttake();
-                brushInStatus = false;
-                brushOutStatus = false;
-            } else if (gamepad1.right_stick_button && in.getExtensionPositionR() < 0.2) {
-                in.needTake();
-                brushInStatus = false;
-                brushOutStatus = false;
-            }
-            if(gamepad2.x) {
-                posLift = 0;
-                lt.setTarget(0);
-                sleep(150);
-                lt.resetZero();
+                flipFSM = Intake.FLIP_INTAKE;
             }
 
 
@@ -214,9 +412,7 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("Hue:", in.getHue());
             telemetry.addData("Saturation:", in.getSaturation());
             telemetry.addData("Value:", in.getValue());
-
             telemetry.addData("PosLift:", posLift);
-
             telemetry.addData("Lift Encoder Position: ", lt.getCurrentPosition());
             telemetry.addData("Lift Motor Speed: ", lt.getPower());
             telemetry.addData("Stick Position: ", gamepad2.right_stick_y);
@@ -227,13 +423,15 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+
+            telemetry.addData("Состояние Lift:", posLift);
+            telemetry.addData("Состояние Shoulder:", posShoulder);
+            telemetry.addData("Состояние Intake", posIntake);
+
             telemetry.update();
         }
         lt.liftMotorPowerDriver.interrupt();
-        in.samplesTaker.interrupt();
-        sl.sampleShTaker.interrupt();
     }
-
     public static class PoseStorage {
         public static Pose2d currentPose = new Pose2d();
     }

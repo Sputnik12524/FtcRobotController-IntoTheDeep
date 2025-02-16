@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.modules.DriveTrain;
 
-@TeleOp(name="TeleOp Test", group="Robot")
+@TeleOp(name="SIMPLE TeleOp Test", group="Robot")
 
 public class TeleOpSimple extends LinearOpMode {
 
@@ -18,7 +18,7 @@ public class TeleOpSimple extends LinearOpMode {
         while (opModeIsActive()) {
             // управление кб
             double main = gamepad1.left_stick_y;
-            double side = -gamepad1.left_stick_x * 1.1;
+            double side = gamepad1.right_stick_x;
             double rotate = (gamepad1.left_trigger - gamepad1.right_trigger);
             double den = Math.max(Math.abs(main) + Math.abs(side) + Math.abs(rotate), 1);
             driveTrain.setPower(main / den, side / den, rotate / den);
