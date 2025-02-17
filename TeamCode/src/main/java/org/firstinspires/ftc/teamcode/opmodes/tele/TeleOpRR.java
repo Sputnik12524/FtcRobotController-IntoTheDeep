@@ -114,11 +114,14 @@ public class TeleOpRR extends LinearOpMode {
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
 
         while (opModeInInit()) {
-            if (gamepad1.x) {
+            if (gamepad1.x) { //Синий альянс
                 badColor = Intake.Color.RED;
             }
-            if (gamepad1.b) {
+            if (gamepad1.b) { //Красный альянс
                 badColor = Intake.Color.BLUE;
+            }
+            if (gamepad1.a) { //Для тестов
+                badColor = null;
             }
         }
 
