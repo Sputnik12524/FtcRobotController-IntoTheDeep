@@ -32,8 +32,8 @@ public class TeleOpRR extends LinearOpMode {
     }
 
     public enum IntakePositions {
-        OUTTAKE_POS, INTAKE_POS,
-        EXTENDING_OUT,
+        OUTTAKE_POS, INTAKE_POS, INTAKE_POS_FOR_FLIP,
+        EXTENDING_OUT, FLIPPING_OUT,
         FLIPPING_IN, EXTENDING_IN,
         REMOVE_TRASH,
 
@@ -331,7 +331,6 @@ public class TeleOpRR extends LinearOpMode {
             switch (posIntake) {
                 case OUTTAKE_POS: //Инит поза
                     flag = true;
-
                     if (gamepad1.right_stick_button && stateStickRb) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
@@ -345,14 +344,19 @@ public class TeleOpRR extends LinearOpMode {
                 case EXTENDING_OUT:
                     flag = false;
                     if (intakeTimer.seconds() >= EXT_TIME) {
+                        intakeTimer.reset();
                         flipFSM = Intake.FLIP_INTAKE;
+                        posIntake = IntakePositions.FLIPPING_OUT;
+                    }
+                case FLIPPING_OUT:
+                    flag = false;
+                    if (intakeTimer.seconds() >= FLIP_TIME) {
                         posIntake = IntakePositions.INTAKE_POS;
-                        flag = false;
                     }
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
-                    if (gamepad1.right_stick_button && stateStickRb || (in.getColorSample() != badColor) || (in.getColorSample() != Intake.Color.NONE)) {
+                    if (gamepad1.right_stick_button && stateStickRb || (in.getColorSample() != badColor) || (in.getColorSample() != Intake.Color.NONE)) { // #НеБойсяПж
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
@@ -372,6 +376,30 @@ public class TeleOpRR extends LinearOpMode {
                         brushInStatus = false;
                         brushOutStatus = true;
                         posIntake = IntakePositions.REMOVE_TRASH;
+                    }
+                    if (flipFSM == Intake.FLIP_OUTTAKE) {
+                        posIntake = IntakePositions.INTAKE_POS_FOR_FLIP;
+                    }
+                    break;
+                case INTAKE_POS_FOR_FLIP:
+                    flag = false;
+                    if (gamepad1.right_stick_button && stateStickRb) { // #НеБойсяПж
+                        intakeTimer.reset();
+                        flipFSM = Intake.FLIP_OUTTAKE;
+                        in.brushIntake();
+                        brushInStatus = true;
+                        brushOutStatus = false;
+                        posIntake = IntakePositions.FLIPPING_IN;
+                    }
+                    if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                        in.brushStop();
+                        brushInStatus = false;
+                        brushOutStatus = false;
+                        posIntake = IntakePositions.OUTTAKE_POS;
+                    }
+                    if (flipFSM == Intake.FLIP_INTAKE) {
+                        intakeTimer.reset();
+                        posIntake = IntakePositions.FLIPPING_OUT;
                     }
                     break;
                 case REMOVE_TRASH:
