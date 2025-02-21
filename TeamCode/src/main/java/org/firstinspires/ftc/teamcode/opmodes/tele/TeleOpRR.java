@@ -33,7 +33,7 @@ public class TeleOpRR extends LinearOpMode {
 
     public enum IntakePositions {
         OUTTAKE_POS, INTAKE_POS, INTAKE_POS_FOR_FLIP,
-        EXTENDING_OUT, FLIPPING_OUT,
+        EXTENDING_OUT, FLIPPING_OUT, BRUSHING_OUT,
         FLIPPING_IN, EXTENDING_IN,
         REMOVE_TRASH,
 
@@ -74,6 +74,8 @@ public class TeleOpRR extends LinearOpMode {
     public static double EXT_TIME = 1;
     public static double FLIP_TIME = 0.5;
     public static double BRUSH_TIME = 0.6;
+    public static double BRUSHING_OUT_TIME = 0.4;
+
 
     public static double NECESSARY_EXT_POS = 0.2;
 
@@ -333,7 +335,7 @@ public class TeleOpRR extends LinearOpMode {
             switch (posIntake) {
                 case OUTTAKE_POS: //Инит поза
                     flag = true;
-                    if (gamepad1.right_bumper && stateRightBumper1) {
+                    if (gamepad1.right_bumper && !stateRightBumper1) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
                         posIntake = IntakePositions.EXTENDING_OUT;
@@ -350,22 +352,33 @@ public class TeleOpRR extends LinearOpMode {
                         flipFSM = Intake.FLIP_INTAKE;
                         posIntake = IntakePositions.FLIPPING_OUT;
                     }
+                    break;
                 case FLIPPING_OUT:
                     flag = false;
                     if (intakeTimer.seconds() >= FLIP_TIME) {
+                        in.brushOuttake();
+                        brushInStatus = false;
+                        brushOutStatus = true;
+                        posIntake = IntakePositions.BRUSHING_OUT;
+                    }
+                case BRUSHING_OUT:
+                    flag = false;
+                    if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
+                        in.brushStop();
+                        brushInStatus = false;
+                        brushOutStatus = false;
                         posIntake = IntakePositions.INTAKE_POS;
                     }
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
-                    if (gamepad1.right_bumper && stateRightBumper1 || (in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE)) { // #НеБойсяПж
+                    if (gamepad1.right_bumper && !stateRightBumper1 || (in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE)) { // #НеБойсяПж
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
                         brushInStatus = true;
                         brushOutStatus = false;
                         posIntake = IntakePositions.FLIPPING_IN;
-                        break;
                     } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
                         in.brushStop();
                         brushInStatus = false;
@@ -383,7 +396,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS_FOR_FLIP:
                     flag = false;
-                    if (gamepad1.right_bumper && stateRightBumper1) { // #НеБойсяПж
+                    if (gamepad1.right_bumper && !stateRightBumper1) { // #НеБойсяПж
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
                         in.brushIntake();
@@ -464,6 +477,7 @@ public class TeleOpRR extends LinearOpMode {
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
+            telemetry.addData("FlipFSM", flipFSM);
 
             telemetry.addData("Color:", in.getColorSample());
             telemetry.addData("Hue:", in.getHue());

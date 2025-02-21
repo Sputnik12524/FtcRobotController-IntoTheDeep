@@ -35,12 +35,12 @@ public class AutoSpecimenBLUE extends LinearOpMode {
 
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.7);
+                    shoulder.shoulderPosition(.72);
                     lift.setTarget(-33);
                 })
-                .back(13, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(10, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(15, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
@@ -61,7 +61,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .back(20, DriveTrainMecanum.getVelocityConstraint(4,
                                 DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .forward(0.7)
+                .forward(1)
                 .addDisplacementMarker(() -> {
                     claw.closeLift();
                     sleep(1000);
@@ -71,10 +71,10 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
                 .waitSeconds(1)
                 .forward(5)
-                .turn(Math.toRadians(-140))
-                .back(48)
-                .turn(Math.toRadians(-50))
-                .back(6,DriveTrainMecanum.getVelocityConstraint(15,
+                .turn(Math.toRadians(-145))
+                .back(52)
+                .turn(Math.toRadians(-45))
+                .back(5.5,DriveTrainMecanum.getVelocityConstraint(15,
                                 DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
