@@ -20,7 +20,7 @@ public class Lift {
     public static double Kp = 0.05;
     public static double Ki = 0;
     public static double Kd = 0;
-    private double error, previousError, u;
+    private double error, previousError;
     private double sError, dError = 0;
     private double limits;
     private double target = 0; //target = -79 --> MAX POSITION!!!!!!!
@@ -33,7 +33,6 @@ public class Lift {
     public static double POS_LOW_BASKET = -50; //-30
     public static double POS_HIGH_BASKET = -70;
     public static double POS_SIDE = -4.5; // Берем с борта // -4 TRUE
-    public static double POS_SIDE_2 = -2.5; //временно
      public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки // -15 TRUE
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
     public static double POS_HIGH_SPECIMEN_BEFORE = -55; // Целимся для установки
@@ -56,7 +55,7 @@ public class Lift {
     private double liftPos() {
         int stepsPerRevolution = 420;
         int D = 3;
-        return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0) * 2;
+        return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0);
     }
 
     public class LiftMotorPowerDriver extends Thread {
@@ -172,7 +171,7 @@ public class Lift {
         return liftMotor.getCurrentPosition();
     }
 
-    public void kolxoz(double speed) {
+    public void KALxoz(double speed) {
         liftMotor.setPower(speed);
     }
 

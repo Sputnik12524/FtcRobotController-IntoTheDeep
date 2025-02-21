@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
@@ -18,6 +19,7 @@ public class AutoBasketRED extends LinearOpMode {
     public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
+        new Claw(this);
         Intake intake = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
 
@@ -29,31 +31,32 @@ public class AutoBasketRED extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-
+        intake.extensionPosition(Intake.EXTENSION_MIN);
+//1. отьезжает когда должен скорить в корзину    2. выдвигает слишком поздно 3. не поднимает подъемник (точнее поднимает со скоростью 0)
+//
         TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeLeft(5)
+                .strafeRight(5)
                 .back(34)
+                .turn(Math.toRadians(30))
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     sleep(3000);
                 })
                 .waitSeconds(2)
-                .turn(Math.toRadians(30))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     sleep(500);
                 })
                 .waitSeconds(3)
-                .forward(6)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
                     sleep(1000);
                 })
                 .build();
         TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
-                .turn(Math.toRadians(100))
-                .waitSeconds(3)
+                .turn(Math.toRadians(90))
+                .waitSeconds(1)
                 .addDisplacementMarker(() -> {
                     intake.extensionPosition(0.5);
                     intake.brushIntake();
@@ -64,9 +67,9 @@ public class AutoBasketRED extends LinearOpMode {
                     telemetry.update();
                 })
                 //capturing yellow sample
-                .turn(Math.toRadians(-100))
+                .turn(Math.toRadians(-90))
                 .waitSeconds(2)
-                .back(5)
+                .back(2)
                 //scoring to basket
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
@@ -78,9 +81,7 @@ public class AutoBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
@@ -113,17 +114,15 @@ public class AutoBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
                     shoulder.shoulderPosition(0);
                 })
-                .splineTo(new Vector2d(-25, -9), Math.toRadians(0))
+                .turn(Math.toRadians(35))
+                .forward(46)
                 .build();
-
         intake.extensionPosition(.05);
         waitForStart();
         if (isStopRequested()) return;

@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
     public static double multiplier = 1;
@@ -279,7 +280,7 @@ public class DriveTrainMecanum extends MecanumDrive {
         }
     }
 
-    public void turnEncoder(double TURN_SPEED,double degrees){
+    public void turnEncoder(double TURN_SPEED, double degrees) {
         aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());
         aggregate.telemetry.update();
         leftFront.setPower(TURN_SPEED);
@@ -287,18 +288,20 @@ public class DriveTrainMecanum extends MecanumDrive {
         leftBack.setPower(TURN_SPEED);
         rightBack.setPower(-TURN_SPEED);
         imu.resetYaw();
-        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees);
+        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees) ;
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
         aggregate.sleep(500);
     }
+
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
-    public void resetIMU(){
+
+    public void resetIMU() {
         imu.initialize(parameters);
     }
 }

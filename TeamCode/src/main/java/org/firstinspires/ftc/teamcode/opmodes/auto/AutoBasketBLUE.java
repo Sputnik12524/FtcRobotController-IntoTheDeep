@@ -57,11 +57,9 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
-                    intake.extensionPosition(0.5);
-                    intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    intake.needTake();
+                    sleep(100);
+                    intake.needOuttake();
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -80,9 +78,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5, () -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
@@ -94,11 +90,9 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .waitSeconds(3)
                 .turn(Math.toRadians(100))
                 .addDisplacementMarker(() -> {
-                    intake.extensionPosition(0.5);
-                    intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    intake.needTake();
+                    sleep(100);
+                    intake.needOuttake();
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -115,9 +109,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5, () -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 @Config
 public class AutoNear2 extends LinearOpMode {
     public static final double DISTANCE = 70;
+
     @Override
     public void runOpMode() {
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);

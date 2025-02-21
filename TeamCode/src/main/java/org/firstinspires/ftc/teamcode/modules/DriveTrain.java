@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+
 @Config
 public class DriveTrain {
     private final DcMotor leftFront;
@@ -22,8 +23,9 @@ public class DriveTrain {
     static final double PULSES = 537.7; //GoBILDA Yellow Jacket 19.2:1
 
     double distance(double centimeter) {
-        return PULSES / (PI*WHEEL_DIAMETER) * centimeter;
+        return PULSES / (PI * WHEEL_DIAMETER) * centimeter;
     }
+
     private double multiplier = 1;
     private final LinearOpMode aggregate;
 
@@ -49,7 +51,7 @@ public class DriveTrain {
         this.aggregate = aggregate;
     }
 
-    public void driveStraight(double DRIVE_SPEED, double distance){
+    public void driveStraight(double DRIVE_SPEED, double distance) {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -65,7 +67,8 @@ public class DriveTrain {
         leftBack.setPower(DRIVE_SPEED);
         rightBack.setPower(DRIVE_SPEED);
 
-        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance));
+        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance))
+            ;
 
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -75,7 +78,7 @@ public class DriveTrain {
         aggregate.sleep(500);
     }
 
-    public void turn(double TURN_SPEED,double degrees){
+    public void turn(double TURN_SPEED, double degrees) {
         aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());
         aggregate.telemetry.update();
         leftFront.setPower(TURN_SPEED);
@@ -83,7 +86,7 @@ public class DriveTrain {
         leftBack.setPower(TURN_SPEED);
         rightBack.setPower(-TURN_SPEED);
         imu.resetYaw();
-        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees);
+        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees) ;
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
@@ -91,7 +94,7 @@ public class DriveTrain {
         aggregate.sleep(500);
     }
 
-    public void setPower (double main, double side, double rotation) {
+    public void setPower(double main, double side, double rotation) {
         leftFront.setPower(multiplier * (main + side + rotation));
         leftBack.setPower(multiplier * (main - side + rotation));
         rightFront.setPower(multiplier * (main - side - rotation));
@@ -110,7 +113,7 @@ public class DriveTrain {
         multiplier = -multiplier;
     }
 
-    public void side(double SIDE_SPEED, double SideDistance){
+    public void side(double SIDE_SPEED, double SideDistance) {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,7 +129,8 @@ public class DriveTrain {
         leftBack.setPower(SIDE_SPEED);
         rightBack.setPower(-SIDE_SPEED);
 
-        while(aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(SideDistance));
+        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(SideDistance))
+            ;
 
         leftFront.setPower(0);
         rightFront.setPower(0);
@@ -134,7 +138,8 @@ public class DriveTrain {
         rightBack.setPower(0);
         aggregate.sleep(500);
     }
-    public void stop(){
+
+    public void stop() {
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);

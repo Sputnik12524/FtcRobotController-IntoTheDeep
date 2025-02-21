@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
+
 //Need test
 @Autonomous(name = "Far Park", group = "Robot")
 @Config
 public class AutoFar2 extends LinearOpMode {
     public static final double DISTANCE = 45;
+
     @Override
     public void runOpMode() {
         DriveTrainMecanum drivetrain = new DriveTrainMecanum(hardwareMap, this);
@@ -22,7 +24,7 @@ public class AutoFar2 extends LinearOpMode {
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
         waitForStart();
-        sleep(2700);
+        sleep(27000);
         drivetrain.followTrajectory(trajectory);
     }
 }

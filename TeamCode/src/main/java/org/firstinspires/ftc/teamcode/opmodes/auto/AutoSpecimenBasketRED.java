@@ -54,9 +54,7 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                     shoulder.shoulderPosition(.1);
                 })
                 .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(0);
-                })
+                .addDisplacementMarker(() -> lift.setTarget(0))
                 .waitSeconds(4)
                 .turn(Math.toRadians(65))
                 .build();
@@ -90,9 +88,7 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
@@ -125,9 +121,7 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)
-                .addTemporalMarker(5,() -> {
-                    shoulder.openSh();
-                })
+                .addTemporalMarker(5, shoulder::openSh)
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_LOWEST);
