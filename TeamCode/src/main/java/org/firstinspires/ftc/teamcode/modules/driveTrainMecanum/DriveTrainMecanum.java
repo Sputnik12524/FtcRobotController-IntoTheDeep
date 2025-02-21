@@ -279,6 +279,16 @@ public class DriveTrainMecanum extends MecanumDrive {
             multiplier *= 2;
         }
     }
+    public void slowMode() {
+        if (Math.abs(multiplier) > 0.5) {
+            multiplier /= 2;
+        }
+    }
+    public void standartMode() {
+        if (Math.abs(multiplier) <= 0.5) {
+            multiplier *= 2;
+        }
+    }
 
     public void turnEncoder(double TURN_SPEED, double degrees) {
         aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());

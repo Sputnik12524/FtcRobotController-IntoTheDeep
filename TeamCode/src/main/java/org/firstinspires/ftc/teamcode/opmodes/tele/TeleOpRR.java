@@ -91,6 +91,11 @@ public class TeleOpRR extends LinearOpMode {
 
     private boolean flag;
 
+    //different things
+    private final ElapsedTime timerOpMode = new ElapsedTime();
+    private boolean initWait = false;
+
+
 
     @Override
     public void runOpMode() {
@@ -118,14 +123,28 @@ public class TeleOpRR extends LinearOpMode {
         driveTrain.setPoseEstimate(PoseStorage.currentPose);
 
         while (opModeInInit()) {
-            if (gamepad1.x) { //Синий альянс
-                badColor = Intake.Color.RED;
-            }
-            if (gamepad1.b) { //Красный альянс
-                badColor = Intake.Color.BLUE;
-            }
-            if (gamepad1.a) { //Для тестов
-                badColor = null;
+            while (!initWait && opModeIsActive()) {
+                if (gamepad1.x) { //Синий альянс
+                    badColor = Intake.Color.RED;
+                    telemetry.addLine("СИНИЙ АЛЬЯНС");
+                    telemetry.update();
+                    initWait = true;
+                }
+                else if (gamepad1.b) { //Красный альянс
+                    badColor = Intake.Color.BLUE;
+                    telemetry.addLine("КРАСНЫЙ АЛЬЯНС");
+                    telemetry.update();
+                    initWait = true;
+                }
+                else if (gamepad1.a) { //Для тестов
+                    badColor = null;
+                    telemetry.addLine("БЕЗ АЛЬЯНСА");
+                    telemetry.update();
+                    initWait = true;
+                } else {
+                    telemetry.addLine("НАЖМИТЕ КНОПКУ ДЛЯ ВЫБОРА АЛЬЯНСА");
+                    telemetry.update();
+                }
             }
         }
 
@@ -134,6 +153,7 @@ public class TeleOpRR extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive() && !isStopRequested()) {
+            timerOpMode.reset();
 
             //КБ
             double w_target = gamepad1.left_trigger - gamepad1.right_trigger;
@@ -168,6 +188,7 @@ public class TeleOpRR extends LinearOpMode {
             /// Автомат для подъемника
             switch (posLift) {
                 case LIFT_ZERO:
+                    driveTrain.standartMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
                         targetLiftFSM = Lift.POS_HIGH_BASKET;
                         posLift = LiftPositions.LIFT_TO_BASKET;
@@ -181,6 +202,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case LIFT_TO_BASKET:
+                    driveTrain.slowMode();
                     if (gamepad2.dpad_down && !stateDpadDown2) {
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
@@ -189,8 +211,8 @@ public class TeleOpRR extends LinearOpMode {
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
-
                 case LIFT_TO_SIDE:
+                    driveTrain.slowMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
@@ -204,6 +226,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case LIFT_TO_SPECIMEN_BEFORE:
+                    driveTrain.slowMode();
                     if (gamepad2.dpad_down && !stateDpadDown2) {
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_AFTER;
@@ -221,6 +244,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case LIFT_TO_SPECIMEN_AFTER:
+                    driveTrain.standartMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
@@ -238,6 +262,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case WAIT_UPDATE:
+                    driveTrain.standartMode();
                     if (lt.isMagneting()) {
                         lt.resetZero();
                         posLift = LiftPositions.LIFT_ZERO;
@@ -247,6 +272,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case ZERO_UPDATE:
+                    driveTrain.standartMode();
                     targetLiftFSM += 3;
                     posLift = LiftPositions.WAIT_UPDATE;
                     break;
@@ -335,6 +361,7 @@ public class TeleOpRR extends LinearOpMode {
             switch (posIntake) {
                 case OUTTAKE_POS: //Инит поза
                     flag = true;
+                    driveTrain.standartMode();
                     if (gamepad1.right_bumper && !stateRightBumper1) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
@@ -361,6 +388,7 @@ public class TeleOpRR extends LinearOpMode {
                         brushOutStatus = true;
                         posIntake = IntakePositions.BRUSHING_OUT;
                     }
+                    break;
                 case BRUSHING_OUT:
                     flag = false;
                     if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
@@ -372,6 +400,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
+                    driveTrain.slowMode();
                     if (gamepad1.right_bumper && !stateRightBumper1 || (in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE)) { // #НеБойсяПж
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
@@ -396,6 +425,7 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS_FOR_FLIP:
                     flag = false;
+                    driveTrain.slowMode();
                     if (gamepad1.right_bumper && !stateRightBumper1) { // #НеБойсяПж
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
@@ -422,6 +452,7 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case FLIPPING_IN:
+                    driveTrain.standartMode();
                     flag = false;
                     if (intakeTimer.seconds() >= FLIP_TIME) {
                         intakeTimer.reset();
@@ -477,8 +508,10 @@ public class TeleOpRR extends LinearOpMode {
 
             // Print pose to telemetry
             telemetry.addLine("УПРАВЛЕНИЕ НЕ ДАМ");
-            telemetry.addData("FlipFSM", flipFSM);
+            telemetry.addLine("САНЕЧКА, СБРОС НУЛЯ");
+            telemetry.addLine("НА КНОПКУ ЛЕВОГО СТИКА!!");
 
+            telemetry.addData("FlipFSM", flipFSM);
             telemetry.addData("Color:", in.getColorSample());
             telemetry.addData("Hue:", in.getHue());
             telemetry.addData("Saturation:", in.getSaturation());

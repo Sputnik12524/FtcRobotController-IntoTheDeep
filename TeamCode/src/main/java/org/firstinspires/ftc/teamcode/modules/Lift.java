@@ -23,7 +23,7 @@ public class Lift {
     private double error, previousError;
     private double sError, dError = 0;
     private double limits;
-    private double target = 0; //target = -79 --> MAX POSITION!!!!!!!
+    private volatile double target = 0; //target = -79 --> MAX POSITION!!!!!!!
     public static double ERROR_ACCEPTABLE_MAX = -0.05;
 
     public static double POS_LOWEST = 0;
@@ -79,6 +79,11 @@ public class Lift {
 
 
                 previousError = error;
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException ignored) {
+
+                }
                 FtcDashboard.getInstance().getTelemetry().addData("error:", error);
                 FtcDashboard.getInstance().getTelemetry().addData("previousError:", previousError);
                 FtcDashboard.getInstance().getTelemetry().addData("sError:", sError);
