@@ -198,8 +198,8 @@ public class TeleOpRR extends LinearOpMode {
             /// Автомат для подъемника
             switch (posLift) {
                 case LIFT_ZERO:
-                    driveTrain.standartMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
+                        driveTrain.slowMode();
                         SLOW_COEF = 0.5;
                         targetLiftFSM = Lift.POS_HIGH_BASKET;
                         posLift = LiftPositions.LIFT_TO_BASKET;
@@ -213,20 +213,21 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case LIFT_TO_BASKET:
-                    driveTrain.slowMode();
                     if (gamepad2.dpad_down && !stateDpadDown2) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
                 case LIFT_TO_SIDE:
-                    driveTrain.slowMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
+                        driveTrain.slowMode();
                         SLOW_COEF = 0.5;
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
@@ -240,30 +241,33 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case LIFT_TO_SPECIMEN_BEFORE:
-                    driveTrain.slowMode();
                     if (gamepad2.dpad_down && !stateDpadDown2) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_AFTER;
                     }
                     if (gamepad2.dpad_right && !stateDpadRight2) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
                     if (gamepad2.dpad_left && !stateDpadRight2) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         targetLiftFSM = 0;
                         posLift = LiftPositions.LIFT_ZERO;
                     }
                     if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         posLift = LiftPositions.ZERO_UPDATE;
                     }
                     break;
                 case LIFT_TO_SPECIMEN_AFTER:
-                    driveTrain.standartMode();
                     if (gamepad2.dpad_up && !stateDpadUp2) {
+                        driveTrain.slowMode();
                         SLOW_COEF = 0.5;
                         targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                         posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
@@ -281,7 +285,6 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case WAIT_UPDATE:
-                    driveTrain.standartMode();
                     if (lt.isMagneting()) {
                         lt.resetZero();
                         posLift = LiftPositions.LIFT_ZERO;
@@ -291,7 +294,6 @@ public class TeleOpRR extends LinearOpMode {
                     }
                     break;
                 case ZERO_UPDATE:
-                    driveTrain.standartMode();
                     targetLiftFSM += 3;
                     posLift = LiftPositions.WAIT_UPDATE;
                     break;
@@ -380,7 +382,6 @@ public class TeleOpRR extends LinearOpMode {
             switch (posIntake) {
                 case OUTTAKE_POS: //Инит поза
                     flag = true;
-                    driveTrain.standartMode();
                     if (gamepad1.right_bumper && !stateRightBumper1) {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
@@ -388,6 +389,7 @@ public class TeleOpRR extends LinearOpMode {
                         flag = true;
                     }
                     if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
+                        driveTrain.slowMode();
                         SLOW_COEF = 0.5;
                         posIntake = IntakePositions.INTAKE_POS;
                     }
@@ -412,6 +414,7 @@ public class TeleOpRR extends LinearOpMode {
                 case BRUSHING_OUT:
                     flag = false;
                     if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
+                        driveTrain.slowMode();
                         SLOW_COEF = 0.5;
                         in.brushStop();
                         brushInStatus = false;
@@ -421,8 +424,8 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS: //Берем пробы
                     flag = false;
-                    driveTrain.slowMode();
                     if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
@@ -431,6 +434,7 @@ public class TeleOpRR extends LinearOpMode {
                         brushOutStatus = false;
                         posIntake = IntakePositions.FLIPPING_IN;
                     } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         in.brushStop();
                         brushInStatus = false;
@@ -448,8 +452,8 @@ public class TeleOpRR extends LinearOpMode {
                     break;
                 case INTAKE_POS_FOR_FLIP:
                     flag = false;
-                    driveTrain.slowMode();
                     if (gamepad1.right_bumper && !stateRightBumper1) { // #НеБойсяПж
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         intakeTimer.reset();
                         flipFSM = Intake.FLIP_OUTTAKE;
@@ -458,6 +462,7 @@ public class TeleOpRR extends LinearOpMode {
                         brushOutStatus = false;
                         posIntake = IntakePositions.FLIPPING_IN;
                     } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                        driveTrain.standartMode();
                         SLOW_COEF = 1;
                         in.brushStop();
                         brushInStatus = false;
