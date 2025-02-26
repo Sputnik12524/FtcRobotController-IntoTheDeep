@@ -43,8 +43,8 @@ public class Intake {
     public static double EXT_K = 8;
     public static double EXT_START_POS = 0.065;
 
-    public static double FLIP_INTAKE = 0.09;
-    public static double FLIP_OUTTAKE = 0.8;
+    public static double FLIP_INTAKE = 0.12;
+    public static double FLIP_OUTTAKE = 0.75;
     public static double FLIP_TIME = 350;
     public static final double SPEED_BRUSH = 1;
 

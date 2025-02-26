@@ -77,13 +77,6 @@ public class Lift {
                 limits(limits);
                 timer.reset();
 
-
-                previousError = error;
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException ignored) {
-
-                }
                 FtcDashboard.getInstance().getTelemetry().addData("error:", error);
                 FtcDashboard.getInstance().getTelemetry().addData("previousError:", previousError);
                 FtcDashboard.getInstance().getTelemetry().addData("sError:", sError);
