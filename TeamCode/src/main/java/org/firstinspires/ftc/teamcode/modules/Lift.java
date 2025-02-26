@@ -21,8 +21,7 @@ public class Lift {
     public static double Ki = 0;
     public static double Kd = 0;
     private double error, previousError;
-    private double sError, dError = 0;
-    private double limits;
+    private double sError;
     private volatile double target = 0; //target = -79 --> MAX POSITION!!!!!!!
     public static double ERROR_ACCEPTABLE_MAX = -0.05;
 
@@ -39,7 +38,6 @@ public class Lift {
     public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
 
 
-    private boolean isStable;
     public boolean StateSpecimenLow;
     public boolean StateSpecimenHigh;
     public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
@@ -71,8 +69,8 @@ public class Lift {
                 error = target - liftPos();
 
                 sError = sError + error * timer.seconds();
-                dError = error - previousError;
-                limits = error * Kp + sError * Ki + dError * Kd / timer.seconds();
+                double dError = error - previousError;
+                double limits = error * Kp + sError * Ki + dError * Kd / timer.seconds();
 
                 limits(limits);
                 timer.reset();
@@ -92,26 +90,6 @@ public class Lift {
 
     public void setTarget(double newTarget) {
         target = newTarget;
-    }
-
-    public void switchSpecimenLow() {
-        if (!StateSpecimenLow && error <= ERROR_ACCEPTABLE_MAX) {
-            setTarget(POS_LOW_SPECIMEN_BEFORE);
-            StateSpecimenLow = true;
-        } else {
-            setTarget(POS_LOW_SPECIMEN_AFTER);
-            StateSpecimenLow = false;
-        }
-    }
-
-    public void switchSpecimenHigh() {
-        if (!StateSpecimenHigh && error <= ERROR_ACCEPTABLE_MAX) {
-            setTarget(POS_HIGH_SPECIMEN_BEFORE);
-            StateSpecimenHigh = true;
-        } else if (error <= ERROR_ACCEPTABLE_MAX) {
-            setTarget(POS_HIGH_SPECIMEN_AFTER);
-            StateSpecimenHigh = false;
-        }
     }
 
     public double getTarget() {
