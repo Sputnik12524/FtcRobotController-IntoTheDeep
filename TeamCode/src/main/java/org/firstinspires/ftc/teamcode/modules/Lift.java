@@ -147,10 +147,6 @@ public class Lift {
         return liftMotor.getCurrentPosition();
     }
 
-    public void KALxoz(double speed) {
-        liftMotor.setPower(speed);
-    }
-
     public void limits(double speed) {
         if (!unlockStatement) {
             if (!magneticSensor.getState() && speed > 0) {
