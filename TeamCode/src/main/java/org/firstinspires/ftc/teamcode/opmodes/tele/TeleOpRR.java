@@ -253,7 +253,7 @@ public class TeleOpRR extends LinearOpMode {
                         targetLiftFSM = Lift.POS_SIDE;
                         posLift = LiftPositions.LIFT_TO_SIDE;
                     }
-                    if (gamepad2.dpad_left && !stateDpadRight2) {
+                    if (gamepad2.dpad_left && !stateDpadLeft2) {
                         driveTrain.standartMode();
                         SLOW_COEF = 1;
                         targetLiftFSM = 0;
@@ -386,7 +386,6 @@ public class TeleOpRR extends LinearOpMode {
                         intakeTimer.reset();
                         extFSM = Intake.EXTENSION_MAX;
                         posIntake = IntakePositions.EXTENDING_OUT;
-                        flag = true;
                     }
                     if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
                         driveTrain.slowMode();
