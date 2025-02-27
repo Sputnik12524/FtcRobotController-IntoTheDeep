@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.archive;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
+/*
+//import com.acmerobotics.roadrunner.geometry.Pose2d;
+//import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+//import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.archive.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.archive.driveTrainMecanum.DriveTrainMecanum;
 
@@ -27,14 +27,14 @@ public class AutoBasketBLUE extends LinearOpMode {
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10,57,Math.toRadians(90));
-        driveTrain.setPoseEstimate(startPose);
+        //Pose2d startPose = new Pose2d(-10,57,Math.toRadians(90));
+        //driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
         intake.extensionPosition(Intake.EXTENSION_MIN);
 
-        TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
+        /*TrajectorySequence traj = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.7);
                     lift.setTarget(-32);
@@ -104,4 +104,5 @@ public class AutoBasketBLUE extends LinearOpMode {
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }
-}
+}*/
+

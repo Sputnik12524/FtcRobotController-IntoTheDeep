@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.archive;
-
+/*
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -72,3 +72,4 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         lift.liftMotorPowerDriver.interrupt();
     }
 }
+*/
