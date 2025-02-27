@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.modules.*;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "2 BLUE Auto Basket", group = "Robot")
-public class AutoBasketBLUE extends LinearOpMode {
+@Autonomous(name = "0 FastTestTraj", group = "Robot")
+public class FastTestTraj extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -38,9 +38,7 @@ public class AutoBasketBLUE extends LinearOpMode {
                 .turn(Math.toRadians(40))
                 .forward(5)
                 .build();
-        TrajectorySequence trajectoryBack = driveTrain.trajectorySequenceBuilder(trajectoryToSample1.end())
-                .turn(Math.toRadians(-40))
-                .back(1).build();
+        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).back(1).build();
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
                 .turn(Math.toRadians(45))
                 .forward(52)
@@ -54,40 +52,8 @@ public class AutoBasketBLUE extends LinearOpMode {
         if (isStopRequested()) return;
 
         driveTrain.followTrajectorySequence(trajectoryToBasket);
-        lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
-        shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
-        sleep(1000);
-        shoulder.openSh();
-        sleep(1000);
-        shoulder.shoulderPosition(Shoulder.INITIAL_POSITION);
-        sleep(1000);
-        lift.setTarget(0);
-        sleep(1000);
-
-        //driveTrain.turn(Math.toRadians(35));
-       // sleep(1000);
-        intake.needTake();
-        intake.brushIntake();
-        sleep(1000);
         driveTrain.followTrajectorySequence(trajectoryToSample1);
-        sleep(1000);
-        intake.needOuttake();
-        intake.brushStop();
-        shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
-        sleep(500);
-        shoulder.closeSh();
-        driveTrain.followTrajectorySequence(trajectoryBack);
-        lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
-        shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
-        sleep(1000);
-        shoulder.openSh();
-        sleep(1000);
-        shoulder.shoulderPosition(Shoulder.INITIAL_POSITION);
-        sleep(1000);
-        lift.setTarget(0);
-
+        driveTrain.followTrajectory(trajectoryBack);
         driveTrain.followTrajectorySequence(trajectoryToPark);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
