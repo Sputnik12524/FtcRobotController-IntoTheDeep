@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 
-import android.graphics.Color;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -19,8 +17,8 @@ public class Intake {
     }
 
     private final CRServo brushServoLeft;
-    private final CRServo  brushServoRight;
-    private final CRServo  brushServo;
+    private final CRServo brushServoRight;
+    private final CRServo brushServo;
 
     private final Servo flipServoLeft;
     private final Servo flipServoRight;
@@ -45,8 +43,8 @@ public class Intake {
     public static double EXT_K = 8;
     public static double EXT_START_POS = 0.065;
 
-    public static double  FLIP_INTAKE = 0.12;
-    public static double  FLIP_OUTTAKE = 0.8;
+    public static double FLIP_INTAKE = 0.12;
+    public static double FLIP_OUTTAKE = 0.75;
     public static double FLIP_TIME = 350;
     public static final double SPEED_BRUSH = 1;
 
@@ -60,7 +58,7 @@ public class Intake {
         this.brushServoLeft = opMode.hardwareMap.crservo.get("brushServoL");
         this.brushServoRight = opMode.hardwareMap.crservo.get("brushServoR");
         this.brushServo = opMode.hardwareMap.crservo.get("brushServo");
-        this.colorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class ,"sensor_color");
+        this.colorSensor = opMode.hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
         colorSensor.setGain(GAIN);
 
         this.brushServoLeft.setDirection(CRServo.Direction.REVERSE);
@@ -96,10 +94,10 @@ public class Intake {
     }
 
     public void extUpdatePosition(double k) {
-        if ((extensionServoRight.getPosition() < EXTENSION_MAX && k>0)
-                || (extensionServoRight.getPosition() > EXTENSION_MIN && k<0)) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+(EXTENSION_STEP * k * EXT_K));
-            extensionServoRight.setPosition(extensionServoRight.getPosition()+(EXTENSION_STEP * k * EXT_K));
+        if ((extensionServoRight.getPosition() < EXTENSION_MAX && k > 0)
+                || (extensionServoRight.getPosition() > EXTENSION_MIN && k < 0)) {
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition() + (EXTENSION_STEP * k * EXT_K));
+            extensionServoRight.setPosition(extensionServoRight.getPosition() + (EXTENSION_STEP * k * EXT_K));
         }
     }
 
@@ -110,45 +108,56 @@ public class Intake {
 
     public void extensionMinus() {
         if (extensionServoRight.getPosition() > EXTENSION_MIN) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition()-EXTENSION_STEP);
-            extensionServoRight.setPosition(extensionServoRight.getPosition()-EXTENSION_STEP);
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition() - EXTENSION_STEP);
+            extensionServoRight.setPosition(extensionServoRight.getPosition() - EXTENSION_STEP);
         }
     }
 
     public void extensionPlus() {
         if (extensionServoRight.getPosition() < EXTENSION_MAX) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition()+EXTENSION_STEP);
-            extensionServoRight.setPosition(extensionServoRight.getPosition()+EXTENSION_STEP);
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition() + EXTENSION_STEP);
+            extensionServoRight.setPosition(extensionServoRight.getPosition() + EXTENSION_STEP);
         }
     }
 
-    public double getFlipPositionR() { return flipServoRight.getPosition(); }
-    public double getFlipPositionL() { return flipServoLeft.getPosition(); }
+    public double getFlipPositionR() {
+        return flipServoRight.getPosition();
+    }
+
+    public double getFlipPositionL() {
+        return flipServoLeft.getPosition();
+    }
+
     public double getExtensionPositionR() {
         return extensionServoRight.getPosition();
     }
+
     public double getExtensionPositionL() {
         return extensionServoLeft.getPosition();
     }
 
 
-    public void needTake () {
+    public void needTake() {
         samplesTaker.needTake = true;
     }
-    public void needOuttake () { samplesTaker.needOuttake = true; }
+
+    public void needOuttake() {
+        samplesTaker.needOuttake = true;
+    }
 
     public class SamplesTaker extends Thread {
         volatile boolean needTake = false;
         volatile boolean needOuttake = false;
 
         private final ElapsedTime timer = new ElapsedTime();
-        public void run () {
+
+        public void run() {
             while (!isInterrupted()) {
                 if (needOuttake) {
                     flipPosition(FLIP_OUTTAKE);
                     brushIntake();
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME );
+                    while (timer.milliseconds() < FLIP_TIME) ;
                     brushStop();
                     extensionPosition(EXTENSION_MIN);
                     needOuttake = false;
@@ -156,7 +165,7 @@ public class Intake {
                 if (needTake) {
                     flipPosition(FLIP_INTAKE);
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME );
+                    while (timer.milliseconds() < FLIP_TIME) ;
                     extensionPosition(EXTENSION_MAX);
                     needTake = false;
                 }
@@ -177,7 +186,16 @@ public class Intake {
         }
         return Color.NONE;
     }
-    public double getHue() { return hsvValues[0]; }
-    public double getSaturation() { return hsvValues[1]; }
-    public double getValue() { return  hsvValues[2]; }
+
+    public double getHue() {
+        return hsvValues[0];
+    }
+
+    public double getSaturation() {
+        return hsvValues[1];
+    }
+
+    public double getValue() {
+        return hsvValues[2];
+    }
 }

@@ -19,7 +19,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
-        Claw claw = new Claw(this);
+        new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
         shoulder = new Shoulder(this);
@@ -51,17 +51,15 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
-                .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(0);
-                })
-                .waitSeconds(4)
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> lift.setTarget(0))
+                .waitSeconds(2)
                 .turn(Math.toRadians(65))
                 .forward(34)
 
                 .build();
 
-        shoulder.shoulderPosition(0);
+        shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXTENSION_MIN);
         waitForStart();

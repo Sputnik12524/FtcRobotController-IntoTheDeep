@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
     public static double multiplier = 1;
@@ -51,7 +52,6 @@ public class DriveTrainMecanum extends MecanumDrive {
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(DriveConstants.MAX_VEL, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(DriveConstants.MAX_ACCEL);
-    private final TrajectoryFollower follower;
     private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     private final List<DcMotorEx> motors;
     public final IMU imu;
@@ -63,7 +63,7 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     public DriveTrainMecanum(HardwareMap hardwareMap, LinearOpMode aggregate) {
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.TRACK_WIDTH, LATERAL_MULTIPLIER);
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+        TrajectoryFollower follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -257,7 +257,7 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate;
+        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
@@ -278,8 +278,18 @@ public class DriveTrainMecanum extends MecanumDrive {
             multiplier *= 2;
         }
     }
+    public void slowMode() {
+        if (Math.abs(multiplier) > 0.5) {
+            multiplier /= 2;
+        }
+    }
+    public void standartMode() {
+        if (Math.abs(multiplier) <= 0.5) {
+            multiplier *= 2;
+        }
+    }
 
-    public void turnEncoder(double TURN_SPEED,double degrees){
+    public void turnEncoder(double TURN_SPEED, double degrees) {
         aggregate.telemetry.addData("angle", imu.getRobotYawPitchRollAngles());
         aggregate.telemetry.update();
         leftFront.setPower(TURN_SPEED);
@@ -287,18 +297,20 @@ public class DriveTrainMecanum extends MecanumDrive {
         leftBack.setPower(TURN_SPEED);
         rightBack.setPower(-TURN_SPEED);
         imu.resetYaw();
-        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees);
+        while (aggregate.opModeIsActive() && Math.abs(getHeading()) < degrees) ;
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
         aggregate.sleep(500);
     }
+
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
-    public void resetIMU(){
+
+    public void resetIMU() {
         imu.initialize(parameters);
     }
 }
