@@ -10,9 +10,8 @@ public class ConstantsOfTeleOp {
 
     public enum ShoulderClawPositions {
         START_POSE,
-        MOVING_TO_INTAKE, MOVED_TO_INTAKE,
-        CLAW_CLOSING, CLAW_CLOSED,
-        MOVING_TO_BASKET, MOVED_TO_BASKET, CLAW_OPEN
+        MOVED_TO_INTAKE,
+        CLAW_CLOSING_TO_BASKET, MOVING_TO_BASKET, MOVING_TO_BASKET_FROM_START, MOVED_TO_BASKET, CLAW_OPENED
 
     }
 
@@ -27,11 +26,10 @@ public class ConstantsOfTeleOp {
     /// DRIVETRAIN
     public static double VELO_SCALE_COEF = 0.00225;
     public static double CORRECTION_COEF = 0;
-    public static double SLOW_COEF = 1;
 
     /// SHOULDER
-    public static double SH_TIME_TO_BASKET = 0.25;
-    public static double SH_TIME_TO_INTAKE = 0.4;
+    public static double TIME_CLOSING_CLAW = 0.25;
+    public static double TIME_SH_TO_BASKET = 0.25;
 
     /// INTAKE
     public static double EXT_TIME = 1;
