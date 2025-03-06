@@ -44,7 +44,6 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -74,14 +73,14 @@ public final class DriveTrainMecanum {
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 47.2441 / -2024.75;
+        public double lateralInPerTick = 23.622 / 1850;
+        public double trackWidthTicks = -712.2230826514292;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS = 2.3603368097519617;
+        public double kV = -0.00539748175378324;
+        public double kA = 0.001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -93,9 +92,9 @@ public final class DriveTrainMecanum {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 0.0;
-        public double lateralGain = 0.0;
-        public double headingGain = 0.0; // shared with turn
+        public double axialGain = 16;
+        public double lateralGain = 1;
+        public double headingGain = 2; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -122,6 +121,10 @@ public final class DriveTrainMecanum {
     public final VoltageSensor voltageSensor;
 
     public final LazyImu lazyImu;
+    //our own parameters
+    public IMU imu1;
+    public double multiplier = 1;
+
 
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -133,8 +136,6 @@ public final class DriveTrainMecanum {
 
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
-        public final IMU imu;
-
         private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
         private Rotation2d lastHeading;
         private boolean initialized;
@@ -146,10 +147,13 @@ public final class DriveTrainMecanum {
             rightBack = new OverflowEncoder(new RawEncoder(DriveTrainMecanum.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(DriveTrainMecanum.this.rightFront));
 
-            imu = lazyImu.get();
+            imu1 = lazyImu.get();
 
             // TO DO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            /*             leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+            leftBack.setDirection(DcMotorEx.Direction.REVERSE); */
+            rightBack.setDirection(DcMotorEx.Direction.REVERSE);
+            rightFront.setDirection(DcMotorEx.Direction.REVERSE);
 
             this.pose = pose;
         }
@@ -171,7 +175,7 @@ public final class DriveTrainMecanum {
             PositionVelocityPair rightBackPosVel = rightBack.getPositionAndVelocity();
             PositionVelocityPair rightFrontPosVel = rightFront.getPositionAndVelocity();
 
-            YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
+            YawPitchRollAngles angles = imu1.getRobotYawPitchRollAngles();
 
             FlightRecorder.write("MECANUM_LOCALIZER_INPUTS", new MecanumLocalizerInputsMessage(
                     leftFrontPosVel, leftBackPosVel, rightBackPosVel, rightFrontPosVel, angles));
@@ -247,15 +251,16 @@ public final class DriveTrainMecanum {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TO DO: reverse motor directions if needed
-        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        leftBack.setDirection(DcMotorEx.Direction.REVERSE);
-        rightFront.setDirection(DcMotorEx.Direction.FORWARD);
-        rightBack.setDirection(DcMotorEx.Direction.FORWARD);
+         leftFront.setDirection(DcMotorEx.Direction.REVERSE);
+         leftBack.setDirection(DcMotorEx.Direction.REVERSE);
+         rightFront.setDirection(DcMotorEx.Direction.FORWARD);
+         rightBack.setDirection(DcMotorEx.Direction.FORWARD);
 
         // TO DO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         lazyImu = new LazyHardwareMapImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
+
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
@@ -465,14 +470,14 @@ public final class DriveTrainMecanum {
     public PoseVelocity2d updatePoseEstimate() {
         PoseVelocity2d vel = localizer.update();
         poseHistory.add(localizer.getPose());
-
+        
         while (poseHistory.size() > 100) {
             poseHistory.removeFirst();
         }
 
         estimatedPoseWriter.write(new PoseMessage(localizer.getPose()));
-
-
+        
+        
         return vel;
     }
 
@@ -507,5 +512,18 @@ public final class DriveTrainMecanum {
                 defaultTurnConstraints,
                 defaultVelConstraint, defaultAccelConstraint
         );
+    }
+    public void resetIMU(){
+        imu1.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(PARAMS.logoFacingDirection, PARAMS.usbFacingDirection)));
+    }
+    public void switchSlowMode() {
+        if (Math.abs(multiplier) > 0.5) {
+            multiplier /= 2;
+        } else {
+            multiplier *= 2;
+        }
+    }
+    public Double getExternalHeadingVelocity() {
+        return (double) imu1.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 }

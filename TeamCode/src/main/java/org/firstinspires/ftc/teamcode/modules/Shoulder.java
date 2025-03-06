@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.modules;
 
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -101,6 +105,7 @@ public class Shoulder {
         sampleShTaker.needToBasketSh = true;
     }
 
+
     public class SampleShTaker extends Thread {
         volatile boolean needToBasketSh = false;
         private final ElapsedTime timer = new ElapsedTime();
@@ -118,4 +123,19 @@ public class Shoulder {
 
         }
     }
+    public class ShoulderMoveBasket implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            servoShoulder.setPosition(POS_SH_BASKET);
+            return false;
+        }
+
+        public Action shoulderMove() {
+            return new ShoulderMoveBasket();
+        }
+    }
+    public Action shoulderMoveAuto() {
+        return new ShoulderMoveBasket();
+    }
+
 }
