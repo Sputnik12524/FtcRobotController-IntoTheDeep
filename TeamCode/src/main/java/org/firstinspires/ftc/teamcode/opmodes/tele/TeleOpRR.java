@@ -61,7 +61,6 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateB1 = false;
     private boolean stateRightBumper1 = false;
     private boolean stateLeftBumper1 = false;
-    private boolean necessaryIntakePos;
     private boolean necessaryFlipPos;
 
     private boolean stateSensor = false;
@@ -173,7 +172,7 @@ public class TeleOpRR extends LinearOpMode {
     private Map<ShoulderClawPositions, Supplier<ShoulderClawPositions>> shoulderFSMMap =
             new HashMap<ShoulderClawPositions, Supplier<ShoulderClawPositions>>() {{
         put(ShoulderClawPositions.START_POSE, () -> {
-            if (gamepad2.a && !stateA2 && necessaryIntakePos && necessaryFlipPos) {
+            if (gamepad2.a && !stateA2 && posIntake == IntakePositions.OUTTAKE_POS && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
                 sl.openSh();
                 shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
                 return ShoulderClawPositions.MOVED_TO_INTAKE;
@@ -246,7 +245,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.OUTTAKE_POS;
         });
         put(IntakePositions.EXTENDING_OUT, () -> {
-            if (intakeTimer.seconds() >= EXT_TIME) {
+            if (intakeTimer.milliseconds() >= TIME_EXT) {
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_INTAKE;
                 return IntakePositions.FLIPPING_OUT;
@@ -254,7 +253,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.EXTENDING_OUT;
         });
         put(IntakePositions.FLIPPING_OUT, () -> {
-            if (intakeTimer.seconds() >= FLIP_TIME) {
+            if (intakeTimer.milliseconds() >= FLIP_TIME) {
                 in.brushOuttake();
                 brushInStatus = false;
                 brushOutStatus = true;
@@ -263,7 +262,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.FLIPPING_OUT;
         });
         put(IntakePositions.BRUSHING_OUT, () -> {
-            if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
+            if (intakeTimer.milliseconds() >= BRUSHING_OUT_TIME) {
                 driveTrain.slowMode();
                 in.brushStop();
                 brushInStatus = false;
@@ -312,7 +311,7 @@ public class TeleOpRR extends LinearOpMode {
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                posIntake = IntakePositions.OUTTAKE_POS;
+                return IntakePositions.OUTTAKE_POS;
             } else if (flipFSM == Intake.FLIP_INTAKE) {
                 intakeTimer.reset();
                 return IntakePositions.FLIPPING_OUT;
@@ -320,7 +319,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.INTAKE_POS_FOR_FLIP;
         });
         put(IntakePositions.REMOVE_TRASH, () -> {
-            if (intakeTimer.seconds() >= BRUSH_TIME) {
+            if (intakeTimer.milliseconds() >= BRUSH_TIME) {
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
@@ -329,7 +328,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.REMOVE_TRASH;
         });
         put(IntakePositions.FLIPPING_IN, () -> {
-            if (intakeTimer.seconds() >= FLIP_TIME) {
+            if (intakeTimer.milliseconds() >= FLIP_TIME) {
                 intakeTimer.reset();
                 in.brushStop();
                 brushInStatus = false;
@@ -340,7 +339,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakePositions.FLIPPING_IN;
         });
         put(IntakePositions.EXTENDING_IN, () -> {
-            if (intakeTimer.seconds() >= EXT_TIME) {
+            if (intakeTimer.milliseconds() >= TIME_EXT) {
                 return IntakePositions.OUTTAKE_POS;
             }
             return IntakePositions.EXTENDING_IN;
@@ -367,7 +366,6 @@ public class TeleOpRR extends LinearOpMode {
         in = new Intake(this);
         cl = new Claw(this);
 
-        necessaryIntakePos = true;
         necessaryFlipPos = true;
 
         sl.closeSh();
@@ -503,6 +501,8 @@ public class TeleOpRR extends LinearOpMode {
 
             /// Telemetry
             telemetry.addLine(String.join(" ","УПРАВЛЕНИЕ НЕ ДАМ", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
+
+            telemetry.addData("EXTENSION POS", in.getExtensionPositionR());
 
             telemetry.addData("Color:", in.getColorSample());
             telemetry.addData("Hue:", in.getHue());

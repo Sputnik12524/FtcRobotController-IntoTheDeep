@@ -48,8 +48,6 @@ public class Intake {
     public static double FLIP_TIME = 350;
     public static final double SPEED_BRUSH = 1;
 
-    public static double FLIP_INTAKE_NEARBY = 0.08;
-
     public Intake(LinearOpMode opMode) {
         this.flipServoLeft = opMode.hardwareMap.servo.get("flipServoL");
         this.flipServoRight = opMode.hardwareMap.servo.get("flipServoR");

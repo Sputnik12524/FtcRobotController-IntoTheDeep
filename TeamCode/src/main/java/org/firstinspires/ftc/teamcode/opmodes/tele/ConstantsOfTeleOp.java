@@ -28,14 +28,14 @@ public class ConstantsOfTeleOp {
     public static double CORRECTION_COEF = 0;
 
     /// SHOULDER
-    public static double TIME_CLOSING_CLAW = 0.25;
-    public static double TIME_SH_TO_BASKET = 0.25;
+    public static double TIME_CLOSING_CLAW = 400;
+    public static double TIME_SH_TO_BASKET = 400;
 
     /// INTAKE
-    public static double EXT_TIME = 1;
-    public static double FLIP_TIME = 0.5;
-    public static double BRUSH_TIME = 0.6;
-    public static double BRUSHING_OUT_TIME = 0.4;
+    public static double TIME_EXT = 400;
+    public static double FLIP_TIME = 400;
+    public static double BRUSH_TIME = 600;
+    public static double BRUSHING_OUT_TIME = 400;
 
     public static double NECESSARY_EXT_POS = 0.2;
 
