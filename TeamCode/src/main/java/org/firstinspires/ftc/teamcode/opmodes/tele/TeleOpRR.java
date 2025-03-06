@@ -18,6 +18,10 @@ import org.firstinspires.ftc.teamcode.opmodes.tele.ConstantsOfTeleOp.IntakePosit
 import org.firstinspires.ftc.teamcode.opmodes.tele.ConstantsOfTeleOp.ShoulderClawPositions;
 import static org.firstinspires.ftc.teamcode.opmodes.tele.ConstantsOfTeleOp.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 @TeleOp(name = "TeleOp Road Runner")
 @Config
 public class TeleOpRR extends LinearOpMode {
@@ -67,267 +71,292 @@ public class TeleOpRR extends LinearOpMode {
     private boolean initWait = false;
 
     ///ALL FSM
+    private Map<LiftPositions, Supplier<LiftPositions>> liftFSMMap = new HashMap<LiftPositions, Supplier<LiftPositions>>() {{
+        put(LiftPositions.LIFT_ZERO, () -> {
+            if (gamepad2.dpad_up && !stateDpadUp2) {
+                driveTrain.slowMode();
+                targetLiftFSM = Lift.POS_HIGH_BASKET;
+                return LiftPositions.LIFT_TO_BASKET;
+            }
+            if (gamepad2.dpad_right && !stateDpadRight2) {
+                targetLiftFSM = Lift.POS_SIDE;
+                return LiftPositions.LIFT_TO_SIDE;
+            }
+            if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.LIFT_ZERO;
+        });
+        put(LiftPositions.LIFT_TO_BASKET, () -> {
+            if (gamepad2.dpad_down && !stateDpadDown2) {
+                driveTrain.standartMode();
+                targetLiftFSM = 0;
+                return LiftPositions.LIFT_ZERO;
+            }
+            if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                driveTrain.standartMode();
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.LIFT_TO_BASKET;
+        });
+        put(LiftPositions.LIFT_TO_SIDE, () -> {
+            if (gamepad2.dpad_up && !stateDpadUp2) {
+                driveTrain.slowMode();
+                targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                return LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+            }
+            if (gamepad2.dpad_left && !stateDpadLeft2) {
+                targetLiftFSM = 0;
+                return LiftPositions.LIFT_ZERO;
+            }
+            if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.LIFT_TO_SIDE;
+        });
+        put(LiftPositions.LIFT_TO_SPECIMEN_BEFORE, () -> {
+            if (gamepad2.dpad_down && !stateDpadDown2) {
+                driveTrain.standartMode();
+                targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
+                return LiftPositions.LIFT_TO_SPECIMEN_AFTER;
+            }
+            if (gamepad2.dpad_right && !stateDpadRight2) {
+                driveTrain.standartMode();
+                targetLiftFSM = Lift.POS_SIDE;
+                return LiftPositions.LIFT_TO_SIDE;
+            }
+            if (gamepad2.dpad_left && !stateDpadLeft2) {
+                driveTrain.standartMode();
+                targetLiftFSM = 0;
+                return LiftPositions.LIFT_ZERO;
+            }
+            if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                driveTrain.standartMode();
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+        });
+        put(LiftPositions.LIFT_TO_SPECIMEN_AFTER, () -> {
+            if (gamepad2.dpad_up && !stateDpadUp2) {
+                driveTrain.slowMode();
+                targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                return LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
+            }
+            if (gamepad2.dpad_right && !stateDpadRight2) {
+                targetLiftFSM = Lift.POS_SIDE;
+                return LiftPositions.LIFT_TO_SIDE;
+            }
+            if (gamepad2.dpad_left && !stateDpadLeft2) {
+                targetLiftFSM = 0;
+                return LiftPositions.LIFT_ZERO;
+            }
+            if (gamepad2.left_stick_button && !stateLeftStickButton) {
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.LIFT_TO_SPECIMEN_AFTER;
+        });
+        put(LiftPositions.WAIT_UPDATE, () -> {
+            if (lt.isMagneting()) {
+                lt.resetZero();
+                return LiftPositions.LIFT_ZERO;
+            }
+            if (Math.abs(lt.getError()) <= 0.05) {
+                return LiftPositions.ZERO_UPDATE;
+            }
+            return LiftPositions.WAIT_UPDATE;
+        });
+        put(LiftPositions.ZERO_UPDATE, () -> {
+            targetLiftFSM += 3;
+            return LiftPositions.WAIT_UPDATE;
+        });
+    }};
+    private Map<ShoulderClawPositions, Supplier<ShoulderClawPositions>> shoulderFSMMap =
+            new HashMap<ShoulderClawPositions, Supplier<ShoulderClawPositions>>() {{
+        put(ShoulderClawPositions.START_POSE, () -> {
+            if (gamepad2.a && !stateA2 && necessaryIntakePos && necessaryFlipPos) {
+                sl.openSh();
+                shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
+                return ShoulderClawPositions.MOVED_TO_INTAKE;
+            }
+            if (gamepad2.b && stateB2) {
+                shoulderTimer.reset();
+                shoulderFSM = Shoulder.POS_SH_BASKET;
+                return ShoulderClawPositions.MOVING_TO_BASKET_FROM_START;
+            }
+            return ShoulderClawPositions.START_POSE;
+        });
+        put(ShoulderClawPositions.MOVED_TO_INTAKE, () -> {
+            if (gamepad2.b && !stateB2) {
+                shoulderTimer.reset();
+                sl.closeSh();
+                return ShoulderClawPositions.CLAW_CLOSING_TO_BASKET;
+            }
+            return ShoulderClawPositions.MOVED_TO_INTAKE;
+        });
+        put(ShoulderClawPositions.CLAW_CLOSING_TO_BASKET, () -> {
+            if (shoulderTimer.milliseconds() >= TIME_CLOSING_CLAW) {
+                shoulderTimer.reset();
+                shoulderFSM = Shoulder.POS_SH_BASKET;
+                return ShoulderClawPositions.MOVING_TO_BASKET;
+            }
+            return ShoulderClawPositions.CLAW_CLOSING_TO_BASKET;
+        });
+        put(ShoulderClawPositions.MOVING_TO_BASKET, () -> {
+            if (shoulderTimer.milliseconds() >= TIME_SH_TO_BASKET) {
+                return ShoulderClawPositions.MOVED_TO_BASKET;
+            }
+            return ShoulderClawPositions.MOVING_TO_BASKET;
+        });
+        put(ShoulderClawPositions.MOVING_TO_BASKET_FROM_START, () -> {
+            if (shoulderTimer.milliseconds() >= (TIME_SH_TO_BASKET / 2)) {
+                return ShoulderClawPositions.MOVED_TO_BASKET;
+            }
+            return ShoulderClawPositions.MOVING_TO_BASKET_FROM_START;
+        });
+        put(ShoulderClawPositions.MOVED_TO_BASKET, () -> {
+            if (gamepad2.b && !stateB2) {
+                sl.openSh();
+                return ShoulderClawPositions.CLAW_OPENED;
+            }
+            if (gamepad2.a && !stateA2) {
+                shoulderFSM = Shoulder.INITIAL_POSITION;
+                return ShoulderClawPositions.START_POSE;
+            }
+            return ShoulderClawPositions.MOVED_TO_BASKET;
+        });
+        put(ShoulderClawPositions.CLAW_OPENED, () -> {
+            if (gamepad2.a && !stateA2) {
+                shoulderFSM = Shoulder.INITIAL_POSITION;
+                return ShoulderClawPositions.START_POSE;
+            }
+            return ShoulderClawPositions.CLAW_OPENED;
+        });
+    }};
+    private Map<IntakePositions, Supplier<IntakePositions>> intakeFSMMap = new HashMap<IntakePositions, Supplier<IntakePositions>>() {{
+        put(IntakePositions.OUTTAKE_POS, () -> {
+            if (gamepad1.right_bumper && !stateRightBumper1) {
+                intakeTimer.reset();
+                extFSM = Intake.EXTENSION_MAX;
+                return IntakePositions.EXTENDING_OUT;
+            }
+            if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
+                driveTrain.slowMode();
+                return IntakePositions.INTAKE_POS;
+            }
+            return IntakePositions.OUTTAKE_POS;
+        });
+        put(IntakePositions.EXTENDING_OUT, () -> {
+            if (intakeTimer.seconds() >= EXT_TIME) {
+                intakeTimer.reset();
+                flipFSM = Intake.FLIP_INTAKE;
+                return IntakePositions.FLIPPING_OUT;
+            }
+            return IntakePositions.EXTENDING_OUT;
+        });
+        put(IntakePositions.FLIPPING_OUT, () -> {
+            if (intakeTimer.seconds() >= FLIP_TIME) {
+                in.brushOuttake();
+                brushInStatus = false;
+                brushOutStatus = true;
+                return IntakePositions.BRUSHING_OUT;
+            }
+            return IntakePositions.FLIPPING_OUT;
+        });
+        put(IntakePositions.BRUSHING_OUT, () -> {
+            if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
+                driveTrain.slowMode();
+                in.brushStop();
+                brushInStatus = false;
+                brushOutStatus = false;
+                return IntakePositions.INTAKE_POS;
+            }
+            return IntakePositions.BRUSHING_OUT;
+        });
+        put(IntakePositions.INTAKE_POS, () -> {
+            if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
+                driveTrain.standartMode();
+                intakeTimer.reset();
+                flipFSM = Intake.FLIP_OUTTAKE;
+                in.brushIntake();
+                brushInStatus = true;
+                brushOutStatus = false;
+                return IntakePositions.FLIPPING_IN;
+            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                driveTrain.standartMode();
+                in.brushStop();
+                brushInStatus = false;
+                brushOutStatus = false;
+                return IntakePositions.OUTTAKE_POS;
+            } else if ((in.getColorSample() == badColor) && stateSensor) {
+                intakeTimer.reset();
+                in.brushOuttake();
+                brushInStatus = false;
+                brushOutStatus = true;
+                posIntake = IntakePositions.REMOVE_TRASH;
+            } else if (flipFSM == Intake.FLIP_OUTTAKE) {
+                return IntakePositions.INTAKE_POS_FOR_FLIP;
+            }
+            return IntakePositions.INTAKE_POS;
+        });
+        put(IntakePositions.INTAKE_POS_FOR_FLIP, () -> {
+            if (gamepad1.right_bumper && !stateRightBumper1) { // #НеБойсяПж
+                driveTrain.standartMode();
+                intakeTimer.reset();
+                flipFSM = Intake.FLIP_OUTTAKE;
+                in.brushIntake();
+                brushInStatus = true;
+                brushOutStatus = false;
+                return IntakePositions.FLIPPING_IN;
+            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+                driveTrain.standartMode();
+                in.brushStop();
+                brushInStatus = false;
+                brushOutStatus = false;
+                posIntake = IntakePositions.OUTTAKE_POS;
+            } else if (flipFSM == Intake.FLIP_INTAKE) {
+                intakeTimer.reset();
+                return IntakePositions.FLIPPING_OUT;
+            }
+            return IntakePositions.INTAKE_POS_FOR_FLIP;
+        });
+        put(IntakePositions.REMOVE_TRASH, () -> {
+            if (intakeTimer.seconds() >= BRUSH_TIME) {
+                in.brushStop();
+                brushInStatus = false;
+                brushOutStatus = false;
+                return IntakePositions.INTAKE_POS;
+            }
+            return IntakePositions.REMOVE_TRASH;
+        });
+        put(IntakePositions.FLIPPING_IN, () -> {
+            if (intakeTimer.seconds() >= FLIP_TIME) {
+                intakeTimer.reset();
+                in.brushStop();
+                brushInStatus = false;
+                brushOutStatus = false;
+                extFSM = Intake.EXTENSION_MIN;
+                return IntakePositions.EXTENDING_IN;
+            }
+            return IntakePositions.FLIPPING_IN;
+        });
+        put(IntakePositions.EXTENDING_IN, () -> {
+            if (intakeTimer.seconds() >= EXT_TIME) {
+                return IntakePositions.OUTTAKE_POS;
+            }
+            return IntakePositions.EXTENDING_IN;
+        });
+
+    }};
+
     public void liftFSM() {
-        switch (posLift) {
-            case LIFT_ZERO:
-                if (gamepad2.dpad_up && !stateDpadUp2) {
-                    driveTrain.slowMode();
-                    targetLiftFSM = Lift.POS_HIGH_BASKET;
-                    posLift = LiftPositions.LIFT_TO_BASKET;
-                }
-                if (gamepad2.dpad_right && !stateDpadRight2) {
-                    targetLiftFSM = Lift.POS_SIDE;
-                    posLift = LiftPositions.LIFT_TO_SIDE;
-                }
-                if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case LIFT_TO_BASKET:
-                if (gamepad2.dpad_down && !stateDpadDown2) {
-                    driveTrain.standartMode();
-                    targetLiftFSM = 0;
-                    posLift = LiftPositions.LIFT_ZERO;
-                }
-                if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                    driveTrain.standartMode();
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case LIFT_TO_SIDE:
-                if (gamepad2.dpad_up && !stateDpadUp2) {
-                    driveTrain.slowMode();
-                    targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
-                    posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
-                }
-                if (gamepad2.dpad_left && !stateDpadLeft2) {
-                    targetLiftFSM = 0;
-                    posLift = LiftPositions.LIFT_ZERO;
-                }
-                if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case LIFT_TO_SPECIMEN_BEFORE:
-                if (gamepad2.dpad_down && !stateDpadDown2) {
-                    driveTrain.standartMode();
-                    targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
-                    posLift = LiftPositions.LIFT_TO_SPECIMEN_AFTER;
-                }
-                if (gamepad2.dpad_right && !stateDpadRight2) {
-                    driveTrain.standartMode();
-                    targetLiftFSM = Lift.POS_SIDE;
-                    posLift = LiftPositions.LIFT_TO_SIDE;
-                }
-                if (gamepad2.dpad_left && !stateDpadLeft2) {
-                    driveTrain.standartMode();
-                    targetLiftFSM = 0;
-                    posLift = LiftPositions.LIFT_ZERO;
-                }
-                if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                    driveTrain.standartMode();
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case LIFT_TO_SPECIMEN_AFTER:
-                if (gamepad2.dpad_up && !stateDpadUp2) {
-                    driveTrain.slowMode();
-                    targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
-                    posLift = LiftPositions.LIFT_TO_SPECIMEN_BEFORE;
-                }
-                if (gamepad2.dpad_right && !stateDpadRight2) {
-                    targetLiftFSM = Lift.POS_SIDE;
-                    posLift = LiftPositions.LIFT_TO_SIDE;
-                }
-                if (gamepad2.dpad_left && !stateDpadLeft2) {
-                    targetLiftFSM = 0;
-                    posLift = LiftPositions.LIFT_ZERO;
-                }
-                if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case WAIT_UPDATE:
-                if (lt.isMagneting()) {
-                    lt.resetZero();
-                    posLift = LiftPositions.LIFT_ZERO;
-                }
-                if (Math.abs(lt.getError()) <= 0.05) {
-                    posLift = LiftPositions.ZERO_UPDATE;
-                }
-                break;
-            case ZERO_UPDATE:
-                targetLiftFSM += 3;
-                posLift = LiftPositions.WAIT_UPDATE;
-                break;
-        }
+        posLift = liftFSMMap.get(posLift).get();
     }
-
     public void shoulderFSM() {
-        switch (posShoulder) {
-            case START_POSE:
-                if (gamepad2.a && !stateA2 && necessaryIntakePos && necessaryFlipPos) {
-                    sl.openSh();
-                    shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
-                    posShoulder = ShoulderClawPositions.MOVED_TO_INTAKE;
-                }
-                if (gamepad2.b && stateB2) {
-                    shoulderTimer.reset();
-                    shoulderFSM = Shoulder.POS_SH_BASKET;
-                }
-                break;
-            case MOVED_TO_INTAKE:
-                if (gamepad2.b && !stateB2) {
-                    shoulderTimer.reset();
-                    sl.closeSh();
-                    posShoulder = ShoulderClawPositions.CLAW_CLOSING_TO_BASKET;
-                }
-                break;
-            case CLAW_CLOSING_TO_BASKET:
-                if (shoulderTimer.milliseconds() >= TIME_CLOSING_CLAW) {
-                    shoulderTimer.reset();
-                    shoulderFSM = Shoulder.POS_SH_BASKET;
-                    posShoulder = ShoulderClawPositions.MOVING_TO_BASKET;
-                }
-                break;
-            case MOVING_TO_BASKET:
-                if (shoulderTimer.milliseconds() >= TIME_SH_TO_BASKET) {
-                    posShoulder = ShoulderClawPositions.MOVED_TO_BASKET;
-                }
-                break;
-            case MOVING_TO_BASKET_FROM_START:
-                if (shoulderTimer.milliseconds() >= (TIME_SH_TO_BASKET / 2)) {
-                    posShoulder = ShoulderClawPositions.MOVED_TO_BASKET;
-                }
-                break;
-            case MOVED_TO_BASKET:
-                if (gamepad2.b && !stateB2) {
-                    sl.openSh();
-                    posShoulder = ShoulderClawPositions.CLAW_OPENED;
-                }
-                if (gamepad2.a && !stateA2) {
-                    shoulderFSM = Shoulder.INITIAL_POSITION;
-                    posShoulder = ShoulderClawPositions.START_POSE;
-                }
-                break;
-            case CLAW_OPENED:
-                if (gamepad2.a && !stateA2) {
-                    shoulderFSM = Shoulder.INITIAL_POSITION;
-                    posShoulder = ShoulderClawPositions.START_POSE;
-                }
-                break;
-        }
+        posShoulder = shoulderFSMMap.get(posShoulder).get();
     }
-
     public void intakeFSM() {
-
-        switch (posIntake) {
-            case OUTTAKE_POS: //Init pos
-                if (gamepad1.right_bumper && !stateRightBumper1) {
-                    intakeTimer.reset();
-                    extFSM = Intake.EXTENSION_MAX;
-                    posIntake = IntakePositions.EXTENDING_OUT;
-                }
-                if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
-                    driveTrain.slowMode();
-                    posIntake = IntakePositions.INTAKE_POS;
-                }
-                break;
-            case EXTENDING_OUT:
-                if (intakeTimer.seconds() >= EXT_TIME) {
-                    intakeTimer.reset();
-                    flipFSM = Intake.FLIP_INTAKE;
-                    posIntake = IntakePositions.FLIPPING_OUT;
-                }
-                break;
-            case FLIPPING_OUT:
-                if (intakeTimer.seconds() >= FLIP_TIME) {
-                    in.brushOuttake();
-                    brushInStatus = false;
-                    brushOutStatus = true;
-                    posIntake = IntakePositions.BRUSHING_OUT;
-                }
-                break;
-            case BRUSHING_OUT:
-                if (intakeTimer.seconds() >= BRUSHING_OUT_TIME) {
-                    driveTrain.slowMode();
-                    in.brushStop();
-                    brushInStatus = false;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.INTAKE_POS;
-                }
-                break;
-            case INTAKE_POS: //Берем пробы
-                if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
-                    driveTrain.standartMode();
-                    intakeTimer.reset();
-                    flipFSM = Intake.FLIP_OUTTAKE;
-                    in.brushIntake();
-                    brushInStatus = true;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.FLIPPING_IN;
-                } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
-                    driveTrain.standartMode();
-                    in.brushStop();
-                    brushInStatus = false;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.OUTTAKE_POS;
-                } else if ((in.getColorSample() == badColor) && stateSensor) {
-                    intakeTimer.reset();
-                    in.brushOuttake();
-                    brushInStatus = false;
-                    brushOutStatus = true;
-                    posIntake = IntakePositions.REMOVE_TRASH;
-                } else if (flipFSM == Intake.FLIP_OUTTAKE) {
-                    posIntake = IntakePositions.INTAKE_POS_FOR_FLIP;
-                }
-                break;
-            case INTAKE_POS_FOR_FLIP:
-                if (gamepad1.right_bumper && !stateRightBumper1) { // #НеБойсяПж
-                    driveTrain.standartMode();
-                    intakeTimer.reset();
-                    flipFSM = Intake.FLIP_OUTTAKE;
-                    in.brushIntake();
-                    brushInStatus = true;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.FLIPPING_IN;
-                } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
-                    driveTrain.standartMode();
-                    in.brushStop();
-                    brushInStatus = false;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.OUTTAKE_POS;
-                } else if (flipFSM == Intake.FLIP_INTAKE) {
-                    intakeTimer.reset();
-                    posIntake = IntakePositions.FLIPPING_OUT;
-                }
-                break;
-            case REMOVE_TRASH:
-                if (intakeTimer.seconds() >= BRUSH_TIME) {
-                    in.brushStop();
-                    brushInStatus = false;
-                    brushOutStatus = false;
-                    posIntake = IntakePositions.INTAKE_POS;
-                }
-                break;
-            case FLIPPING_IN:
-                if (intakeTimer.seconds() >= FLIP_TIME) {
-                    intakeTimer.reset();
-                    in.brushStop();
-                    brushInStatus = false;
-                    brushOutStatus = false;
-                    extFSM = Intake.EXTENSION_MIN;
-                    posIntake = IntakePositions.EXTENDING_IN;
-                }
-                break;
-            case EXTENDING_IN:
-                if (intakeTimer.seconds() >= EXT_TIME) {
-                    posIntake = IntakePositions.OUTTAKE_POS;
-                }
-                break;
-        }
+        posIntake = intakeFSMMap.get(posIntake).get();
     }
-
 
 
     @Override
