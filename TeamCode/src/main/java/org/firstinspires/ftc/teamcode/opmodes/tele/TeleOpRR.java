@@ -61,7 +61,6 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateB1 = false;
     private boolean stateRightBumper1 = false;
     private boolean stateLeftBumper1 = false;
-    private boolean necessaryFlipPos;
 
     private boolean stateSensor = false;
     public Intake.Color badColor;
@@ -366,8 +365,6 @@ public class TeleOpRR extends LinearOpMode {
         in = new Intake(this);
         cl = new Claw(this);
 
-        necessaryFlipPos = true;
-
         sl.closeSh();
         cl.openLift();
         sl.shoulderPosition(Shoulder.INITIAL_POSITION);
@@ -465,6 +462,7 @@ public class TeleOpRR extends LinearOpMode {
             in.flipPosition(flipFSM);
             stateRightBumper1 = gamepad1.right_bumper;
 
+
             /// Manual control:
             //Extension:
             extFSM += -gamepad1.right_stick_y * Intake.EXT_K * Intake.EXTENSION_STEP;
@@ -501,8 +499,6 @@ public class TeleOpRR extends LinearOpMode {
 
             /// Telemetry
             telemetry.addLine(String.join(" ","УПРАВЛЕНИЕ НЕ ДАМ", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
-
-            telemetry.addData("EXTENSION POS", in.getExtensionPositionR());
 
             telemetry.addData("Color:", in.getColorSample());
             telemetry.addData("Hue:", in.getHue());
