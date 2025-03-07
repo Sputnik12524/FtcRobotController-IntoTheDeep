@@ -50,8 +50,6 @@ public class MainTeleOp extends LinearOpMode {
         in.extensionPosition(Intake.EXT_START_POS);
         lt.resetZero();
 
-        while (opModeInInit()) {
-        }
         waitForStart();
         while (opModeIsActive()) {
             // Управление колесной базой

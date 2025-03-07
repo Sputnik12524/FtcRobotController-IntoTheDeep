@@ -1,21 +1,24 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 public class ConstantsOfTeleOp {
 
-    public enum LiftPositions {
+    public enum LiftStates {
         LIFT_ZERO, WAIT_UPDATE, ZERO_UPDATE,
         LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
         LIFT_TO_BASKET
     }
 
-    public enum ShoulderClawPositions {
+    public enum ShoulderClawStates {
         START_POSE,
         MOVED_TO_INTAKE,
         CLAW_CLOSING_TO_BASKET, MOVING_TO_BASKET, MOVING_TO_BASKET_FROM_START, MOVED_TO_BASKET, CLAW_OPENED
 
     }
 
-    public enum IntakePositions {
+    public enum IntakeStates {
         OUTTAKE_POS, INTAKE_POS, INTAKE_POS_FOR_FLIP,
         EXTENDING_OUT, FLIPPING_OUT, BRUSHING_OUT,
         FLIPPING_IN, EXTENDING_IN,
