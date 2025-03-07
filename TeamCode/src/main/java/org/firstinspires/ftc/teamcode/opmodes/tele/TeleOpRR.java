@@ -13,11 +13,14 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
+import org.firstinspires.ftc.teamcode.modules.Suspension;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
 @TeleOp(name = "TeleOp Road Runner")
 @Config
 public class TeleOpRR extends LinearOpMode {
+
+    Suspension sp;
 
     public enum LiftPositions {
         LIFT_ZERO, WAIT_UPDATE, ZERO_UPDATE,
@@ -108,6 +111,7 @@ public class TeleOpRR extends LinearOpMode {
         Shoulder sl = new Shoulder(this);
         Intake in = new Intake(this);
         Claw cl = new Claw(this);
+        sp = new Suspension(this);
 
         sl.closeSh();
         cl.openLift();
@@ -188,7 +192,7 @@ public class TeleOpRR extends LinearOpMode {
 
             driveTrain.update();
 
-            if (gamepad1.dpad_left) {
+            if (gamepad1.dpad_right) {
                 driveTrain.resetIMU();
             }
 
