@@ -34,7 +34,10 @@ public class TestAutoSpecimen extends LinearOpMode {
         Action act1 = trajectoryToSubmersible.build();
         Action act2 = trajectoryToObservation.build();
 
-        Actions.runBlocking(new ParallelAction(act1, shoulder.shoulderMoveAuto()), new SequentialAction(act2));
+        Actions.runBlocking(new SequentialAction
+                (new ParallelAction
+                        (act1, shoulder.shoulderMoveAuto()), act2
+                ));
 
     }
 }
