@@ -42,7 +42,7 @@ import java.util.List;
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
     public static double multiplier = 1;
-    public static double TURN_COEF;
+    public static double turnCoef;
     public static double SLOW = 0.5;
     public static double STANDART = 1;
 
@@ -279,23 +279,23 @@ public class DriveTrainMecanum extends MecanumDrive {
     public void switchSlowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
-            TURN_COEF = SLOW;
+            turnCoef = SLOW;
         } else {
             multiplier *= 2;
-            TURN_COEF = STANDART;
+            turnCoef = STANDART;
         }
     }
     public void slowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
         }
-        TURN_COEF = SLOW;
+        turnCoef = SLOW;
     }
     public void standartMode() {
         if (Math.abs(multiplier) <= 0.5) {
             multiplier *= 2;
         }
-        TURN_COEF = STANDART;
+        turnCoef = STANDART;
     }
 
     public void turnEncoder(double TURN_SPEED, double degrees) {

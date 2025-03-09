@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -85,7 +84,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
-        in.extensionPosition(Intake.EXTENSION_MIN);
+        in.extensionPosition(Intake.EXT_POS_MIN);
         waitForStart();
 
         if (isStopRequested()) ;

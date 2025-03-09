@@ -19,7 +19,7 @@ public class ConstantsOfTeleOp {
     }
 
     public enum IntakeStates {
-        OUTTAKE_POS, INTAKE_POS, INTAKE_POS_FOR_FLIP,
+        FOLDED_POS, UNFOLDED_POS, UNFOLDED_POS_FOR_FLIP,
         EXTENDING_OUT, FLIPPING_OUT, BRUSHING_OUT,
         FLIPPING_IN, EXTENDING_IN,
         REMOVE_TRASH,
@@ -31,11 +31,11 @@ public class ConstantsOfTeleOp {
     public static double CORRECTION_COEF = 0;
 
     /// SHOULDER
-    public static double TIME_CLOSING_CLAW = 400;
-    public static double TIME_SH_TO_BASKET = 400;
+    public static double CLAW_CLOSING_TIME = 400;
+    public static double SH_TO_BASKET_TIME = 400;
 
     /// INTAKE
-    public static double TIME_EXT = 400;
+    public static double EXT_TIME = 400;
     public static double FLIP_TIME = 400;
     public static double BRUSH_TIME = 600;
     public static double BRUSHING_OUT_TIME = 400;

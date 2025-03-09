@@ -13,20 +13,20 @@ public class Shoulder {
     private final Servo clawServoShoulder;
 
     //Позиции плечо
-    public static double SHOULDER_MAX = 1;
-    public static double SHOULDER_MIN = 0;
+    public static double SH_POS_MAX = 1;
+    public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double POS_SH_BASKET = 0.5;
-    public static double POS_SH_FOR_INTAKE = 0;
+    public static double SH_POS_TO_BASKET = 0.5;
+    public static double SH_POS_TO_INTAKE = 0;
 
-    public static double INITIAL_POSITION = 0.2;
+    public static double SH_POS_INIT = 0.2;
 
     //Позиции клешни
 
-    public static double CLAW_CLOSE = 0.055;
-    public static double CLAW_OPEN = 0.26;
-    public static double CLAW_HALF_OPEN = 0.6;
+    public static double CLAW_POS_CLOSE = 0.055;
+    public static double CLAW_POS_OPEN = 0.26;
+    public static double CLAW_POS_HALF_OPEN = 0.6;
 
     public static double CLOSING_TIME = 250;
     public boolean stateOpenShoulder;
@@ -45,13 +45,13 @@ public class Shoulder {
 
     //Методы плеча
     public void shoulderPlus() {
-        if (servoShoulder.getPosition() < SHOULDER_MAX) {
+        if (servoShoulder.getPosition() < SH_POS_MAX) {
             servoShoulder.setPosition(servoShoulder.getPosition() + SHOULDER_STEP);
         }
     }
 
     public void shoulderMinus() {
-        if (servoShoulder.getPosition() > SHOULDER_MIN) {
+        if (servoShoulder.getPosition() > SH_POS_MIN) {
             servoShoulder.setPosition(servoShoulder.getPosition() - SHOULDER_STEP);
         }
     }
@@ -67,26 +67,26 @@ public class Shoulder {
     //Методы клешни
 
     public void halfOpenSh() {
-        clawServoShoulder.setPosition(CLAW_HALF_OPEN);
+        clawServoShoulder.setPosition(CLAW_POS_HALF_OPEN);
     }
 
     public void switchPositionShoulder() {
         if (!stateOpenShoulder) {
-            clawServoShoulder.setPosition(CLAW_OPEN);
+            clawServoShoulder.setPosition(CLAW_POS_OPEN);
             stateOpenShoulder = true;
         } else {
-            clawServoShoulder.setPosition(CLAW_CLOSE);
+            clawServoShoulder.setPosition(CLAW_POS_CLOSE);
             stateOpenShoulder = false;
         }
     }
 
     public void closeSh() {
-        clawServoShoulder.setPosition(CLAW_CLOSE);
+        clawServoShoulder.setPosition(CLAW_POS_CLOSE);
         stateOpenShoulder = false;
     }
 
     public void openSh() {
-        clawServoShoulder.setPosition(CLAW_OPEN);
+        clawServoShoulder.setPosition(CLAW_POS_OPEN);
         stateOpenShoulder = true;
 
     }
@@ -111,7 +111,7 @@ public class Shoulder {
                     closeSh();
                     timer.reset();
                     while (timer.milliseconds() < CLOSING_TIME) ;
-                    servoShoulder.setPosition(POS_SH_BASKET);
+                    servoShoulder.setPosition(SH_POS_TO_BASKET);
                     needToBasketSh = false;
                 }
             }

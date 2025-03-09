@@ -27,7 +27,7 @@ public class AutoBasketRED extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(Intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(7)
@@ -51,11 +51,11 @@ public class AutoBasketRED extends LinearOpMode {
         driveTrain.followTrajectorySequence(trajectoryToBasket);
         lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(2000);
-        shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         shoulder.openSh();
         sleep(1000);
-        shoulder.shoulderPosition(Shoulder.INITIAL_POSITION);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(1000);
         lift.setTarget(0);
         sleep(1000);
@@ -67,11 +67,11 @@ public class AutoBasketRED extends LinearOpMode {
         driveTrain.followTrajectory(trajectoryBack);
         lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(2000);
-        shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         shoulder.openSh();
         sleep(1000);
-        shoulder.shoulderPosition(Shoulder.INITIAL_POSITION);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(1000);
         lift.setTarget(0);
 

@@ -36,15 +36,15 @@ public class Intake {
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXTENSION_MAX = 0.6;
-    public static double EXTENSION_MIN = 0.05;
+    public static double EXT_POS_MAX = 0.6;
+    public static double EXT_POS_MIN = 0.05;
 
     public static double EXTENSION_STEP = 0.005;
-    public static double EXT_K = 8;
-    public static double EXT_START_POS = 0.065;
+    public static double EXT_SPEED_COEF = 8;
+    public static double EXT_POS_INIT = 0.065;
 
-    public static double FLIP_INTAKE = 0.12;
-    public static double FLIP_OUTTAKE = 0.75;
+    public static double FLIP_POS_FOR_TAKE = 0.12;
+    public static double FLIP_POS_FOR_OUTTAKE = 0.75;
     public static double FLIP_TIME = 350;
     public static final double SPEED_BRUSH = 1;
 
@@ -92,10 +92,10 @@ public class Intake {
     }
 
     public void extUpdatePosition(double k) {
-        if ((extensionServoRight.getPosition() < EXTENSION_MAX && k > 0)
-                || (extensionServoRight.getPosition() > EXTENSION_MIN && k < 0)) {
-            extensionServoLeft.setPosition(extensionServoLeft.getPosition() + (EXTENSION_STEP * k * EXT_K));
-            extensionServoRight.setPosition(extensionServoRight.getPosition() + (EXTENSION_STEP * k * EXT_K));
+        if ((extensionServoRight.getPosition() < EXT_POS_MAX && k > 0)
+                || (extensionServoRight.getPosition() > EXT_POS_MIN && k < 0)) {
+            extensionServoLeft.setPosition(extensionServoLeft.getPosition() + (EXTENSION_STEP * k * EXT_SPEED_COEF));
+            extensionServoRight.setPosition(extensionServoRight.getPosition() + (EXTENSION_STEP * k * EXT_SPEED_COEF));
         }
     }
 
@@ -105,14 +105,14 @@ public class Intake {
     }
 
     public void extensionMinus() {
-        if (extensionServoRight.getPosition() > EXTENSION_MIN) {
+        if (extensionServoRight.getPosition() > EXT_POS_MIN) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition() - EXTENSION_STEP);
             extensionServoRight.setPosition(extensionServoRight.getPosition() - EXTENSION_STEP);
         }
     }
 
     public void extensionPlus() {
-        if (extensionServoRight.getPosition() < EXTENSION_MAX) {
+        if (extensionServoRight.getPosition() < EXT_POS_MAX) {
             extensionServoLeft.setPosition(extensionServoLeft.getPosition() + EXTENSION_STEP);
             extensionServoRight.setPosition(extensionServoRight.getPosition() + EXTENSION_STEP);
         }
@@ -152,19 +152,19 @@ public class Intake {
         public void run() {
             while (!isInterrupted()) {
                 if (needOuttake) {
-                    flipPosition(FLIP_OUTTAKE);
+                    flipPosition(FLIP_POS_FOR_OUTTAKE);
                     brushIntake();
                     timer.reset();
                     while (timer.milliseconds() < FLIP_TIME) ;
                     brushStop();
-                    extensionPosition(EXTENSION_MIN);
+                    extensionPosition(EXT_POS_MIN);
                     needOuttake = false;
                 }
                 if (needTake) {
-                    flipPosition(FLIP_INTAKE);
+                    flipPosition(FLIP_POS_FOR_TAKE);
                     timer.reset();
                     while (timer.milliseconds() < FLIP_TIME) ;
-                    extensionPosition(EXTENSION_MAX);
+                    extensionPosition(EXT_POS_MAX);
                     needTake = false;
                 }
             }

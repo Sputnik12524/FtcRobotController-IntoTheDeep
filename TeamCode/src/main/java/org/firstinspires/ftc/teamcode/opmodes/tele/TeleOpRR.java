@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
+import static org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum.turnCoef;
 import static org.firstinspires.ftc.teamcode.opmodes.tele.ConstantsOfTeleOp.*;
 
 import java.util.HashMap;
@@ -24,7 +25,11 @@ import java.util.function.Supplier;
 @Config
 public class TeleOpRR extends LinearOpMode {
 
-    DriveTrainMecanum driveTrain; Shoulder sl; Lift lt; Intake in; Claw cl;
+    DriveTrainMecanum driveTrain;
+    Shoulder sl;
+    Lift lt;
+    Intake in;
+    Claw cl;
 
     /// LIFT AND CLAW(for specimens)
     private final ElapsedTime liftTimer = new ElapsedTime();
@@ -41,7 +46,7 @@ public class TeleOpRR extends LinearOpMode {
     /// SHOULDER AND CLAW(for samples)
     private final ElapsedTime shoulderTimer = new ElapsedTime();
     ShoulderClawStates posShoulder = ShoulderClawStates.START_POSE;
-    double shoulderFSM = Shoulder.INITIAL_POSITION;
+    double shoulderFSM = Shoulder.SH_POS_INIT;
 
     private boolean stateA2 = false;
     private boolean stateB2 = false;
@@ -49,9 +54,9 @@ public class TeleOpRR extends LinearOpMode {
 
     /// INTAKE
     private final ElapsedTime intakeTimer = new ElapsedTime();
-    IntakeStates posIntake = IntakeStates.OUTTAKE_POS;
-    double extFSM = Intake.EXTENSION_MIN;
-    double flipFSM = Intake.FLIP_OUTTAKE;
+    IntakeStates posIntake = IntakeStates.FOLDED_POS;
+    double extFSM = Intake.EXT_POS_MIN;
+    double flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
 
     private boolean brushInStatus = false;
     private boolean brushOutStatus = false;
@@ -169,14 +174,14 @@ public class TeleOpRR extends LinearOpMode {
     private final Map<ShoulderClawStates, Supplier<ShoulderClawStates>> shoulderFSMMap =
             new HashMap<ShoulderClawStates, Supplier<ShoulderClawStates>>() {{
         put(ShoulderClawStates.START_POSE, () -> {
-            if (gamepad2.a && !stateA2 && posIntake == IntakeStates.OUTTAKE_POS && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+            if (gamepad2.a && !stateA2 && posIntake == IntakeStates.FOLDED_POS && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
                 sl.openSh();
-                shoulderFSM = Shoulder.POS_SH_FOR_INTAKE;
+                shoulderFSM = Shoulder.SH_POS_TO_INTAKE;
                 return ShoulderClawStates.MOVED_TO_INTAKE;
             }
             if (gamepad2.b && stateB2) {
                 shoulderTimer.reset();
-                shoulderFSM = Shoulder.POS_SH_BASKET;
+                shoulderFSM = Shoulder.SH_POS_TO_BASKET;
                 return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
             }
             return ShoulderClawStates.START_POSE;
@@ -190,21 +195,21 @@ public class TeleOpRR extends LinearOpMode {
             return ShoulderClawStates.MOVED_TO_INTAKE;
         });
         put(ShoulderClawStates.CLAW_CLOSING_TO_BASKET, () -> {
-            if (shoulderTimer.milliseconds() >= TIME_CLOSING_CLAW) {
+            if (shoulderTimer.milliseconds() >= CLAW_CLOSING_TIME) {
                 shoulderTimer.reset();
-                shoulderFSM = Shoulder.POS_SH_BASKET;
+                shoulderFSM = Shoulder.SH_POS_TO_BASKET;
                 return ShoulderClawStates.MOVING_TO_BASKET;
             }
             return ShoulderClawStates.CLAW_CLOSING_TO_BASKET;
         });
         put(ShoulderClawStates.MOVING_TO_BASKET, () -> {
-            if (shoulderTimer.milliseconds() >= TIME_SH_TO_BASKET) {
+            if (shoulderTimer.milliseconds() >= SH_TO_BASKET_TIME) {
                 return ShoulderClawStates.MOVED_TO_BASKET;
             }
             return ShoulderClawStates.MOVING_TO_BASKET;
         });
         put(ShoulderClawStates.MOVING_TO_BASKET_FROM_START, () -> {
-            if (shoulderTimer.milliseconds() >= (TIME_SH_TO_BASKET / 2)) {
+            if (shoulderTimer.milliseconds() >= (SH_TO_BASKET_TIME / 2)) {
                 return ShoulderClawStates.MOVED_TO_BASKET;
             }
             return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
@@ -215,36 +220,36 @@ public class TeleOpRR extends LinearOpMode {
                 return ShoulderClawStates.CLAW_OPENED;
             }
             if (gamepad2.a && !stateA2) {
-                shoulderFSM = Shoulder.INITIAL_POSITION;
+                shoulderFSM = Shoulder.SH_POS_INIT;
                 return ShoulderClawStates.START_POSE;
             }
             return ShoulderClawStates.MOVED_TO_BASKET;
         });
         put(ShoulderClawStates.CLAW_OPENED, () -> {
             if (gamepad2.a && !stateA2) {
-                shoulderFSM = Shoulder.INITIAL_POSITION;
+                shoulderFSM = Shoulder.SH_POS_INIT;
                 return ShoulderClawStates.START_POSE;
             }
             return ShoulderClawStates.CLAW_OPENED;
         });
     }};
     private final Map<IntakeStates, Supplier<IntakeStates>> intakeFSMMap = new HashMap<IntakeStates, Supplier<IntakeStates>>() {{
-        put(IntakeStates.OUTTAKE_POS, () -> {
+        put(IntakeStates.FOLDED_POS, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1) {
                 intakeTimer.reset();
-                extFSM = Intake.EXTENSION_MAX;
+                extFSM = Intake.EXT_POS_MAX;
                 return IntakeStates.EXTENDING_OUT;
             }
             if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
                 driveTrain.slowMode();
-                return IntakeStates.INTAKE_POS;
+                return IntakeStates.UNFOLDED_POS;
             }
-            return IntakeStates.OUTTAKE_POS;
+            return IntakeStates.FOLDED_POS;
         });
         put(IntakeStates.EXTENDING_OUT, () -> {
-            if (intakeTimer.milliseconds() >= TIME_EXT) {
+            if (intakeTimer.milliseconds() >= EXT_TIME) {
                 intakeTimer.reset();
-                flipFSM = Intake.FLIP_INTAKE;
+                flipFSM = Intake.FLIP_POS_FOR_TAKE;
                 return IntakeStates.FLIPPING_OUT;
             }
             return IntakeStates.EXTENDING_OUT;
@@ -264,63 +269,63 @@ public class TeleOpRR extends LinearOpMode {
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                return IntakeStates.INTAKE_POS;
+                return IntakeStates.UNFOLDED_POS;
             }
             return IntakeStates.BRUSHING_OUT;
         });
-        put(IntakeStates.INTAKE_POS, () -> {
+        put(IntakeStates.UNFOLDED_POS, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
                 driveTrain.standartMode();
                 intakeTimer.reset();
-                flipFSM = Intake.FLIP_OUTTAKE;
+                flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
                 brushInStatus = true;
                 brushOutStatus = false;
                 return IntakeStates.FLIPPING_IN;
-            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
                 driveTrain.standartMode();
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                return IntakeStates.OUTTAKE_POS;
+                return IntakeStates.FOLDED_POS;
             } else if ((in.getColorSample() == badColor) && stateSensor) {
                 intakeTimer.reset();
                 in.brushOuttake();
                 brushInStatus = false;
                 brushOutStatus = true;
                 posIntake = IntakeStates.REMOVE_TRASH;
-            } else if (flipFSM == Intake.FLIP_OUTTAKE) {
-                return IntakeStates.INTAKE_POS_FOR_FLIP;
+            } else if (flipFSM == Intake.FLIP_POS_FOR_OUTTAKE) {
+                return IntakeStates.UNFOLDED_POS_FOR_FLIP;
             }
-            return IntakeStates.INTAKE_POS;
+            return IntakeStates.UNFOLDED_POS;
         });
-        put(IntakeStates.INTAKE_POS_FOR_FLIP, () -> {
+        put(IntakeStates.UNFOLDED_POS_FOR_FLIP, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1) { /// #НеБойсяПж
                 driveTrain.standartMode();
                 intakeTimer.reset();
-                flipFSM = Intake.FLIP_OUTTAKE;
+                flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
                 brushInStatus = true;
                 brushOutStatus = false;
                 return IntakeStates.FLIPPING_IN;
-            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_OUTTAKE)) {
+            } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
                 driveTrain.standartMode();
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                return IntakeStates.OUTTAKE_POS;
-            } else if (flipFSM == Intake.FLIP_INTAKE) {
+                return IntakeStates.FOLDED_POS;
+            } else if (flipFSM == Intake.FLIP_POS_FOR_TAKE) {
                 intakeTimer.reset();
                 return IntakeStates.FLIPPING_OUT;
             }
-            return IntakeStates.INTAKE_POS_FOR_FLIP;
+            return IntakeStates.UNFOLDED_POS_FOR_FLIP;
         });
         put(IntakeStates.REMOVE_TRASH, () -> {
             if (intakeTimer.milliseconds() >= BRUSH_TIME) {
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                return IntakeStates.INTAKE_POS;
+                return IntakeStates.UNFOLDED_POS;
             }
             return IntakeStates.REMOVE_TRASH;
         });
@@ -330,14 +335,14 @@ public class TeleOpRR extends LinearOpMode {
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
-                extFSM = Intake.EXTENSION_MIN;
+                extFSM = Intake.EXT_POS_MIN;
                 return IntakeStates.EXTENDING_IN;
             }
             return IntakeStates.FLIPPING_IN;
         });
         put(IntakeStates.EXTENDING_IN, () -> {
-            if (intakeTimer.milliseconds() >= TIME_EXT) {
-                return IntakeStates.OUTTAKE_POS;
+            if (intakeTimer.milliseconds() >= EXT_TIME) {
+                return IntakeStates.FOLDED_POS;
             }
             return IntakeStates.EXTENDING_IN;
         });
@@ -365,9 +370,9 @@ public class TeleOpRR extends LinearOpMode {
 
         sl.closeSh();
         cl.openLift();
-        sl.shoulderPosition(Shoulder.INITIAL_POSITION);
-        in.extensionPosition(Intake.EXT_START_POS);
-        in.flipPosition(Intake.FLIP_OUTTAKE);
+        sl.shoulderPosition(Shoulder.SH_POS_INIT);
+        in.extensionPosition(Intake.EXT_POS_INIT);
+        in.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
         lt.resetZero();
         liftTimer.reset();
         shoulderTimer.reset();
@@ -422,7 +427,7 @@ public class TeleOpRR extends LinearOpMode {
                     new Pose2d(
                             -gamepad1.left_stick_y * DriveTrainMecanum.multiplier,
                             gamepad1.left_stick_x * DriveTrainMecanum.multiplier,
-                            rotate * DriveTrainMecanum.multiplier * DriveTrainMecanum.TURN_COEF
+                            rotate * DriveTrainMecanum.multiplier * turnCoef
                     )
             );
 
@@ -463,7 +468,7 @@ public class TeleOpRR extends LinearOpMode {
 
             /// Manual control:
             //Extension:
-            extFSM += -gamepad1.right_stick_y * Intake.EXT_K * Intake.EXTENSION_STEP;
+            extFSM += -gamepad1.right_stick_y * Intake.EXT_SPEED_COEF * Intake.EXTENSION_STEP;
 
             //Brushes:
             if (gamepad1.a && !brushInStatus && !stateA1) {
@@ -487,8 +492,8 @@ public class TeleOpRR extends LinearOpMode {
             stateB1 = gamepad1.b;
 
             //flip
-            if (gamepad1.y) flipFSM = Intake.FLIP_OUTTAKE;
-            if (gamepad1.x) flipFSM = Intake.FLIP_INTAKE;
+            if (gamepad1.y) flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
+            if (gamepad1.x) flipFSM = Intake.FLIP_POS_FOR_TAKE;
 
             //Color Sensor
             if (gamepad1.dpad_up) stateSensor = true;
