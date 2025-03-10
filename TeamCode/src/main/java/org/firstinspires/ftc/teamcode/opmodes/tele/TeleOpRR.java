@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.tele;
 
+import static org.firstinspires.ftc.teamcode.modules.Suspension.SUS_SPEED;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -100,6 +102,9 @@ public class TeleOpRR extends LinearOpMode {
     private final ElapsedTime timerOpMode = new ElapsedTime();
     private boolean initWait = false;
     public static double SLOW_COEF = 1;
+
+    private boolean stateDpadUp1 = false;
+    private boolean stateDpadDown1 = false;
 
 
 
@@ -539,12 +544,20 @@ public class TeleOpRR extends LinearOpMode {
             }
 
             //Состояние сенсора
+//            if (gamepad1.dpad_up) {
+//                stateSensor = true;
+//            }
+//            else if (gamepad1.dpad_down) {
+//                stateSensor = false;
+//            }
+
             if (gamepad1.dpad_up) {
-                stateSensor = true;
-            }
-            else if (gamepad1.dpad_down) {
-                stateSensor = false;
-            }
+                sp.MoveUp(SUS_SPEED);
+            } else if (gamepad1.dpad_down) {
+                sp.MoveDown(SUS_SPEED);
+            } else sp.MoveStop();
+
+
 
 
             // Print pose to telemetry

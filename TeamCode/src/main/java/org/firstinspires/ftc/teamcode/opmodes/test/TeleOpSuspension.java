@@ -19,8 +19,12 @@ public class TeleOpSuspension extends LinearOpMode {
         while (opModeIsActive()) {
 
             ///Suspension
-            if (gamepad1.dpad_up) sp.MoveUp(SUS_SPEED);
-            else if (gamepad1.dpad_down) sp.MoveDown(SUS_SPEED);
+            if (gamepad1.dpad_up) {
+                sp.MoveUp(SUS_SPEED);
+            } else if (gamepad1.dpad_down) {
+                sp.MoveDown(SUS_SPEED);
+            } else sp.MoveStop();
+
         }
     }
 }

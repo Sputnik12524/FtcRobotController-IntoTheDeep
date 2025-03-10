@@ -21,11 +21,15 @@ public class Suspension {
 
     public void MoveUp (double speed) {
         susMotorRight.setPower(speed);
-        susMotorLeft.setPower(speed);
+        susMotorLeft.setPower(-speed);
     }
     public void MoveDown (double speed) {
         susMotorRight.setPower(-speed);
-        susMotorLeft.setPower(-speed);
+        susMotorLeft.setPower(speed);
+    }
+    public void MoveStop () {
+        susMotorRight.setPower(0);
+        susMotorLeft.setPower(0);
     }
 
 
