@@ -41,8 +41,8 @@ import java.util.List;
 
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
-    public static double multiplier = 1;
-    public static double turnCoef;
+    private static double multiplier = 1;
+    private static double turnCoef;
     public static double SLOW = 0.5;
     public static double STANDART = 1;
 
@@ -214,9 +214,9 @@ public class DriveTrainMecanum extends MecanumDrive {
                     + VY_WEIGHT * Math.abs(drivePower.getY())
                     + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
             vel = new Pose2d(
-                    VX_WEIGHT * drivePower.getX(),
-                    VY_WEIGHT * drivePower.getY(),
-                    OMEGA_WEIGHT * drivePower.getHeading()
+                    VX_WEIGHT * drivePower.getX() * multiplier,
+                    VY_WEIGHT * drivePower.getY() * multiplier,
+                    OMEGA_WEIGHT * drivePower.getHeading() * multiplier * turnCoef
             ).div(denom);
         }
         setDrivePower(vel);
@@ -276,6 +276,8 @@ public class DriveTrainMecanum extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+    public double getTurnCoef() { return turnCoef; }
+    public double getMultiplier() { return multiplier; }
     public void switchSlowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
