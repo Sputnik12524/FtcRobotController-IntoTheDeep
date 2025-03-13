@@ -34,7 +34,6 @@ public class Intake {
     public static double YELLOW_MIN = 60;
     public static float GAIN = 2;
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
-    private boolean stateSensor = false;
 
 
     public static double EXT_POS_MAX = 0.6;
@@ -185,10 +184,6 @@ public class Intake {
         }
         return Color.NONE;
     }
-    public void switchSensor() {
-        stateSensor = !stateSensor;
-    }
-    public boolean getSensorState() { return stateSensor; }
 
     public double getHue() {
         return hsvValues[0];
