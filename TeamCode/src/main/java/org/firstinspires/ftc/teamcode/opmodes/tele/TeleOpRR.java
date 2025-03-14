@@ -571,9 +571,9 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("Состояние Lift:", posLift);
             telemetry.addData("Состояние Shoulder:", posShoulder);
             telemetry.addData("Состояние Intake", posIntake);
-            telemetry.addData("x", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate);
-            telemetry.addData("y", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).yRotationRate);
-            telemetry.addData("z", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate);
+           // telemetry.addData("x", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate);
+           // telemetry.addData("y", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).yRotationRate);
+           // telemetry.addData("z", driveTrain.imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate);
             telemetry.update();
         }
         lt.liftMotorPowerDriver.interrupt();
