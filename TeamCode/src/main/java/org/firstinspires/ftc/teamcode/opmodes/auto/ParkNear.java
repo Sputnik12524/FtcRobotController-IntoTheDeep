@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 
 @Autonomous(name = "Near Park", group = "Robot")
 @Config
-public class AutoNear2 extends LinearOpMode {
+public class ParkNear extends LinearOpMode {
     public static final double DISTANCE = 70;
 
     @Override

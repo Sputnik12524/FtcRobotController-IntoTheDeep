@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.modules.*;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "2 RED Auto Basket", group = "Robot")
-public class AutoBasketRED extends LinearOpMode {
+@Autonomous(name = "2 BLUE Auto Basket", group = "Robot")
+public class Auto3Basket extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -22,7 +22,7 @@ public class AutoBasketRED extends LinearOpMode {
         intake.samplesTaker.start();
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10, -57, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(32, 57, Math.toRadians(90));
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
@@ -31,11 +31,14 @@ public class AutoBasketRED extends LinearOpMode {
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(7)
-                .back(37)
+                .back(17)
                 .turn(Math.toRadians(30))
                 .build();
-        Trajectory trajectoryToSample1 = driveTrain.trajectoryBuilder(trajectoryToBasket.end()).forward(2).build();
-        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).back(2).build();
+        Trajectory trajectoryToSample1 = driveTrain.trajectoryBuilder
+                        (trajectoryToBasket.end().plus(new Pose2d(0,0, Math.toRadians(35))))
+                .forward(1)
+                .build();
+        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).back(1).build();
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
                 .turn(Math.toRadians(45))
                 .forward(52)
@@ -60,9 +63,12 @@ public class AutoBasketRED extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(45));
+        driveTrain.turn(Math.toRadians(35));
+        sleep(1000);
         intake.needTake();
+        sleep(1000);
         driveTrain.followTrajectory(trajectoryToSample1);
+        sleep(1000);
         intake.needOuttake();
         driveTrain.followTrajectory(trajectoryBack);
         lift.setTarget(Lift.POS_HIGH_BASKET);

@@ -30,7 +30,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         base.setPoseEstimate(startPose);
         base.imu.resetYaw();
         claw.openLift();
-
+//TODO: use spline trajectories to deliver specimens
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.72);

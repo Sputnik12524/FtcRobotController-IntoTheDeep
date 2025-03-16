@@ -43,11 +43,10 @@ public class AutoSpecimenRED extends LinearOpMode {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
-                //.waitSeconds(1)
                 .forward(5)
                 .addDisplacementMarker(() -> shoulder.shoulderPosition(.1))
                 .waitSeconds(0.5)
-                .addDisplacementMarker(() -> lift.setTarget(0)) //statement lambda was replaced with expression lambda
+                .addDisplacementMarker(() -> lift.setTarget(0))
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
                 .turn(Math.toRadians(-120))
