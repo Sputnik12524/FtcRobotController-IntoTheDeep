@@ -422,7 +422,7 @@ public class TeleOpRR extends LinearOpMode {
             if (Math.abs(w_real) < 1) w_real = 0;
             double rotate = CORRECTION_COEF * (w_target - w_real * VELO_SCALE_COEF) + w_target;
             dt.setWeightedDrivePower(
-                    new Pose2d(-gamepad1.left_stick_y, gamepad1.left_stick_x, rotate)
+                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, rotate)
             );
 
             if (gamepad1.dpad_right) dt.resetIMU();

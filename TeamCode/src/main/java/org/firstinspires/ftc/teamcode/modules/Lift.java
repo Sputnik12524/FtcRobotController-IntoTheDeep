@@ -165,4 +165,8 @@ public class Lift {
             liftMotor.setPower(speed);
         }
     }
+    public void KALxoz(double speed) {
+        liftMotor.setPower(speed);
+    }
+
 }

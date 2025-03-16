@@ -40,7 +40,7 @@ public class TeleopIntake extends LinearOpMode {
             }
 
             //выдвижение
-            double k = 0.5;
+            double k = 0.25;
             in.extUpdatePosition(-gamepad1.right_stick_y * k); //с помощью стика
 
             if (gamepad1.dpad_up) { //с помощью крестовины
