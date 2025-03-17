@@ -35,8 +35,8 @@ public class Lift {
     public static double POS_SIDE = -4.5; // Берем с борта // -4 TRUE
      public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки // -15 TRUE
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
-    public static double POS_HIGH_SPECIMEN_BEFORE = -55; // Целимся для установки
-    public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
+    public static double POS_HIGH_SPECIMEN_BEFORE = -30; // Целимся для установки
+    public static double POS_HIGH_SPECIMEN_AFTER = -25; // Устанавливаем образец
 
 
     public boolean StateSpecimenLow;
