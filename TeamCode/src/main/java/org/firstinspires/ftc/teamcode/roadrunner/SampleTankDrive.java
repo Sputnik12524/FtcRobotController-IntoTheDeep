@@ -78,7 +78,7 @@ public class SampleTankDrive extends TankDrive {
 
         // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(DriveConstants.revHubOrientationOnRobot);
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(DriveConstants.logoOrientationOnRobot,DriveConstants.usbFacingDirection));
         imu.initialize(parameters);
 
         // add/remove motors depending on your robot (e.g., 6WD)

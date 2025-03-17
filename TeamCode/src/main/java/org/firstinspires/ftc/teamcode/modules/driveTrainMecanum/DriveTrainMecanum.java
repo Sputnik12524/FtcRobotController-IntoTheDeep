@@ -56,7 +56,7 @@ public class DriveTrainMecanum extends MecanumDrive {
     private final List<DcMotorEx> motors;
     public final IMU imu;
     //TODO: delete all IMU usages when switching to an odometry
-    final IMU.Parameters parameters = new IMU.Parameters(DriveConstants.revHubOrientationOnRobot);
+    final IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(DriveConstants.logoOrientationOnRobot,DriveConstants.usbFacingDirection));
     private final VoltageSensor batteryVoltageSensor;
     private final List<Integer> lastEncPositions = new ArrayList<>();
     private final List<Integer> lastEncVels = new ArrayList<>();

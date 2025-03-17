@@ -28,15 +28,15 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 28;
+    public static double TICKS_PER_REV = 2000;
     public static double WHEEL_RADIUS = 0.629921; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 4.7637795; // in; distance between the left and right wheels
+    public static double LATERAL_DISTANCE = -0.230937951; // in; distance between the left and right wheels //<3
     public static double FORWARD_OFFSET = 5.11; // in; offset of the lateral wheel
-    public static double X_MULTIPLIER = 23.6/22.66;//23.6/29.8979;//first - 23.6/24.8924;
-    public static double Y_MULTIPLIER =23.6/21.5754;//35.4331/920;// 35.4331/24.0064;
-    private Encoder leftEncoder, rightEncoder, frontEncoder;
+    public static double X_MULTIPLIER = 23.6/24.7537;
+    public static double Y_MULTIPLIER = 23.6/23.453;//23.6/21.5754;//35.4331/920;// 35.4331/24.0064;
+    public Encoder leftEncoder, rightEncoder, frontEncoder;
 
     private List<Integer> lastEncPositions, lastEncVels;
 
@@ -50,9 +50,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         lastEncPositions = lastTrackingEncPositions;
         lastEncVels = lastTrackingEncVels;
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "left_x"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "SuspensionL"));
-        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "SuspensionR"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"y_enc"));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionL"));
+        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionR"));
 
         // TO DO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
         frontEncoder.setDirection(Encoder.Direction.REVERSE);
