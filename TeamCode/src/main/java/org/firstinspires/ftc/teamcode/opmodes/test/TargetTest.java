@@ -11,8 +11,9 @@ import org.firstinspires.ftc.teamcode.modules.Lift;
 @Config
 public class TargetTest extends LinearOpMode {
 
-    public static double POSITION_1 = -10;
-    public static double POSITION_2 = -25; //-79 --> MAX POSITION!!!!!!!
+    public static double POSITION_1 = 10;
+    public static double POSITION_2 = 30; //-79 --> MAX POSITION!!!!!!!
+    public static double POSITION_3 = 50;
     // -30 low basket
     // -4 с борта берем
     // -15 low specimen целимся / -2 устанавливаем
@@ -26,12 +27,10 @@ public class TargetTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad1.x) {
-                lift.setTarget(POSITION_1);
-            }
-            if (gamepad1.y) {
-                lift.setTarget(POSITION_2);
-            }
+            if (gamepad1.x) lift.setTarget(POSITION_1);
+            if (gamepad1.y) lift.setTarget(POSITION_2);
+            if (gamepad1.b) lift.setTarget(POSITION_3);
+            if (gamepad1.a) lift.setTarget(0);
 
         }
         lift.liftMotorPowerDriver.interrupt();

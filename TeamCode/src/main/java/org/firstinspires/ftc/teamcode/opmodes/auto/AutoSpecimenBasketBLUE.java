@@ -32,7 +32,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(Intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectorySpecimen = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
@@ -71,7 +71,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     intake.brushIntake();
                     sleep(500);
                     intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -81,12 +81,12 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .back(5)
                 //scoring to basket
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
                     shoulder.closeSh();
                 })
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(3)
@@ -107,7 +107,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                     intake.brushIntake();
                     sleep(500);
                     intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_OUTTAKE);
+                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
                     telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
                     telemetry.update();
                 })
@@ -115,12 +115,12 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .back(5)
                 .waitSeconds(3)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
                     shoulder.closeSh();
                 })
                 .waitSeconds(2)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                 })
                 .waitSeconds(5)

@@ -17,17 +17,13 @@ public class LiftTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() {
         Lift lift = new Lift(this);
-        lift.liftMotorPowerDriver.start();
         waitForStart();
 
         while (opModeIsActive()) {
-            boolean stateB = gamepad2.b;
 
-            double speed = gamepad2.right_stick_y;
+            double speed = gamepad1.right_stick_y;
+            lift.KALxoz(speed);
 
-            if (!stateB && gamepad2.b) {
-                lift.unlockLift();
-            }
 
 
             telemetry.addData("Encoder Position: ", lift.liftMotor.getCurrentPosition());
@@ -36,6 +32,5 @@ public class LiftTeleOp extends LinearOpMode {
             dashboardTelemetry.update();
             telemetry.update();
         }
-        lift.liftMotorPowerDriver.interrupt();
     }
 }

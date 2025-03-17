@@ -18,32 +18,38 @@ public class TeleopClaw extends LinearOpMode {
         Claw cl = new Claw(this);
         Shoulder sl = new Shoulder(this);
 
-        while (opModeInInit()) {
-
-        }
+        while (opModeInInit()) {}
         waitForStart();
         while (opModeIsActive()){
 
-            if (gamepad2.a) {
-                sl.halfOpenSh();
+            if (gamepad1.y) {
+                sl.openSh();
+            }
+            if (gamepad1.x) {
+                sl.closeSh();
+            }
+            if (gamepad2.y) {
+                cl.openLift();
+            }
+            if (gamepad2.x) {
+                cl.closeLift();
             }
 
-            if (gamepad2.left_bumper && !btnStateSh) {
+            if (gamepad1.right_bumper && !btnStateSh) {
                 sl.switchPositionShoulder();
             }
             if (gamepad2.right_bumper && !btnStateLift) {
                 cl.switchPositionLift();
             }
-            btnStateSh = gamepad2.left_bumper;
+            btnStateSh = gamepad1.left_bumper;
             btnStateLift = gamepad2.right_bumper;
 
             telemetry.addData("Значение клешни на плече: ", sl.stateOpenShoulder);
             telemetry.addData("Значение клешни на подъемнике: ", cl.stateOpenLift);
-            telemetry.addLine("Управление:");
-            telemetry.addLine(" А - Полуоткрытое состояние (плечо)");
-            telemetry.addLine(" Х - Полуоткрытое состояние (подъемник)");
-            telemetry.addLine("Левый бампер - Смена позиции (плечо)");
-            telemetry.addLine("Правый бампер - Смена позиции (подъемник)");
+            telemetry.addLine("Управление: (1 - Sh)(2 - Lt)");
+            telemetry.addLine(" Y - открытое состояни (плечо)");
+            telemetry.addLine(" Х - закрытое состояние");
+            telemetry.addLine("Правый бампер - Смена позиции");
             telemetry.update();
         }
 

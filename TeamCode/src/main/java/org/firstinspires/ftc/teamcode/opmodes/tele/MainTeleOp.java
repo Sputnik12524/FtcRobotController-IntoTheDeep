@@ -46,12 +46,10 @@ public class MainTeleOp extends LinearOpMode {
         lt.liftMotorPowerDriver.start();
         in.samplesTaker.start();
 
-        sl.shoulderPosition(Shoulder.INITIAL_POSITION);
-        in.extensionPosition(Intake.EXT_START_POS);
+        sl.shoulderPosition(Shoulder.SH_POS_INIT);
+        in.extensionPosition(Intake.EXT_POS_INIT);
         lt.resetZero();
 
-        while (opModeInInit()) {
-        }
         waitForStart();
         while (opModeIsActive()) {
             // Управление колесной базой
@@ -109,10 +107,10 @@ public class MainTeleOp extends LinearOpMode {
             // Управление плечо
             // по позициям
             if (gamepad2.dpad_right) {
-                sl.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE); //начальная позиция (внутри робота)
+                sl.shoulderPosition(Shoulder.SH_POS_TO_INTAKE); //начальная позиция (внутри робота)
             } else if (gamepad2.dpad_up) {
                 cl.closeLift();
-                sl.shoulderPosition(Shoulder.POS_SH_BASKET); //lowest (для взятия пробы)
+                sl.shoulderPosition(Shoulder.SH_POS_TO_BASKET); //lowest (для взятия пробы)
             }
 
             // Управление клешней.
@@ -139,10 +137,10 @@ public class MainTeleOp extends LinearOpMode {
             }
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(Intake.FLIP_INTAKE);
+                in.flipPosition(Intake.FLIP_POS_FOR_TAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(Intake.FLIP_OUTTAKE);
+                in.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
             }
             //выдвижение
             in.extUpdatePosition(-gamepad1.right_stick_y); //с помощью стика
