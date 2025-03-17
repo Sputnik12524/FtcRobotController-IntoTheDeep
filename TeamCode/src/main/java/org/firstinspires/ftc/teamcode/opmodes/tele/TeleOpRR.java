@@ -73,13 +73,12 @@ public class TeleOpRR extends LinearOpMode {
     private final Map<LiftStates, Supplier<LiftStates>> liftFSMMap = new HashMap<LiftStates, Supplier<LiftStates>>() {{
         put(LiftStates.LIFT_ZERO, () -> {
             if (gamepad2.dpad_up && !stateDpadUp2) {
-                dt.slowMode();
                 targetLiftFSM = Lift.POS_HIGH_BASKET;
                 return LiftStates.LIFT_TO_BASKET;
             }
             if (gamepad2.dpad_right && !stateDpadRight2) {
-                targetLiftFSM = Lift.POS_SIDE;
-                return LiftStates.LIFT_TO_SIDE;
+                targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
+                return LiftStates.LIFT_TO_SPECIMEN_BEFORE;
             }
             if (gamepad2.left_stick_button && !stateLeftStickButton) {
                 return LiftStates.ZERO_UPDATE;
@@ -88,64 +87,30 @@ public class TeleOpRR extends LinearOpMode {
         });
         put(LiftStates.LIFT_TO_BASKET, () -> {
             if (gamepad2.dpad_down && !stateDpadDown2) {
-                dt.standartMode();
                 targetLiftFSM = 0;
                 return LiftStates.LIFT_ZERO;
             }
             if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                dt.standartMode();
                 return LiftStates.ZERO_UPDATE;
             }
             return LiftStates.LIFT_TO_BASKET;
         });
-        put(LiftStates.LIFT_TO_SIDE, () -> {
-            if (gamepad2.dpad_up && !stateDpadUp2) {
-                dt.slowMode();
-                targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
-                return LiftStates.LIFT_TO_SPECIMEN_BEFORE;
-            }
-            if (gamepad2.dpad_left && !stateDpadLeft2) {
-                targetLiftFSM = 0;
-                return LiftStates.LIFT_ZERO;
-            }
-            if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                return LiftStates.ZERO_UPDATE;
-            }
-            return LiftStates.LIFT_TO_SIDE;
-        });
         put(LiftStates.LIFT_TO_SPECIMEN_BEFORE, () -> {
             if (gamepad2.dpad_down && !stateDpadDown2) {
-                dt.standartMode();
                 targetLiftFSM = Lift.POS_HIGH_SPECIMEN_AFTER;
                 return LiftStates.LIFT_TO_SPECIMEN_AFTER;
             }
-            if (gamepad2.dpad_right && !stateDpadRight2) {
-                dt.standartMode();
-                targetLiftFSM = Lift.POS_SIDE;
-                return LiftStates.LIFT_TO_SIDE;
-            }
-            if (gamepad2.dpad_left && !stateDpadLeft2) {
-                dt.standartMode();
-                targetLiftFSM = 0;
-                return LiftStates.LIFT_ZERO;
-            }
             if (gamepad2.left_stick_button && !stateLeftStickButton) {
-                dt.standartMode();
                 return LiftStates.ZERO_UPDATE;
             }
             return LiftStates.LIFT_TO_SPECIMEN_BEFORE;
         });
         put(LiftStates.LIFT_TO_SPECIMEN_AFTER, () -> {
             if (gamepad2.dpad_up && !stateDpadUp2) {
-                dt.slowMode();
                 targetLiftFSM = Lift.POS_HIGH_SPECIMEN_BEFORE;
                 return LiftStates.LIFT_TO_SPECIMEN_BEFORE;
             }
-            if (gamepad2.dpad_right && !stateDpadRight2) {
-                targetLiftFSM = Lift.POS_SIDE;
-                return LiftStates.LIFT_TO_SIDE;
-            }
-            if (gamepad2.dpad_left && !stateDpadLeft2) {
+            if (gamepad2.dpad_down && !stateDpadDown2) {
                 targetLiftFSM = 0;
                 return LiftStates.LIFT_ZERO;
             }
@@ -239,7 +204,6 @@ public class TeleOpRR extends LinearOpMode {
                 return IntakeStates.EXTENDING_OUT;
             }
             if (in.getExtensionPositionR() >= NECESSARY_EXT_POS) {
-                dt.slowMode();
                 return IntakeStates.UNFOLDED_POS;
             }
             return IntakeStates.FOLDED_POS;
@@ -263,7 +227,6 @@ public class TeleOpRR extends LinearOpMode {
         });
         put(IntakeStates.BRUSHING_OUT, () -> {
             if (intakeTimer.milliseconds() >= BRUSHING_OUT_TIME) {
-                dt.slowMode();
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
@@ -273,7 +236,6 @@ public class TeleOpRR extends LinearOpMode {
         });
         put(IntakeStates.UNFOLDED_POS, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
-                dt.standartMode();
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
@@ -281,7 +243,6 @@ public class TeleOpRR extends LinearOpMode {
                 brushOutStatus = false;
                 return IntakeStates.FLIPPING_IN;
             } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
-                dt.standartMode();
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
@@ -299,7 +260,6 @@ public class TeleOpRR extends LinearOpMode {
         });
         put(IntakeStates.UNFOLDED_POS_FOR_FLIP, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1) { /// #НеБойсяПж
-                dt.standartMode();
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
@@ -307,7 +267,6 @@ public class TeleOpRR extends LinearOpMode {
                 brushOutStatus = false;
                 return IntakeStates.FLIPPING_IN;
             } else if ((in.getExtensionPositionR() < NECESSARY_EXT_POS) && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
-                dt.standartMode();
                 in.brushStop();
                 brushInStatus = false;
                 brushOutStatus = false;
@@ -428,6 +387,7 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.dpad_right) dt.resetIMU();
             if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
             stateLeftBumper1 = gamepad1.left_bumper;
+
 
 
             /// Lift FSM

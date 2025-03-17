@@ -7,7 +7,7 @@ public class ConstantsOfTeleOp {
 
     public enum LiftStates {
         LIFT_ZERO, WAIT_UPDATE, ZERO_UPDATE,
-        LIFT_TO_SIDE, LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
+        LIFT_TO_SPECIMEN_BEFORE, LIFT_TO_SPECIMEN_AFTER,
         LIFT_TO_BASKET
     }
 
