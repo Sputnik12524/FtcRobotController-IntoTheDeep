@@ -136,66 +136,66 @@ public class TeleOpRR extends LinearOpMode {
     }};
     private final Map<ShoulderClawStates, Supplier<ShoulderClawStates>> shoulderFSMMap =
             new HashMap<ShoulderClawStates, Supplier<ShoulderClawStates>>() {{
-        put(ShoulderClawStates.START_POSE, () -> {
-            if (gamepad2.a && !stateA2 && posIntake == IntakeStates.FOLDED_POS && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
-                sl.openSh();
-                shoulderFSM = Shoulder.SH_POS_TO_INTAKE;
-                return ShoulderClawStates.MOVED_TO_INTAKE;
-            }
-            if (gamepad2.b && stateB2) {
-                shoulderTimer.reset();
-                shoulderFSM = Shoulder.SH_POS_TO_BASKET;
-                return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
-            }
-            return ShoulderClawStates.START_POSE;
-        });
-        put(ShoulderClawStates.MOVED_TO_INTAKE, () -> {
-            if (gamepad2.b && !stateB2) {
-                shoulderTimer.reset();
-                sl.closeSh();
-                return ShoulderClawStates.CLAW_CLOSING_TO_BASKET;
-            }
-            return ShoulderClawStates.MOVED_TO_INTAKE;
-        });
-        put(ShoulderClawStates.CLAW_CLOSING_TO_BASKET, () -> {
-            if (shoulderTimer.milliseconds() >= CLAW_CLOSING_TIME) {
-                shoulderTimer.reset();
-                shoulderFSM = Shoulder.SH_POS_TO_BASKET;
-                return ShoulderClawStates.MOVING_TO_BASKET;
-            }
-            return ShoulderClawStates.CLAW_CLOSING_TO_BASKET;
-        });
-        put(ShoulderClawStates.MOVING_TO_BASKET, () -> {
-            if (shoulderTimer.milliseconds() >= SH_TO_BASKET_TIME) {
-                return ShoulderClawStates.MOVED_TO_BASKET;
-            }
-            return ShoulderClawStates.MOVING_TO_BASKET;
-        });
-        put(ShoulderClawStates.MOVING_TO_BASKET_FROM_START, () -> {
-            if (shoulderTimer.milliseconds() >= (SH_TO_BASKET_TIME / 2)) {
-                return ShoulderClawStates.MOVED_TO_BASKET;
-            }
-            return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
-        });
-        put(ShoulderClawStates.MOVED_TO_BASKET, () -> {
-            if (gamepad2.b && !stateB2) {
-                sl.openSh();
-                return ShoulderClawStates.CLAW_OPENED;
-            }
-            if (gamepad2.a && !stateA2) {
-                shoulderFSM = Shoulder.SH_POS_INIT;
-                return ShoulderClawStates.START_POSE;
-            }
-            return ShoulderClawStates.MOVED_TO_BASKET;
-        });
-        put(ShoulderClawStates.CLAW_OPENED, () -> {
-            if (gamepad2.a && !stateA2) {
-                shoulderFSM = Shoulder.SH_POS_INIT;
-                return ShoulderClawStates.START_POSE;
-            }
-            return ShoulderClawStates.CLAW_OPENED;
-        });
-    }};
+                put(ShoulderClawStates.START_POSE, () -> {
+                    if (gamepad2.a && !stateA2 && posIntake == IntakeStates.FOLDED_POS && (in.getFlipPositionR() == Intake.FLIP_POS_FOR_OUTTAKE)) {
+                        sl.openSh();
+                        shoulderFSM = Shoulder.SH_POS_TO_INTAKE;
+                        return ShoulderClawStates.MOVED_TO_INTAKE;
+                    }
+                    if (gamepad2.b && stateB2) {
+                        shoulderTimer.reset();
+                        shoulderFSM = Shoulder.SH_POS_TO_BASKET;
+                        return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
+                    }
+                    return ShoulderClawStates.START_POSE;
+                });
+                put(ShoulderClawStates.MOVED_TO_INTAKE, () -> {
+                    if (gamepad2.b && !stateB2) {
+                        shoulderTimer.reset();
+                        sl.closeSh();
+                        return ShoulderClawStates.CLAW_CLOSING_TO_BASKET;
+                    }
+                    return ShoulderClawStates.MOVED_TO_INTAKE;
+                });
+                put(ShoulderClawStates.CLAW_CLOSING_TO_BASKET, () -> {
+                    if (shoulderTimer.milliseconds() >= CLAW_CLOSING_TIME) {
+                        shoulderTimer.reset();
+                        shoulderFSM = Shoulder.SH_POS_TO_BASKET;
+                        return ShoulderClawStates.MOVING_TO_BASKET;
+                    }
+                    return ShoulderClawStates.CLAW_CLOSING_TO_BASKET;
+                });
+                put(ShoulderClawStates.MOVING_TO_BASKET, () -> {
+                    if (shoulderTimer.milliseconds() >= SH_TO_BASKET_TIME) {
+                        return ShoulderClawStates.MOVED_TO_BASKET;
+                    }
+                    return ShoulderClawStates.MOVING_TO_BASKET;
+                });
+                put(ShoulderClawStates.MOVING_TO_BASKET_FROM_START, () -> {
+                    if (shoulderTimer.milliseconds() >= (SH_TO_BASKET_TIME / 2)) {
+                        return ShoulderClawStates.MOVED_TO_BASKET;
+                    }
+                    return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
+                });
+                put(ShoulderClawStates.MOVED_TO_BASKET, () -> {
+                    if (gamepad2.b && !stateB2) {
+                        sl.openSh();
+                        return ShoulderClawStates.CLAW_OPENED;
+                    }
+                    if (gamepad2.a && !stateA2) {
+                        shoulderFSM = Shoulder.SH_POS_INIT;
+                        return ShoulderClawStates.START_POSE;
+                    }
+                    return ShoulderClawStates.MOVED_TO_BASKET;
+                });
+                put(ShoulderClawStates.CLAW_OPENED, () -> {
+                    if (gamepad2.a && !stateA2) {
+                        shoulderFSM = Shoulder.SH_POS_INIT;
+                        return ShoulderClawStates.START_POSE;
+                    }
+                    return ShoulderClawStates.CLAW_OPENED;
+                });
+            }};
     private final Map<IntakeStates, Supplier<IntakeStates>> intakeFSMMap = new HashMap<IntakeStates, Supplier<IntakeStates>>() {{
         put(IntakeStates.FOLDED_POS, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1) {
@@ -309,9 +309,11 @@ public class TeleOpRR extends LinearOpMode {
     public void liftFSM() {
         posLift = liftFSMMap.get(posLift).get();
     }
+
     public void shoulderFSM() {
         posShoulder = shoulderFSMMap.get(posShoulder).get();
     }
+
     public void intakeFSM() {
         posIntake = intakeFSMMap.get(posIntake).get();
     }
@@ -350,14 +352,12 @@ public class TeleOpRR extends LinearOpMode {
                     telemetry.addLine("СИНИЙ АЛЬЯНС");
                     telemetry.update();
                     initWait = true;
-                }
-                else if (gamepad1.b) { //Red alliance
+                } else if (gamepad1.b) { //Red alliance
                     badColor = Intake.Color.BLUE;
                     telemetry.addLine("КРАСНЫЙ АЛЬЯНС");
                     telemetry.update();
                     initWait = true;
-                }
-                else if (gamepad1.a) { //For tests
+                } else if (gamepad1.a) { //For tests
                     badColor = null;
                     telemetry.addLine("БЕЗ АЛЬЯНСА");
                     telemetry.update();
@@ -387,7 +387,6 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.dpad_right) dt.resetIMU();
             if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
             stateLeftBumper1 = gamepad1.left_bumper;
-
 
 
             /// Lift FSM
@@ -454,7 +453,7 @@ public class TeleOpRR extends LinearOpMode {
 
 
             /// Telemetry
-            telemetry.addLine(String.join(" ","УПРАВЛЕНИЕ НЕ ДАМ", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
+            telemetry.addLine(String.join(" ", "УПРАВЛЕНИЕ НЕ ДАМ", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
 
             telemetry.addData("Color:", in.getColorSample());
             telemetry.addData("Hue:", in.getHue());
@@ -476,6 +475,7 @@ public class TeleOpRR extends LinearOpMode {
         }
         lt.liftMotorPowerDriver.interrupt();
     }
+
     public static class PoseStorage {
         public static Pose2d currentPose = new Pose2d();
     }
