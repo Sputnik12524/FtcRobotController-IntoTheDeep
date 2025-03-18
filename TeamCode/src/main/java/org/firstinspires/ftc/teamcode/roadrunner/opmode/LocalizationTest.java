@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

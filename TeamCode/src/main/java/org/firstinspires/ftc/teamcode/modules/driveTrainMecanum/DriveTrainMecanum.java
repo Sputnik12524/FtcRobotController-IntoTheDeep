@@ -45,7 +45,7 @@ public class DriveTrainMecanum extends MecanumDrive {
     private final LinearOpMode aggregate;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(17, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0); //kP = 11
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double LATERAL_MULTIPLIER = 23.6/22.9525;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
@@ -54,9 +54,8 @@ public class DriveTrainMecanum extends MecanumDrive {
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(DriveConstants.MAX_ACCEL);
     private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     private final List<DcMotorEx> motors;
-    public final IMU imu;
     //TODO: delete all IMU usages when switching to an odometry
-    final IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(DriveConstants.logoOrientationOnRobot,DriveConstants.usbFacingDirection));
+
     private final VoltageSensor batteryVoltageSensor;
     private final List<Integer> lastEncPositions = new ArrayList<>();
     private final List<Integer> lastEncVels = new ArrayList<>();
@@ -70,9 +69,7 @@ public class DriveTrainMecanum extends MecanumDrive {
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
-        imu = hardwareMap.get(IMU.class, "imu");
 
-        imu.initialize(parameters);
         leftFront = hardwareMap.get(DcMotorEx.class, "left_front");
         leftBack = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBack = hardwareMap.get(DcMotorEx.class, "right_back");
@@ -252,12 +249,12 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        return (double) 0.0;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
@@ -289,9 +286,9 @@ public class DriveTrainMecanum extends MecanumDrive {
         }
     }
 
-    public void resetIMU() {
+   /* public void resetIMU() {
         imu.initialize(parameters);
-    }
+    }*/
     public void cancelTrajectoryFollowing(boolean isCancelled){
         setDrivePower(new Pose2d(0,0));
     }

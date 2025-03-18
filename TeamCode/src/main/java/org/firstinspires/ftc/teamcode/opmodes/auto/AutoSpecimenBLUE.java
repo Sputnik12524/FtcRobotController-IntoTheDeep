@@ -28,7 +28,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-9, 54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
-        base.imu.resetYaw();
+//        base.imu.resetYaw();
         claw.openLift();
 //TODO: use spline trajectories to deliver specimens
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)

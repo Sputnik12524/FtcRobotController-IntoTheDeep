@@ -20,6 +20,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -40,8 +41,8 @@ import java.util.List;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(11, 0, 0); //kP = 11 (tuned)
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(4, 0, 0); //kP = 4
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(17, 0, 0); //kP = 11 (tuned)
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0); //kP = 4
 
     public static double LATERAL_MULTIPLIER = 1;
 

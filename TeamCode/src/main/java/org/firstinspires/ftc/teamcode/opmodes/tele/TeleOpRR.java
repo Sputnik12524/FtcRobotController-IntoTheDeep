@@ -189,7 +189,7 @@ public class TeleOpRR extends LinearOpMode {
             driveTrain.update();
 
             if (gamepad1.dpad_left) {
-                driveTrain.resetIMU();
+             //   driveTrain.resetIMU();
             }
 
             // Read pose

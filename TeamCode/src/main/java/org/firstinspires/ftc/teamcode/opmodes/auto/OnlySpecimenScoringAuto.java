@@ -27,7 +27,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
-        base.imu.resetYaw();
+    //    base.imu.resetYaw();
 
         TrajectorySequence trajectoryToSubmarine1 = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
