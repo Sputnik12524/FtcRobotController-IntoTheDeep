@@ -43,9 +43,11 @@ public class Intake {
     public static double EXT_SPEED_COEF = 8;
     public static double EXT_POS_INIT = 0.1;
 
-    public static double FLIP_POS_FOR_TAKE = 0.1;
-    public static double FLIP_POS_FOR_OUTTAKE = 0.72;
+    public static double FLIP_POS_FOR_TAKE = 0.08;
+    public static double FLIP_POS_FOR_OUTTAKE = 0.73;
     public static double FLIP_TIME = 350;
+
+    public static double BRUSH_TIME = 600;
     public static final double SPEED_BRUSH = 1;
 
     public Intake(LinearOpMode opMode) {
@@ -152,10 +154,12 @@ public class Intake {
         public void run() {
             while (!isInterrupted()) {
                 if (needOuttake) {
-                    flipPosition(FLIP_POS_FOR_OUTTAKE);
                     brushIntake();
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME) ;
+                    while (timer.milliseconds() < BRUSH_TIME);
+                    flipPosition(FLIP_POS_FOR_OUTTAKE);
+                    timer.reset();
+                    while (timer.milliseconds() < FLIP_TIME);
                     brushStop();
                     extensionPosition(EXT_POS_MIN);
                     needOuttake = false;

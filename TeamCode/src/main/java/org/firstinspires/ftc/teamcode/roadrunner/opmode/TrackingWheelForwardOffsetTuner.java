@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
  * satisfactory result is produced.
  */
 @Config
-@Autonomous(group="drive")
+@Autonomous(name="TEST FORWARD OFFSET", group="test")
 public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
     public static double ANGLE = 180; // deg
     public static int NUM_TRIALS = 5;

@@ -15,7 +15,6 @@ public class Auto3Basket extends LinearOpMode {
     public void runOpMode() {
         DriveTrainMecanum driveTrain = new DriveTrainMecanum(hardwareMap, this);
         Lift lift = new Lift(this);
-        new Claw(this);
         Intake intake = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
 
@@ -26,24 +25,24 @@ public class Auto3Basket extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        shoulder.strongCloseSh();
+        shoulder.closeSh();
         intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeRight(7)
-                .back(17)
-                .turn(Math.toRadians(30))
+                .strafeRight(8)
+                .forward(10)
+                .turn(Math.toRadians(35))
                 .build();
         Trajectory trajectoryToSample1 = driveTrain.trajectoryBuilder
                         (trajectoryToBasket.end().plus(new Pose2d(0,0, Math.toRadians(35))))
-                .forward(1)
+                .back(1)
                 .build();
-        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).back(1).build();
+        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).forward(1).build();
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
-                .turn(Math.toRadians(45))
-                .forward(52)
+                .turn(Math.toRadians(-45))
+                .back(52)
                 .turn(Math.toRadians(105))
-                .back(13)
+                .forward(13)
                 .build();
         intake.extensionPosition(.05);
 
@@ -53,7 +52,7 @@ public class Auto3Basket extends LinearOpMode {
 
         driveTrain.followTrajectorySequence(trajectoryToBasket);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
+        sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         shoulder.openSh();
@@ -63,16 +62,20 @@ public class Auto3Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(35));
+        driveTrain.turn(Math.toRadians(50));
         sleep(1000);
         intake.needTake();
         sleep(1000);
         driveTrain.followTrajectory(trajectoryToSample1);
         sleep(1000);
         intake.needOuttake();
+        sleep(1500);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+        sleep(500);
+        shoulder.closeSh();
         driveTrain.followTrajectory(trajectoryBack);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
+        sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         shoulder.openSh();

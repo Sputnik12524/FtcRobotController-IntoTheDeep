@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.util.Encoder;
 
-@TeleOp(name="Dead Wheels", group="Robot")
+@TeleOp(name="TEST Dead Wheels", group="test")
 public class DeadWheelsTest extends LinearOpMode {
     public Encoder leftEncoder, rightEncoder, frontEncoder;
     public SampleMecanumDrive drive;

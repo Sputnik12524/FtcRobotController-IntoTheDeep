@@ -29,30 +29,31 @@ public class OnlyBasket extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        shoulder.strongCloseSh();
+        shoulder.closeSh();
         intake.extensionPosition(Intake.EXT_POS_MIN);
-
+/**<?White comment>*/
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeRight(7)
-                .back(37)
-                .turn(Math.toRadians(30))
+                .strafeRight(8)
+                .forward(13)
+                .turn(Math.toRadians(35))
                 .build();
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end())
                 .turn(Math.toRadians(45))
-                .forward(52)
+                .back(52)
                 .turn(Math.toRadians(105))
-                .back(13)
+                .forward(13)
                 .build();
         intake.extensionPosition(.05);
         waitForStart();
         if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectoryToBasket);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
+        sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
-        shoulder.openSh();
-        sleep(1000);
+        shoulder.openSh(); ///#НеБойсяПж
+        /**
+         * <?sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(1000);
         lift.setTarget(0);
@@ -61,6 +62,6 @@ public class OnlyBasket extends LinearOpMode {
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         lift.liftMotorPowerDriver.interrupt();
-        intake.samplesTaker.interrupt();
+        intake.samplesTaker.interrupt();*/
     }
 }

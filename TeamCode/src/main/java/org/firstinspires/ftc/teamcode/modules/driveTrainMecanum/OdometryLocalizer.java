@@ -28,15 +28,15 @@ import java.util.List;
  */
 @Config
 public class OdometryLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 28;
+    public static double TICKS_PER_REV = 2000;
     public static double WHEEL_RADIUS = 0.629921; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 4.7637795; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 0; // in; offset of the lateral wheel
-    public static double X_MULTIPLIER = 1;
-    public static double Y_MULTIPLIER = 1;
-    private Encoder leftEncoder, rightEncoder, frontEncoder;
+    public static double LATERAL_DISTANCE = 5.158048244412753; // physical value 5,90551 (15 cm) // in; distance between the left and right wheels //<3
+    public static double FORWARD_OFFSET = 5.11; // in; offset of the lateral wheel
+    public static double X_MULTIPLIER = 23.6/24.7537;
+    public static double Y_MULTIPLIER = 23.6/23.453;//23.6/21.5754;//35.4331/920;// 35.4331/24.0064;
+    public Encoder leftEncoder, rightEncoder, frontEncoder;
 
     private List<Integer> lastEncPositions, lastEncVels;
 
@@ -50,9 +50,9 @@ public class OdometryLocalizer extends ThreeTrackingWheelLocalizer {
         lastEncPositions = lastTrackingEncPositions;
         lastEncVels = lastTrackingEncVels;
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"y_enc"));
+        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionL"));
+        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionR"));
 
         // TO DO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
         frontEncoder.setDirection(Encoder.Direction.REVERSE);

@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
  * is recommended that you use the FollowerPIDTuner opmode for further fine tuning.
  */
 @Config
-@Autonomous(name = "TEST Back&Forth", group = "drive")
+@Autonomous(name = "TEST Back&Forth", group = "test")
 public class BackAndForth extends LinearOpMode {
 
     public static double DISTANCE = 50;

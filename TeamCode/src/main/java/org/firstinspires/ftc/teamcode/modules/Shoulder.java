@@ -17,7 +17,7 @@ public class Shoulder {
     public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double SH_POS_TO_BASKET = 0.5561; //0.63 lower
+    public static double SH_POS_TO_BASKET = 0.63;// 0.5561; upper
     public static double SH_POS_TO_INTAKE = 0;
 
     public static double SH_POS_INIT = 0.2;
@@ -92,7 +92,7 @@ public class Shoulder {
     }
 
     public void strongCloseSh() {
-        clawServoShoulder.setPosition(0.03);
+        clawServoShoulder.setPosition(0.1);
     }
 
     //Многопоточность

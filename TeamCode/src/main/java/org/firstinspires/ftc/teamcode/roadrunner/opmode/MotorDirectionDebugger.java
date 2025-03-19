@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
  * Uncomment the @Disabled tag below to use this opmode.
  */
 @Disabled
-@TeleOp(group = "drive")
+@TeleOp(group = "test")
 public class MotorDirectionDebugger extends LinearOpMode {
     public static double MOTOR_POWER = 0.7;
 

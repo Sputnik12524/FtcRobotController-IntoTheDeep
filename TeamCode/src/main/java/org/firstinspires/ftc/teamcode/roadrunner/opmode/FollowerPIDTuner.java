@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "TEST follower PID", group = "drive")
+@Autonomous(name = "TEST follower PID", group = "test")
 public class FollowerPIDTuner extends LinearOpMode {
     public static double DISTANCE = 15; // in
 
