@@ -32,7 +32,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
 
         shoulder.shoulderPosition(0.1);
         shoulder.strongCloseSh();
-        intake.extensionPosition(Intake.EXTENSION_MIN);
+        intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectorySpecimen = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
@@ -60,6 +60,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .splineTo(new Vector2d(54, 55), Math.toRadians(55))
                 .build();
+<<<<<<< HEAD
 
         Trajectory trajectoryToSample1 = driveTrain.trajectoryBuilder
                         (trajectorySpecimen.end().plus(new Pose2d(0,0, Math.toRadians(35))))
@@ -71,6 +72,78 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .forward(52)
                 .turn(Math.toRadians(105))
                 .back(13)
+=======
+        TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(trajectorySpecimen.end())
+                .forward(5)
+                .splineTo(new Vector2d(52, 52), Math.toRadians(90))
+                .turn(Math.toRadians(-195))
+                .waitSeconds(3)
+                .addDisplacementMarker(() -> {
+                    intake.extensionPosition(0.5);
+                    intake.brushIntake();
+                    sleep(500);
+                    intake.extensionPosition(0.05);
+                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
+                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
+                    telemetry.update();
+                })
+                //capturing yellow sample
+                .turn(Math.toRadians(-25))
+                .waitSeconds(2)
+                .back(5)
+                //scoring to basket
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+                    shoulder.closeSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
+                    lift.setTarget(Lift.POS_HIGH_BASKET);
+                })
+                .waitSeconds(3)
+                .addTemporalMarker(5, shoulder::openSh)
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(Lift.POS_LOWEST);
+                    shoulder.shoulderPosition(0);
+                })
+                .forward(5)
+                .waitSeconds(3)
+                .build();
+        TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
+                .turn(Math.toRadians(60))
+                .waitSeconds(3)
+                .addDisplacementMarker(() -> {
+                    intake.extensionPosition(0.5);
+                    intake.brushIntake();
+                    sleep(500);
+                    intake.extensionPosition(0.05);
+                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
+                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
+                    telemetry.update();
+                })
+                .turn(Math.toRadians(-60))
+                .back(5)
+                .waitSeconds(3)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+                    shoulder.closeSh();
+                })
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
+                    lift.setTarget(Lift.POS_HIGH_BASKET);
+                })
+                .waitSeconds(5)
+                .addTemporalMarker(5, shoulder::openSh)
+                .waitSeconds(2)
+                .addDisplacementMarker(() -> {
+                    lift.setTarget(Lift.POS_LOWEST);
+                    shoulder.shoulderPosition(0);
+                })
+                .forward(46)
+>>>>>>> teleop
                 .build();
 
         intake.extensionPosition(.05);

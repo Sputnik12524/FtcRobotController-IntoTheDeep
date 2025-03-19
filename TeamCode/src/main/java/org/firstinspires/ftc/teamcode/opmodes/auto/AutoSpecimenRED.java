@@ -83,7 +83,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
-        in.extensionPosition(Intake.EXTENSION_MIN);
+        in.extensionPosition(Intake.EXT_POS_MIN);
         waitForStart();
 
         if (isStopRequested()) ;

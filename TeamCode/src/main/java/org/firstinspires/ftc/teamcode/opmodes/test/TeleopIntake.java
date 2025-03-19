@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.test;
 
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_INTAKE;
-import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_OUTTAKE;
+import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_POS_FOR_TAKE;
+import static org.firstinspires.ftc.teamcode.modules.Intake.FLIP_POS_FOR_OUTTAKE;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,7 +16,7 @@ public class TeleopIntake extends LinearOpMode {
     public void runOpMode() {
         Intake in = new Intake(this);
         in.samplesTaker.start();
-        in.extensionPosition(Intake.EXT_START_POS);
+        in.extensionPosition(Intake.EXT_POS_INIT);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -33,14 +33,14 @@ public class TeleopIntake extends LinearOpMode {
 
             //переворот
             if (gamepad1.y) {
-                in.flipPosition(FLIP_OUTTAKE);
+                in.flipPosition(FLIP_POS_FOR_OUTTAKE);
             }
             if (gamepad1.x) {
-                in.flipPosition(FLIP_INTAKE);
+                in.flipPosition(FLIP_POS_FOR_TAKE);
             }
 
             //выдвижение
-            double k = 0.5;
+            double k = 0.25;
             in.extUpdatePosition(-gamepad1.right_stick_y * k); //с помощью стика
 
             if (gamepad1.dpad_up) { //с помощью крестовины

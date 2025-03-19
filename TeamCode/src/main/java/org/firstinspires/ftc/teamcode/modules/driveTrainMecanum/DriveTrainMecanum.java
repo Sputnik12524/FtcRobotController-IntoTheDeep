@@ -41,7 +41,12 @@ import java.util.List;
 
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
-    public static double multiplier = 1;
+    private static double multiplier = 1;
+    private static double turnCoef;
+    public static double SLOW = 0.5;
+    public static double STANDART = 1;
+
+
     private final LinearOpMode aggregate;
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(17, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0); //kP = 11
@@ -206,9 +211,9 @@ public class DriveTrainMecanum extends MecanumDrive {
                     + VY_WEIGHT * Math.abs(drivePower.getY())
                     + OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
             vel = new Pose2d(
-                    VX_WEIGHT * drivePower.getX(),
-                    VY_WEIGHT * drivePower.getY(),
-                    OMEGA_WEIGHT * drivePower.getHeading()
+                    VX_WEIGHT * drivePower.getX() * multiplier,
+                    VY_WEIGHT * drivePower.getY() * multiplier,
+                    OMEGA_WEIGHT * drivePower.getHeading() * multiplier * turnCoef
             ).div(denom);
         }
         setDrivePower(vel);
@@ -268,22 +273,28 @@ public class DriveTrainMecanum extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+    public double getTurnCoef() { return turnCoef; }
+    public double getMultiplier() { return multiplier; }
     public void switchSlowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
+            turnCoef = SLOW;
         } else {
             multiplier *= 2;
+            turnCoef = STANDART;
         }
     }
     public void slowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
         }
+        turnCoef = SLOW;
     }
     public void standartMode() {
         if (Math.abs(multiplier) <= 0.5) {
             multiplier *= 2;
         }
+        turnCoef = STANDART;
     }
 
    /* public void resetIMU() {

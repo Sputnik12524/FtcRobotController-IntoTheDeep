@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,8 +35,8 @@ public class Lift {
     public static double POS_SIDE = -4.5; // Берем с борта // -4 TRUE
      public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки // -15 TRUE
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
-    public static double POS_HIGH_SPECIMEN_BEFORE = -55; // Целимся для установки
-    public static double POS_HIGH_SPECIMEN_AFTER = -35; // Устанавливаем образец
+    public static double POS_HIGH_SPECIMEN_BEFORE = -35; // Целимся для установки
+    public static double POS_HIGH_SPECIMEN_AFTER = -25; // Устанавливаем образец
 
 
     public boolean StateSpecimenLow;
@@ -47,11 +48,12 @@ public class Lift {
         this.magneticSensor = opMode.hardwareMap.get(DigitalChannel.class, "magneticSensor");
         this.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.liftMotor.setDirection(DcMotorEx.Direction.REVERSE);
         this.aggregate = opMode;
     }
 
     private double liftPos() {
-        int stepsPerRevolution = 420;
+        int stepsPerRevolution = 252;
         int D = 3;
         return (D * Math.PI * liftMotor.getCurrentPosition() / stepsPerRevolution) * (79.0 / 75.0);
     }
@@ -154,15 +156,27 @@ public class Lift {
                 liftMotor.setPower(0);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                FtcDashboard.getInstance().getTelemetry().addLine("останавливаю подъемник (концевик)");
+                FtcDashboard.getInstance().getTelemetry().update();
             } else if (liftPos() <= POS_HIGHEST && speed < 0) {
                 liftMotor.setPower(0);
                 isOnLimits = true;
+                FtcDashboard.getInstance().getTelemetry().addLine("останавливаю подъемник (верх)");
+                FtcDashboard.getInstance().getTelemetry().update();
             } else {
                 liftMotor.setPower(speed);
                 isOnLimits = false;
+                FtcDashboard.getInstance().getTelemetry().addLine("Еду");
+                FtcDashboard.getInstance().getTelemetry().update();
             }
         } else {
             liftMotor.setPower(speed);
+            FtcDashboard.getInstance().getTelemetry().addLine("Просто подаю мощность моторам");
+            FtcDashboard.getInstance().getTelemetry().update();
         }
     }
+    public void KALxoz(double speed) {
+        liftMotor.setPower(speed);
+    }
+
 }
