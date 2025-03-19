@@ -552,10 +552,10 @@ public class TeleOpRR extends LinearOpMode {
 //            }
 
             if (gamepad1.dpad_up) {
-                sp.MoveUp(SUS_SPEED);
+                sp.moveUp(SUS_SPEED);
             } else if (gamepad1.dpad_down) {
-                sp.MoveDown(SUS_SPEED);
-            } else sp.MoveStop();
+                sp.moveDown(SUS_SPEED);
+            } else sp.moveStop();
 
 
 

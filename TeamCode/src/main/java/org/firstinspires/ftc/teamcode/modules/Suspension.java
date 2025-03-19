@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Config
 public class Suspension {
 
-    public DcMotor susMotorRight, susMotorLeft;
+    public DcMotor susMotorRight;
+    public DcMotor susMotorLeft;
     LinearOpMode opMode;
 
     public static double SUS_SPEED = 1;
@@ -19,15 +20,15 @@ public class Suspension {
         this.opMode = opMode;
     }
 
-    public void MoveUp (double speed) {
+    public void moveUp(double speed) {
         susMotorRight.setPower(speed);
         susMotorLeft.setPower(-speed);
     }
-    public void MoveDown (double speed) {
+    public void moveDown(double speed) {
         susMotorRight.setPower(-speed);
         susMotorLeft.setPower(speed);
     }
-    public void MoveStop () {
+    public void moveStop() {
         susMotorRight.setPower(0);
         susMotorLeft.setPower(0);
     }
