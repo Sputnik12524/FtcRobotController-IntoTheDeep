@@ -381,12 +381,9 @@ public class TeleOpRR extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             /// DriveTrain ALL:
-            double w_target = gamepad1.left_trigger - gamepad1.right_trigger;
-            double w_real = dt.getExternalHeadingVelocity();
-            if (Math.abs(w_real) < 1) w_real = 0;
-            double rotate = CORRECTION_COEF * (w_target - w_real * VELO_SCALE_COEF) + w_target;
+
             dt.setWeightedDrivePower(
-                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, rotate)
+                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger-gamepad1.right_trigger)
             );
 
             if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
@@ -478,13 +475,6 @@ public class TeleOpRR extends LinearOpMode {
             telemetry.addData("State FSM Intake", posIntake);
 
             telemetry.update();
-
-            /// Dashboard telemetry
-            FtcDashboard.getInstance().getTelemetry().addData("error dt:", w_target - w_real);
-            FtcDashboard.getInstance().getTelemetry().addData("w_target", w_target);
-            FtcDashboard.getInstance().getTelemetry().addData("w_real", w_real);
-            FtcDashboard.getInstance().getTelemetry().addData("rotate", rotate);
-            FtcDashboard.getInstance().getTelemetry().update();
         }
         lt.liftMotorPowerDriver.interrupt();
     }

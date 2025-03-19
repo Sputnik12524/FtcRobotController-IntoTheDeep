@@ -36,12 +36,12 @@ public class Intake {
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXT_POS_MAX = 0.54;
-    public static double EXT_POS_MIN = 0.05;
+    public static double EXT_POS_MAX = 0.4;
+    public static double EXT_POS_MIN = 0.09;
 
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_SPEED_COEF = 8;
-    public static double EXT_POS_INIT = 0.065;
+    public static double EXT_POS_INIT = 0.1;
 
     public static double FLIP_POS_FOR_TAKE = 0.1;
     public static double FLIP_POS_FOR_OUTTAKE = 0.72;

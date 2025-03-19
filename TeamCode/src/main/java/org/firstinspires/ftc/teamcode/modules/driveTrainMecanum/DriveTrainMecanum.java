@@ -43,7 +43,7 @@ import java.util.List;
 public class DriveTrainMecanum extends MecanumDrive {
     private static double multiplier = 1;
     private static double turnCoef;
-    public static double SLOW = 0.5;
+    public static double SLOW = 0.7;
     public static double STANDART = 1;
 
 
@@ -276,11 +276,11 @@ public class DriveTrainMecanum extends MecanumDrive {
     public double getTurnCoef() { return turnCoef; }
     public double getMultiplier() { return multiplier; }
     public void switchSlowMode() {
-        if (Math.abs(multiplier) > 0.5) {
-            multiplier /= 2;
+        if (Math.abs(multiplier) > 0.34) {
+            multiplier /= 3;
             turnCoef = SLOW;
         } else {
-            multiplier *= 2;
+            multiplier *= 3;
             turnCoef = STANDART;
         }
     }
@@ -297,9 +297,6 @@ public class DriveTrainMecanum extends MecanumDrive {
         turnCoef = STANDART;
     }
 
-   /* public void resetIMU() {
-        imu.initialize(parameters);
-    }*/
     public void cancelTrajectoryFollowing(boolean isCancelled){
         setDrivePower(new Pose2d(0,0));
     }
