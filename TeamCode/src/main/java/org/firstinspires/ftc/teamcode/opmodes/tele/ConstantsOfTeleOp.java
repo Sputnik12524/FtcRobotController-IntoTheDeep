@@ -40,7 +40,7 @@ public class ConstantsOfTeleOp {
     public static double BRUSH_TIME = 600;
     public static double BRUSHING_OUT_TIME = 400;
 
-    public static double NECESSARY_EXT_POS = 0.2;
+    public static double NECESSARY_EXT_POS = 0.14;
 
 
 }

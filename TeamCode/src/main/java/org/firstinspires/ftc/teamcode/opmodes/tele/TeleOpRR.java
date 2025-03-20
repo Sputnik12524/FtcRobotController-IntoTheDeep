@@ -357,16 +357,19 @@ public class TeleOpRR extends LinearOpMode {
                     telemetry.addLine("СИНИЙ АЛЬЯНС");
                     telemetry.update();
                     initWait = true;
+                    sleep(300);
                 } else if (gamepad1.b) { //Red alliance
                     badColor = Intake.Color.BLUE;
                     telemetry.addLine("КРАСНЫЙ АЛЬЯНС");
                     telemetry.update();
                     initWait = true;
-                } else if (gamepad1.a) { //For tests
+                    sleep(300);
+                } else if (gamepad1.y) { //For tests
                     badColor = null;
                     telemetry.addLine("БЕЗ АЛЬЯНСА");
                     telemetry.update();
                     initWait = true;
+                    sleep(300);
                 } else {
                     telemetry.addLine("НАЖМИТЕ КНОПКУ ДЛЯ ВЫБОРА АЛЬЯНСА");
                     telemetry.update();
