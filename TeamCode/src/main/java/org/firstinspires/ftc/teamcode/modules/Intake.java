@@ -165,10 +165,14 @@ public class Intake {
                     needOuttake = false;
                 }
                 if (needTake) {
+                    brushIntake();
                     flipPosition(FLIP_POS_FOR_TAKE);
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME) ;
+                    while (timer.milliseconds() < FLIP_TIME);
                     extensionPosition(EXT_POS_MAX);
+                    timer.reset();
+                    while (timer.milliseconds() < BRUSH_TIME);
+                    brushStop();
                     needTake = false;
                 }
             }

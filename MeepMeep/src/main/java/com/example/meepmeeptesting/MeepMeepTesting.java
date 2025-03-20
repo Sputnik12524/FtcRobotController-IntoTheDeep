@@ -13,31 +13,9 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(16, 54, 0))
-                        .turn(Math.toRadians(90))
-                        .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(.7);
-                            //lift.setTarget(-33);
-                        })
-                        .back(13)//, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                //DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                        .back(12)//, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                               // DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                        .addDisplacementMarker(     () -> {
-                         //   shoulder.openSh();
-                           // shoulder.shoulderPosition(.75);
-                            //telemetry.addLine("Здесь опустится подъемник");
-                            //telemetry.update();
-                        })
-                        .waitSeconds(2)
-                        .forward(25)
-                        .addDisplacementMarker(() -> {
-                           // sleep(500);
-                            //shoulder.shoulderPosition(.1);
-                        })
-                        .splineTo(new Vector2d(54, 55), Math.toRadians(55))
-
+                .setConstraints(52, 52, Math.toRadians(223), Math.toRadians(223), 12)
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-10, 56, 0))
+                        .splineTo(new Vector2d(-15,30), Math.toRadians(180))
                        // .addDisplacementMarker(() -> lift.setTarget(0))
                         .build());
 

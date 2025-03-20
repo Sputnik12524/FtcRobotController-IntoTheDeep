@@ -31,7 +31,7 @@ public class OnlyBasket extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         intake.extensionPosition(Intake.EXT_POS_MIN);
-/*<?White comment>*/
+/**<?White comment>*/
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(8)
                 .forward(13)

@@ -30,11 +30,11 @@ public class Claw {
         }
     }
 
-    public void closeLift() {
+    public void openLift() {
         clawServoLift.setPosition(CLAW_L_POS_CLOSE);
         stateOpenLift = false;
     }
-    public void openLift() {
+    public void closeLift() {
         clawServoLift.setPosition(CLAW_L_POS_OPEN);
         stateOpenLift = true;
     }
