@@ -31,7 +31,7 @@ public class OnlyBasket extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         intake.extensionPosition(Intake.EXT_POS_MIN);
-/**<?White comment>*/
+/*<?White comment>*/
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(8)
                 .forward(13)
@@ -52,8 +52,8 @@ public class OnlyBasket extends LinearOpMode {
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
         shoulder.openSh(); ///#НеБойсяПж
-        /**
-         * <?sleep(1000);
+        /*
+          <?sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(1000);
         lift.setTarget(0);

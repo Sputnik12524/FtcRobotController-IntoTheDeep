@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -8,12 +9,13 @@ import org.firstinspires.ftc.teamcode.modules.Claw;
 import org.firstinspires.ftc.teamcode.modules.Intake;
 import org.firstinspires.ftc.teamcode.modules.Lift;
 import org.firstinspires.ftc.teamcode.modules.Shoulder;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto RED Specimen", group = "Robot")
+@Autonomous(name = "RED Auto Specimen", group = "Robot")
 public class AutoSpecimenRED extends LinearOpMode {
+
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
@@ -23,18 +25,17 @@ public class AutoSpecimenRED extends LinearOpMode {
         Shoulder shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(9, -54, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-9, 54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
         claw.openLift();
-
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.7);
+                    shoulder.shoulderPosition(.72);
                     lift.setTarget(-33);
                 })
-                .back(13, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(10, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .back(15, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     shoulder.openSh();
@@ -42,19 +43,15 @@ public class AutoSpecimenRED extends LinearOpMode {
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
+                .waitSeconds(1)
                 .forward(5)
                 .addDisplacementMarker(() -> shoulder.shoulderPosition(.1))
                 .waitSeconds(0.5)
-                .addDisplacementMarker(() -> lift.setTarget(0))
+                .addDisplacementMarker(() -> lift.setTarget(0)) //statement lambda was replaced with expression lambda
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
-                .turn(Math.toRadians(-120))
-                .back(34)
-                .turn(Math.toRadians(-50))
-                .back(20, DriveTrainMecanum.getVelocityConstraint(4,
-                                DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .forward(0.7)
+                .splineTo(new Vector2d(-52, 59), Math.toRadians(90))
+                .forward(3)
                 .addDisplacementMarker(() -> {
                     claw.closeLift();
                     sleep(1000);
@@ -63,11 +60,11 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
                 .waitSeconds(1)
-                .forward(5)
-                .turn(Math.toRadians(-140))
-                .back(48)
-                .turn(Math.toRadians(-50))
-                .back(6,DriveTrainMecanum.getVelocityConstraint(15,
+                .back(10)
+                .turn(Math.toRadians(70))
+                .back(46)
+                .turn(Math.toRadians(-70))
+                .back(5.5, DriveTrainMecanum.getVelocityConstraint(15,
                                 DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .waitSeconds(1)
@@ -76,13 +73,14 @@ public class AutoSpecimenRED extends LinearOpMode {
                     sleep(1000);
                     claw.openLift();
                 })
-                .forward(6)
+                .splineTo(new Vector2d(-52, 55), Math.toRadians(180))
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .waitSeconds(1)
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXT_POS_MIN);
+
         waitForStart();
 
         if (isStopRequested()) ;

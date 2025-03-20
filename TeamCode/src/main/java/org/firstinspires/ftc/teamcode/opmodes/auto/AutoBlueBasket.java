@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "2 BLUE Auto Basket", group = "Robot")
-public class Auto3Basket extends LinearOpMode {
+public class AutoBlueBasket extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -39,9 +39,8 @@ public class Auto3Basket extends LinearOpMode {
                 .build();
         Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).forward(1).build();
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
-                .turn(Math.toRadians(-45))
-                .back(52)
-                .turn(Math.toRadians(105))
+                .back(45)
+                .turn(Math.toRadians(100))
                 .forward(13)
                 .build();
         intake.extensionPosition(.05);
