@@ -119,7 +119,6 @@ public class Intake {
             extensionServoRight.setPosition(extensionServoRight.getPosition() + EXTENSION_STEP);
         }
     }
-
     public double getFlipPositionR() {
         return flipServoRight.getPosition();
     }

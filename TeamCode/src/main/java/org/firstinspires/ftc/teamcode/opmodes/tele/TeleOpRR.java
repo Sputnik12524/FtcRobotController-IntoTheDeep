@@ -146,7 +146,7 @@ public class TeleOpRR extends LinearOpMode {
                         shoulderFSM = Shoulder.SH_POS_TO_INTAKE;
                         return ShoulderClawStates.MOVED_TO_INTAKE;
                     }
-                    if (gamepad2.b && stateB2) {
+                    if (gamepad2.b && stateB2 && in.getExtensionPositionR() <= NECESSARY_EXT_POS) {
                         shoulderTimer.reset();
                         shoulderFSM = Shoulder.SH_POS_TO_BASKET;
                         return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
@@ -202,7 +202,7 @@ public class TeleOpRR extends LinearOpMode {
             }};
     private final Map<IntakeStates, Supplier<IntakeStates>> intakeFSMMap = new HashMap<IntakeStates, Supplier<IntakeStates>>() {{
         put(IntakeStates.FOLDED_POS, () -> {
-            if (gamepad1.right_bumper && !stateRightBumper1) {
+            if (gamepad1.right_bumper && !stateRightBumper1 && shoulderFSM == Shoulder.SH_POS_INIT) {
                 intakeTimer.reset();
                 extFSM = Intake.EXT_POS_MAX;
                 return IntakeStates.EXTENDING_OUT;
@@ -426,6 +426,7 @@ public class TeleOpRR extends LinearOpMode {
             /// Manual control:
             //Extension:
             extFSM += -gamepad1.right_stick_y * Intake.EXT_SPEED_COEF * Intake.EXTENSION_STEP;
+            if (shoulderFSM == Shoulder.SH_POS_TO_BASKET) extFSM = Intake.EXT_POS_INIT;
 
             //Brushes:
             if (gamepad1.a && !brushInStatus && !stateA1) {
@@ -459,7 +460,7 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 sp.moveUp(SUS_SPEED);
             } else if (gamepad1.dpad_down) {
-                sp.moveDown(SUS_SPEED);
+                sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();
 
 
