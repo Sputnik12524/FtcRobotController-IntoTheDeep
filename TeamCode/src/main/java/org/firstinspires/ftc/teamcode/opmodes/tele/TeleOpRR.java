@@ -466,16 +466,18 @@ public class TeleOpRR extends LinearOpMode {
 
 
             /// Telemetry
-            telemetry.addLine(String.join(" ", "УПРАВЛЕНИЕ НЕ ДАМ", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
+            telemetry.addLine(String.join(" ", "УПРАВЛЕНИЕ НЕ ДАМ!1!11", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
 
+            telemetry.addData("ДАТЧИК ЦВЕТА:", stateSensor);
             telemetry.addData("Color:", in.getColorSample());
-            telemetry.addData("Hue:", in.getHue());
-            telemetry.addData("Saturation:", in.getSaturation());
-            telemetry.addData("Value:", in.getValue());
 
             telemetry.addData("State FSM Lift:", posLift);
             telemetry.addData("State FSM Shoulder:", posShoulder);
             telemetry.addData("State FSM Intake", posIntake);
+
+            FtcDashboard.getInstance().getTelemetry().addData("Hue:", in.getHue());
+            FtcDashboard.getInstance().getTelemetry().addData("Saturation:", in.getSaturation());
+            FtcDashboard.getInstance().getTelemetry().addData("Value:", in.getValue());
 
             telemetry.update();
         }

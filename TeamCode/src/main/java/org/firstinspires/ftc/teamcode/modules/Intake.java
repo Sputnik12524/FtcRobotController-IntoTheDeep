@@ -37,11 +37,11 @@ public class Intake {
 
 
     public static double EXT_POS_MAX = 0.4;
-    public static double EXT_POS_MIN = 0.09;
+    public static double EXT_POS_MIN = 0.07;
 
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_SPEED_COEF = 8;
-    public static double EXT_POS_INIT = 0.1;
+    public static double EXT_POS_INIT = 0.075;
 
     public static double FLIP_POS_FOR_TAKE = 0.08;
     public static double FLIP_POS_FOR_OUTTAKE = 0.73;
