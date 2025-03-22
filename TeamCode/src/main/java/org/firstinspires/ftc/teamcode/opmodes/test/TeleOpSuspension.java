@@ -20,7 +20,7 @@ public class TeleOpSuspension extends LinearOpMode {
 
             ///Suspension
             if (gamepad1.dpad_up) {
-                sp.moveUp(SUS_SPEED);
+                sp.moveUpStupid(SUS_SPEED);
             } else if (gamepad1.dpad_down) {
                 sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();

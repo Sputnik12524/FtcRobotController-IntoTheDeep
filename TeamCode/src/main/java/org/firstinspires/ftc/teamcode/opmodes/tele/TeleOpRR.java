@@ -67,8 +67,10 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateB1 = false;
     private boolean stateRightBumper1 = false;
     private boolean stateLeftBumper1 = false;
+
     public Intake.Color badColor;
-    private boolean stateSensor = false;
+    private boolean stateSensor = true;
+    private boolean stateDpadLeft1 = false;
 
     /// different things
     private boolean initWait = false;
@@ -134,7 +136,7 @@ public class TeleOpRR extends LinearOpMode {
             return LiftStates.WAIT_UPDATE;
         });
         put(LiftStates.ZERO_UPDATE, () -> {
-            targetLiftFSM += 3;
+            targetLiftFSM += 6;
             return LiftStates.WAIT_UPDATE;
         });
     }};
@@ -146,7 +148,7 @@ public class TeleOpRR extends LinearOpMode {
                         shoulderFSM = Shoulder.SH_POS_TO_INTAKE;
                         return ShoulderClawStates.MOVED_TO_INTAKE;
                     }
-                    if (gamepad2.b && stateB2 && in.getExtensionPositionR() <= NECESSARY_EXT_POS) {
+                    if (gamepad2.b && stateB2) {
                         shoulderTimer.reset();
                         shoulderFSM = Shoulder.SH_POS_TO_BASKET;
                         return ShoulderClawStates.MOVING_TO_BASKET_FROM_START;
@@ -202,7 +204,7 @@ public class TeleOpRR extends LinearOpMode {
             }};
     private final Map<IntakeStates, Supplier<IntakeStates>> intakeFSMMap = new HashMap<IntakeStates, Supplier<IntakeStates>>() {{
         put(IntakeStates.FOLDED_POS, () -> {
-            if (gamepad1.right_bumper && !stateRightBumper1 && shoulderFSM == Shoulder.SH_POS_INIT) {
+            if (gamepad1.right_bumper && !stateRightBumper1) {
                 intakeTimer.reset();
                 extFSM = Intake.EXT_POS_MAX;
                 return IntakeStates.EXTENDING_OUT;
@@ -426,7 +428,7 @@ public class TeleOpRR extends LinearOpMode {
             /// Manual control:
             //Extension:
             extFSM += -gamepad1.right_stick_y * Intake.EXT_SPEED_COEF * Intake.EXTENSION_STEP;
-            if (shoulderFSM == Shoulder.SH_POS_TO_BASKET) extFSM = Intake.EXT_POS_INIT;
+            if (extFSM > Intake.EXT_POS_MAX) extFSM = Intake.EXT_POS_MAX - 0.05;
 
             //Brushes:
             if (gamepad1.a && !brushInStatus && !stateA1) {
@@ -454,11 +456,12 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.x) flipFSM = Intake.FLIP_POS_FOR_TAKE;
 
             //Color sensor
-            if (gamepad1.dpad_left) stateSensor = !stateSensor;
+            if (gamepad1.dpad_left && !stateDpadLeft1) stateSensor = !stateSensor;
+            stateDpadLeft1 = gamepad1.dpad_left;
 
             /// Suspension
             if (gamepad1.dpad_up) {
-                sp.moveUp(SUS_SPEED);
+                sp.moveUpStupid(SUS_SPEED);
             } else if (gamepad1.dpad_down) {
                 sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();

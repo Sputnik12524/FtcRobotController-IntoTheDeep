@@ -29,14 +29,14 @@ public class Intake {
 
     NormalizedColorSensor colorSensor;
     public static double BLUE_MAX = 280;
-    public static double BLUE_MIN = 210;
+    public static double BLUE_MIN = 180;
     public static double YELLOW_MAX = 110;
     public static double YELLOW_MIN = 60;
     public static float GAIN = 2;
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXT_POS_MAX = 0.4;
+    public static double EXT_POS_MAX = 0.36;
     public static double EXT_POS_MIN = 0.07;
 
     public static double EXTENSION_STEP = 0.005;

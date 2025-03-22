@@ -30,8 +30,9 @@ public class Lift {
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
 
     public static double POS_FOR_INTAKE = -10; //НАДО НАСТРОИТЬ
-    public static double POS_LOW_BASKET = -50; //-30
-    public static double POS_HIGH_BASKET = -70;
+    public static double POS_LOW_BASKET = -30; //-30
+    public static double POS_HIGH_BASKET = -55;
+    public static double POS_HIGH_BASKET_AUTO = -55;
     public static double POS_SIDE = -4.5; // Берем с борта // -4 TRUE
      public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки // -15 TRUE
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
