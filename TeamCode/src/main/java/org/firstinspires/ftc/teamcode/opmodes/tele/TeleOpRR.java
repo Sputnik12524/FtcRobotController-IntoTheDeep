@@ -258,7 +258,7 @@ public class TeleOpRR extends LinearOpMode {
                 in.brushOuttake();
                 brushInStatus = false;
                 brushOutStatus = true;
-                posIntake = IntakeStates.REMOVE_TRASH;
+                return IntakeStates.REMOVE_TRASH;
             } else if (flipFSM == Intake.FLIP_POS_FOR_OUTTAKE) {
                 return IntakeStates.UNFOLDED_POS_FOR_FLIP;
             }

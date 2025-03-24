@@ -64,7 +64,7 @@ public class Auto2Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(59));
+        driveTrain.turn(Math.toRadians(60));
         sleep(100);
         intake.needTake();
         sleep(1000);

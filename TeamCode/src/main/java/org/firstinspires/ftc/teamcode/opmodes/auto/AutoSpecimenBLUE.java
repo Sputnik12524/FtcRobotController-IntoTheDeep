@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "BLUE Auto Specimen", group = "Robot")
+@Autonomous(name = "1+1 Auto Specimen", group = "Robot")
 public class AutoSpecimenBLUE extends LinearOpMode {
 
     @Override
@@ -31,39 +31,39 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         cl.closeLift();
 
         /**<?TO DO: use spline trajectories to deliver specimens*/
-
+/**<?*/
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE))
                 .forward(28)
                 .build();
         TrajectorySequence trajectoryFirstSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
-                .back(10)
                 .addDisplacementMarker(() -> lift.setTarget(0))
+                .back(10)
                 .waitSeconds(0.5)
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
                 .turn(Math.toRadians(-120))
-                .forward(38)
+                .forward(35)
                 .turn(Math.toRadians(-60))
-                .forward(2, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     cl.closeLift();
-                    sleep(1000);
+                    sleep(700);
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                 })
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
                 .back(10)
                 .turn(Math.toRadians(-110))
-                .forward(35)
+                .forward(30)
                 .turn(Math.toRadians(-70))
                 .forward(10)
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .build();
         Trajectory trajectorySecondSpecEnd = base.trajectoryBuilder(trajectoryScoringSecondSpecimen.end(), true)
-                .splineTo(new Vector2d(-52, 55), Math.toRadians(180))
                 .addDisplacementMarker(() -> lift.setTarget(0))
+                .splineTo(new Vector2d(40, 50), Math.toRadians(180))
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
@@ -71,7 +71,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) ;
+        if (isStopRequested());
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(500);
         lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
@@ -82,9 +82,9 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
         sleep(500);
         base.followTrajectorySequence(trajectoryScoringSecondSpecimen);
-        sleep(1500);
-        lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
         sleep(1000);
+        lift.setTarget(-27);
+        sleep(900);
         cl.openLift();
         base.followTrajectory(trajectorySecondSpecEnd);
         lift.liftMotorPowerDriver.interrupt();
