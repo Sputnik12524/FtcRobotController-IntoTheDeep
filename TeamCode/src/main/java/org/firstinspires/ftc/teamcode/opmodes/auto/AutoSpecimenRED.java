@@ -83,7 +83,7 @@ public class AutoSpecimenRED extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) ;
+        if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(500);
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);

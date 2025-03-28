@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import android.database.sqlite.SQLiteException;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.*;
@@ -40,11 +38,7 @@ public class Auto3Basket extends LinearOpMode {
                 .back(1)
                 .build();
         Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).forward(1).build();
-        TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
-                .back(45)
-                .turn(Math.toRadians(110))
-                .forward(13)
-                .build();
+
         intake.extensionPosition(.05);
 
         waitForStart();
@@ -80,8 +74,7 @@ public class Auto3Basket extends LinearOpMode {
         sleep(900);
         shoulder.openSh();
         sleep(900);
-        shoulder.shoulderPos
-    ition(Shoulder.SH_POS_INIT);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(500);
         lift.setTarget(0);
 
@@ -107,7 +100,6 @@ public class Auto3Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-     //   driveTrain.followTrajectorySequence(trajectoryToPark);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }

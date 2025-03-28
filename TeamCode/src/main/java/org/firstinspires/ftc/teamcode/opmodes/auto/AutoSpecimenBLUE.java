@@ -30,8 +30,8 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         base.setPoseEstimate(startPose);
         cl.closeLift();
 
-        /**<?TO DO: use spline trajectories to deliver specimens*/
-/**<?*/
+        /*<?TODO: use spline trajectories to deliver specimens*/
+
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE))
                 .forward(28)
@@ -71,7 +71,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested());
+        if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(500);
         lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);

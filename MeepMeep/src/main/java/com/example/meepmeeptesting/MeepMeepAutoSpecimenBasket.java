@@ -18,8 +18,6 @@ public class MeepMeepAutoSpecimenBasket {
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(12, 57, 0))
                         .turn(Math.toRadians(90))
                         .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(.7);
-                            //lift.setTarget(-33);
                         })
                         .back(13)//, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         //  DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -27,16 +25,10 @@ public class MeepMeepAutoSpecimenBasket {
                         .back(12)//, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         //DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                         .addDisplacementMarker(() -> {
-                            /*shoulder.openSh();
-                            shoulder.shoulderPosition(.75);
-                            telemetry.addLine("Здесь опустится подъемник");
-                            telemetry.update();*/
                         })
                         .waitSeconds(2)
                         .forward(10)
                         .addDisplacementMarker(() -> {
-                            /*sleep(500);
-                            shoulder.shoulderPosition(.1);*/
                         })
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
@@ -51,13 +43,6 @@ public class MeepMeepAutoSpecimenBasket {
                         .turn(Math.toRadians(-195))
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
-                            /*intake.extensionPosition(0.5);
-                            intake.brushIntake();
-                            sleep(500);
-                            intake.extensionPosition(0.05);
-                            intake.flipPosition(Intake.FLIP_OUTTAKE);
-                            telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
-                            telemetry.update();*/
                         })
                         //capturing yellow sample
                         .turn(Math.toRadians(-25))
@@ -65,13 +50,9 @@ public class MeepMeepAutoSpecimenBasket {
                         .back(5)
                         //scoring to basket
                         .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
-                            //shoulder.closeSh();
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
-                            //lift.setTarget(Lift.POS_HIGH_BASKET);
                         })
                         .waitSeconds(3)
                         .addTemporalMarker(5, () -> {
@@ -79,8 +60,6 @@ public class MeepMeepAutoSpecimenBasket {
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {
-                            //lift.setTarget(Lift.POS_LOWEST);
-                            //shoulder.shoulderPosition(0);
                         })
                         .forward(5)
                         .waitSeconds(3)
@@ -88,25 +67,14 @@ public class MeepMeepAutoSpecimenBasket {
                         .turn(Math.toRadians(60))
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
-                   /* intake.extensionPosition(0.5);
-                    intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_OUTTAKE);
-                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
-                    telemetry.update();*/
                         })
                         .turn(Math.toRadians(-60))
                         .back(5)
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(Shoulder.POS_SH_FOR_INTAKE);
-                            //shoulder.closeSh();
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {
-                            //shoulder.shoulderPosition(Shoulder.POS_SH_BASKET);
-                            //lift.setTarget(Lift.POS_HIGH_BASKET);
                         })
                         .waitSeconds(5)
                         .addTemporalMarker(5, () -> {
@@ -114,8 +82,6 @@ public class MeepMeepAutoSpecimenBasket {
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {
-                            //lift.setTarget(Lift.POS_LOWEST);
-                            //shoulder.shoulderPosition(0);
                         })
                         .forward(46)
                         .build());

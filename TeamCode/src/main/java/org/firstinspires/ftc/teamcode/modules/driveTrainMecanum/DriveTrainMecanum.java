@@ -315,7 +315,7 @@ public class DriveTrainMecanum extends MecanumDrive {
         }
         turnCoef = SLOW;
     }
-    public void standartMode() {
+    public void standardMode() {
         if (Math.abs(multiplier) <= 0.5) {
             multiplier *= 2;
         }
@@ -323,7 +323,9 @@ public class DriveTrainMecanum extends MecanumDrive {
     }
 
     public void cancelTrajectoryFollowing(boolean isCancelled){
-        setDrivePower(new Pose2d(0,0));
+        if(isCancelled) {
+            setDrivePower(new Pose2d(0, 0));
+        }
     }
 
 }
