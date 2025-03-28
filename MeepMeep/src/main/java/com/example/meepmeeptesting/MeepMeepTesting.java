@@ -16,7 +16,6 @@ public class MeepMeepTesting {
                 .setConstraints(52, 52, Math.toRadians(223), Math.toRadians(223), 12)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-10, 56, 0))
                         .splineTo(new Vector2d(-15,30), Math.toRadians(180))
-                       // .addDisplacementMarker(() -> lift.setTarget(0))
                         .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)

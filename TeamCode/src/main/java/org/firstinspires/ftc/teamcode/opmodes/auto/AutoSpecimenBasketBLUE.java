@@ -43,7 +43,7 @@ public class AutoSpecimenBasketBLUE extends LinearOpMode {
                 .waitSeconds(2)
                 .back(12, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addDisplacementMarker(     () -> {
+                .addDisplacementMarker(() -> {
                     shoulder.openSh();
                     shoulder.shoulderPosition(.75);
                     telemetry.addLine("Здесь опустится подъемник");

@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*
- * Simple mecanum drive hardware implementation for REV hardware.
- */
 @Config
 public class DriveTrainMecanum extends MecanumDrive {
 
@@ -46,8 +43,8 @@ public class DriveTrainMecanum extends MecanumDrive {
     public static double SLOW = 0.55;
     public static double STANDART = 1;
     private final LinearOpMode aggregate;
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 0); //kP = 11 (tuned)
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0); //kP = 4
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(20, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -84,7 +81,7 @@ public class DriveTrainMecanum extends MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TO DO: adjust the names of the following hardware devices to match your configuration
+        // adjust the names of the following hardware devices to match your configuration
         leftFront = hardwareMap.get(DcMotorEx.class, "left_front");
         leftBack = hardwareMap.get(DcMotorEx.class, "left_back");
         rightBack = hardwareMap.get(DcMotorEx.class, "right_back");
@@ -108,7 +105,7 @@ public class DriveTrainMecanum extends MecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, DriveConstants.MOTOR_VELO_PID);
         }
 
-        // TO DO: reverse any motors using DcMotor.setDirection()
+        // reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotorEx.Direction.REVERSE);
         leftBack.setDirection(DcMotorEx.Direction.REVERSE);
         rightBack.setDirection(DcMotorEx.Direction.FORWARD);
@@ -117,7 +114,7 @@ public class DriveTrainMecanum extends MecanumDrive {
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
-        // TO DO: if desired, use setLocalizer() to change the localization method
+        // if desired, use setLocalizer() to change the localization method
         //https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit?tab=t.0 to learn more
         setLocalizer(new OdometryLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
@@ -298,8 +295,15 @@ public class DriveTrainMecanum extends MecanumDrive {
     public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
     }
-    public double getTurnCoef() { return turnCoef; }
-    public double getMultiplier() { return multiplier; }
+
+    public double getTurnCoef() {
+        return turnCoef;
+    }
+
+    public double getMultiplier() {
+        return multiplier;
+    }
+
     public void switchSlowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
@@ -309,12 +313,14 @@ public class DriveTrainMecanum extends MecanumDrive {
             turnCoef = STANDART;
         }
     }
+
     public void slowMode() {
         if (Math.abs(multiplier) > 0.5) {
             multiplier /= 2;
         }
         turnCoef = SLOW;
     }
+
     public void standardMode() {
         if (Math.abs(multiplier) <= 0.5) {
             multiplier *= 2;
@@ -322,8 +328,8 @@ public class DriveTrainMecanum extends MecanumDrive {
         turnCoef = STANDART;
     }
 
-    public void cancelTrajectoryFollowing(boolean isCancelled){
-        if(isCancelled) {
+    public void cancelTrajectoryFollowing(boolean isCancelled) {
+        if (isCancelled) {
             setDrivePower(new Pose2d(0, 0));
         }
     }

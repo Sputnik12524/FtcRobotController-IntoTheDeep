@@ -28,7 +28,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-10, 56, Math.toRadians(90));
         base.setPoseEstimate(startPose);
-        cl.closeLift();
+        cl.openLift();
 
         /*<?TODO: use spline trajectories to deliver specimens*/
 
@@ -48,7 +48,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
                 .forward(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
-                    cl.closeLift();
+                    cl.openLift();
                     sleep(700);
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                 })
@@ -76,7 +76,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         sleep(500);
         lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
         sleep(1000);
-        cl.openLift();
+        cl.closeLift();
         sleep(1000);
         base.followTrajectorySequence(trajectoryFirstSpecimen);
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
@@ -85,7 +85,7 @@ public class AutoSpecimenBLUE extends LinearOpMode {
         sleep(1000);
         lift.setTarget(-27);
         sleep(900);
-        cl.openLift();
+        cl.closeLift();
         base.followTrajectory(trajectorySecondSpecEnd);
         lift.liftMotorPowerDriver.interrupt();
     }

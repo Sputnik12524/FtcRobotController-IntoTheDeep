@@ -55,7 +55,4 @@ public class Suspension {
         susMotorRight.setPower(0);
         susMotorLeft.setPower(0);
     }
-
-
-
 }

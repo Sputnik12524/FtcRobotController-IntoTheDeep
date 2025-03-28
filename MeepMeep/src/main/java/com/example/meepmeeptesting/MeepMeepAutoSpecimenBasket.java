@@ -19,11 +19,9 @@ public class MeepMeepAutoSpecimenBasket {
                         .turn(Math.toRadians(90))
                         .addDisplacementMarker(() -> {
                         })
-                        .back(13)//, DriveTrainMecanum.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        //  DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .back(13)
                         .waitSeconds(2)
-                        .back(12)//, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        //DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .back(12)
                         .addDisplacementMarker(() -> {
                         })
                         .waitSeconds(2)
@@ -32,23 +30,17 @@ public class MeepMeepAutoSpecimenBasket {
                         })
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
-                            // lift.setTarget(0);
                         })
                         .waitSeconds(4)
-                       // .turn(Math.toRadians(65))
-                        // TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(trajectorySpecimen.end())
                         .forward(5)
-                        //.turn(Math.toRadians())
                         .splineTo(new Vector2d(52, 52), Math.toRadians(90))
                         .turn(Math.toRadians(-195))
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
                         })
-                        //capturing yellow sample
                         .turn(Math.toRadians(-25))
                         .waitSeconds(2)
                         .back(5)
-                        //scoring to basket
                         .addDisplacementMarker(() -> {
                         })
                         .waitSeconds(2)
@@ -56,14 +48,12 @@ public class MeepMeepAutoSpecimenBasket {
                         })
                         .waitSeconds(3)
                         .addTemporalMarker(5, () -> {
-                            // shoulder.openSh();
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {
                         })
                         .forward(5)
                         .waitSeconds(3)
-                        //TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
                         .turn(Math.toRadians(60))
                         .waitSeconds(3)
                         .addDisplacementMarker(() -> {
@@ -78,7 +68,6 @@ public class MeepMeepAutoSpecimenBasket {
                         })
                         .waitSeconds(5)
                         .addTemporalMarker(5, () -> {
-                            // shoulder.openSh();
                         })
                         .waitSeconds(2)
                         .addDisplacementMarker(() -> {

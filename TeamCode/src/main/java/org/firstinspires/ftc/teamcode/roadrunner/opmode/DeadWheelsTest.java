@@ -4,20 +4,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.util.Encoder;
 
 @TeleOp(name="TEST Dead Wheels", group="test")
 public class DeadWheelsTest extends LinearOpMode {
     public Encoder leftEncoder, rightEncoder, frontEncoder;
-    public SampleMecanumDrive drive;
 
     @Override
     public void runOpMode() {
         leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"y_enc"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionL"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionR"));
-        drive = new SampleMecanumDrive(hardwareMap);
+        DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
+
         waitForStart();
         while(opModeIsActive()) {
             telemetry.addData("X Left - ", leftEncoder.getCurrentPosition());

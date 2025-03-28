@@ -46,7 +46,7 @@ public class Auto3Basket extends LinearOpMode {
         if (isStopRequested()) return;
 
         driveTrain.followTrajectorySequence(trajectoryToBasket);
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(900);
@@ -68,7 +68,7 @@ public class Auto3Basket extends LinearOpMode {
         shoulder.setPosition(.46);
         sleep(500);
         driveTrain.turn(Math.toRadians(-45));
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(900);
@@ -89,7 +89,7 @@ public class Auto3Basket extends LinearOpMode {
         shoulder.setPosition(.46);
         sleep(500);
         driveTrain.turn(Math.toRadians(-67));
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(1500);

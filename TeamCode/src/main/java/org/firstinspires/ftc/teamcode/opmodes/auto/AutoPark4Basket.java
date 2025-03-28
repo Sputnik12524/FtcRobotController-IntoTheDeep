@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "4+Park  BLUE Auto Basket", group = "Robot")
-public class AutoPark4basket extends LinearOpMode {
+public class AutoPark4Basket extends LinearOpMode {
 
     @Override
     public void runOpMode() {
