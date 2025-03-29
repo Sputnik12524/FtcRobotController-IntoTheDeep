@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.modules.*;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "4+Park  BLUE Auto Basket", group = "Robot")
+@Autonomous(name = "4+Park BLUE Auto Basket", group = "Robot")
 public class AutoPark4Basket extends LinearOpMode {
 
     @Override
@@ -28,13 +28,14 @@ public class AutoPark4Basket extends LinearOpMode {
         intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
-                .strafeRight(8)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                 })
-                .forward(10)
-                .turn(Math.toRadians(35))
+                .strafeRight(10)
+                .forward(15)
+                .turn(Math.toRadians(40))
+                //.splineTo(-x,y,Math.toRadians(0)
                 .build();
         TrajectorySequence trajectoryToSample1 = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end().plus(new Pose2d(0, 0, Math.toRadians(35))))
                 .addDisplacementMarker(() -> {
@@ -77,51 +78,59 @@ public class AutoPark4Basket extends LinearOpMode {
         if (isStopRequested()) return;
 
         driveTrain.followTrajectorySequence(trajectoryToBasket);
-        sleep(1000);
         shoulder.openSh();
-        sleep(100);
+        sleep(500);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
-        sleep(1000);
         lift.setTarget(0);
-        sleep(1000);
+        sleep(600);
 
-        driveTrain.turn(Math.toRadians(80));
+        driveTrain.turn(Math.toRadians(65));
         sleep(100);
         intake.needTake();
         sleep(1000);
         intake.needOuttake();
-        sleep(2000);
-
-        driveTrain.followTrajectorySequence(trajectoryToSample1);
-        lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(1000);
-        shoulder.shoulderPosition(.65);
-        sleep(1000);
-        shoulder.openSh();
-        sleep(1000);
-        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
-        sleep(1000);
-        lift.setTarget(0);
-
-        driveTrain.turn(Math.toRadians(110));
-        sleep(100);
-        intake.needTake();
-        sleep(1000);
-        intake.needOuttake();
-        sleep(2000);
-        driveTrain.followTrajectorySequence(trajectoryBack);
-        lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(1000);
-        shoulder.shoulderPosition(.65);
         sleep(1500);
-        shoulder.openSh();
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+        sleep(300);
+        shoulder.setClawPosition(.46);
         sleep(1000);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
+        driveTrain.turn(Math.toRadians(-65));
+        sleep(100);
+        shoulder.openSh();
+        sleep(400);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
+
+        lift.setTarget(0);
+
+        driveTrain.turn(Math.toRadians(75));
+        sleep(100);
+        intake.needTake();
+        sleep(1000);
+        intake.needOuttake();
+        sleep(1500);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+        sleep(300);
+        shoulder.setClawPosition(.46);
+        sleep(1000);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
+        driveTrain.turn(Math.toRadians(-75));
+        sleep(100);
+        shoulder.openSh();
+        sleep(500);
         shoulder.shoulderPosition(0.42);
         sleep(1000);
         lift.setTarget(0);
+        sleep(1000);
 
+        /*
+        Here will be third sample capturing and dropping
+         */
 
-        driveTrain.followTrajectorySequence(trajectoryToPark);
+       /// driveTrain.followTrajectorySequence(trajectoryToPark);
+
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "1+1 Auto Specimen", group = "Robot")
-public class AutoSpecimenBLUE extends LinearOpMode {
+public class Auto2Specimen extends LinearOpMode {
 
     @Override
     public void runOpMode() {

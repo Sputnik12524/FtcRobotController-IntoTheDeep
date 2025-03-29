@@ -44,7 +44,7 @@ public class Intake {
     public static double EXT_POS_INIT = 0.075;
 
     public static double FLIP_POS_FOR_TAKE = 0.08;
-    public static double FLIP_POS_FOR_OUTTAKE = 0.73;
+    public static double FLIP_POS_FOR_OUTTAKE = 0.68;
     public static double FLIP_TIME = 350;
 
     public static double BRUSH_TIME = 600;

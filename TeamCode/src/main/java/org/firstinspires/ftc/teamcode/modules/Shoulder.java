@@ -96,7 +96,7 @@ public class Shoulder {
         clawServoShoulder.setPosition(CLAW_STRONG_CLOSED);
     }
 
-    public void setPosition(double position) {
+    public void setClawPosition(double position) {
         clawServoShoulder.setPosition(position);
     }
     //Многопоточность

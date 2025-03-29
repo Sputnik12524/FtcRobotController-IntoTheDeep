@@ -28,7 +28,7 @@ public class Auto2Basket extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        shoulder.setPosition(.46);
+        shoulder.setClawPosition(.46);
         intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
@@ -64,7 +64,7 @@ public class Auto2Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(60));
+        driveTrain.turn(Math.toRadians(47));
         sleep(100);
         intake.needTake();
         sleep(1000);
@@ -72,18 +72,19 @@ public class Auto2Basket extends LinearOpMode {
         sleep(2000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
         sleep(500);
-        shoulder.setPosition(.46);
+        shoulder.setClawPosition(.46);
         sleep(500);
-        driveTrain.turn(Math.toRadians(-59));
+        driveTrain.turn(Math.toRadians(-47));
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(1000);
-        shoulder.shoulderPosition(.65);
-        sleep(1000);
-        shoulder.openSh();
         sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
+        shoulder.openSh();
+        sleep(1000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
+        sleep(1000);
         lift.setTarget(0);
+
         driveTrain.followTrajectorySequence(trajectoryToPark);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();

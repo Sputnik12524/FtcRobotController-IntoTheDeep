@@ -221,6 +221,7 @@ public class TeleOpRR extends LinearOpMode {
                 return IntakeStates.FLIPPING_OUT;
             }
             return IntakeStates.EXTENDING_OUT;
+            //TODO добавить режим подвеса - условие, что если плечо опущено, то захват задвинуть нельзя; чтобы захват не складывался при подъеме; автоматик для подвеса?
         });
         put(IntakeStates.FLIPPING_OUT, () -> {
             if (intakeTimer.milliseconds() >= FLIP_TIME) {
