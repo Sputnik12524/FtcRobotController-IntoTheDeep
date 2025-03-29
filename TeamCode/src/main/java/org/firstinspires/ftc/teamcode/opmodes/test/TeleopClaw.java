@@ -29,10 +29,10 @@ public class TeleopClaw extends LinearOpMode {
                 sl.closeSh();
             }
             if (gamepad2.y) {
-                cl.openLift();
+                cl.closeLift();
             }
             if (gamepad2.x) {
-                cl.closeLift();
+                cl.openLift();
             }
 
             if (gamepad1.right_bumper && !btnStateSh) {

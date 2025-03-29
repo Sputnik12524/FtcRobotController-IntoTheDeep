@@ -27,7 +27,7 @@ public class AutoSpecimenRED extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-9, 54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
-        claw.openLift();
+        claw.closeLift();
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     shoulder.shoulderPosition(.72);
@@ -53,7 +53,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .splineTo(new Vector2d(-52, 59), Math.toRadians(90))
                 .forward(3)
                 .addDisplacementMarker(() -> {
-                    claw.closeLift();
+                    claw.openLift();
                     sleep(1000);
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                 })
@@ -71,7 +71,7 @@ public class AutoSpecimenRED extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
                     sleep(1000);
-                    claw.openLift();
+                    claw.closeLift();
                 })
                 .splineTo(new Vector2d(-52, 55), Math.toRadians(180))
                 .addDisplacementMarker(() -> lift.setTarget(0))
@@ -83,7 +83,7 @@ public class AutoSpecimenRED extends LinearOpMode {
 
         waitForStart();
 
-        if (isStopRequested()) ;
+        if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(500);
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);

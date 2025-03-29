@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
 @Autonomous (name = "Only Specimen", group = "Robot")
-public class OnlySpecimenScoringAuto extends LinearOpMode {
-    private Shoulder shoulder;
+public class OnlySpecimen extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -22,9 +21,9 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         Claw cl = new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
-        shoulder = new Shoulder(this);
+        Shoulder shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
-/**<?Белый комментарий> */
+/*<?Белый комментарий> */
         Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
 
@@ -36,7 +35,7 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
-                    cl.openLift();
+                    cl.closeLift();
                     telemetry.addLine("Здесь опустится подъемник");
                     telemetry.update();
                 })
@@ -53,11 +52,11 @@ public class OnlySpecimenScoringAuto extends LinearOpMode {
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXT_POS_MIN);
-        cl.closeLift();
+        cl.openLift();
 
         waitForStart();
 
-        if (isStopRequested());
+        if (isStopRequested()) return;
         base.followTrajectorySequence(trajectoryToSubmarine1);
 
         lift.liftMotorPowerDriver.interrupt();

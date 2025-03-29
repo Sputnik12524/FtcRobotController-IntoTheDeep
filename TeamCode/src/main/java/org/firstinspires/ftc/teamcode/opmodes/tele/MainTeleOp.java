@@ -41,7 +41,7 @@ public class MainTeleOp extends LinearOpMode {
         Intake in = new Intake(this);
 
         sl.closeSh();
-        cl.openLift();
+        cl.closeLift();
 
         lt.liftMotorPowerDriver.start();
         in.samplesTaker.start();
@@ -109,7 +109,7 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.dpad_right) {
                 sl.shoulderPosition(Shoulder.SH_POS_TO_INTAKE); //начальная позиция (внутри робота)
             } else if (gamepad2.dpad_up) {
-                cl.closeLift();
+                cl.openLift();
                 sl.shoulderPosition(Shoulder.SH_POS_TO_BASKET); //lowest (для взятия пробы)
             }
 

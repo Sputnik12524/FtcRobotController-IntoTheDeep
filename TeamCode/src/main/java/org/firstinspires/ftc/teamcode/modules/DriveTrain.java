@@ -72,8 +72,7 @@ public class DriveTrain {
         leftBack.setPower(DRIVE_SPEED);
         rightBack.setPower(DRIVE_SPEED);
 
-        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance))
-            ;
+        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance)) ;
 
         leftFront.setPower(0);
         rightFront.setPower(0);

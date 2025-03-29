@@ -335,7 +335,7 @@ public class TeleOpRR extends LinearOpMode {
         sp = new Suspension(this);
 
         sl.closeSh();
-        cl.openLift();
+        cl.closeLift();
         sl.shoulderPosition(Shoulder.SH_POS_INIT);
         in.extensionPosition(Intake.EXT_POS_INIT);
         in.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
@@ -346,7 +346,7 @@ public class TeleOpRR extends LinearOpMode {
 
         lt.liftMotorPowerDriver.start();
 
-        dt.standartMode();
+        dt.standardMode();
         dt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = dt.getPoseEstimate();
         dt.setPoseEstimate(PoseStorage.currentPose);
@@ -388,7 +388,7 @@ public class TeleOpRR extends LinearOpMode {
             /// DriveTrain ALL:
 
             dt.setWeightedDrivePower(
-                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger-gamepad1.right_trigger)
+                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger - gamepad1.right_trigger)
             );
 
             if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
@@ -465,8 +465,6 @@ public class TeleOpRR extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();
-
-
 
 
             /// Telemetry

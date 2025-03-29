@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,12 +28,11 @@ public class Lift {
     public static double POS_LOWEST = 0;
     public static double POS_HIGHEST = -79; //Самая высокая позиция, выше нельзя!
 
-    public static double POS_FOR_INTAKE = -10; //НАДО НАСТРОИТЬ
-    public static double POS_LOW_BASKET = -30; //-30
+    public static double POS_FOR_INTAKE = -10;
+    public static double POS_LOW_BASKET = -30;
     public static double POS_HIGH_BASKET = -55;
-    public static double POS_HIGH_BASKET_AUTO = -55;
-    public static double POS_SIDE = -4.5; // Берем с борта // -4 TRUE
-     public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки // -15 TRUE
+    public static double POS_SIDE = -4.5; // Берем с борта
+    public static double POS_LOW_SPECIMEN_BEFORE = -30; // Целимся для установки
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
     public static double POS_HIGH_SPECIMEN_BEFORE = -37; // Целимся для установки
     public static double POS_HIGH_SPECIMEN_AFTER = -28; // Устанавливаем образец
@@ -98,7 +96,10 @@ public class Lift {
     public double getTarget() {
         return target;
     }
-    public double getError() { return error; }
+
+    public double getError() {
+        return error;
+    }
 
     public double getPower() {
         return liftMotor.getPower();
@@ -176,6 +177,7 @@ public class Lift {
             FtcDashboard.getInstance().getTelemetry().update();
         }
     }
+
     public void KALxoz(double speed) {
         liftMotor.setPower(speed);
     }

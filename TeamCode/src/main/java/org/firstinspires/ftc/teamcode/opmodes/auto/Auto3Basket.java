@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import android.database.sqlite.SQLiteException;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.*;
@@ -40,11 +38,7 @@ public class Auto3Basket extends LinearOpMode {
                 .back(1)
                 .build();
         Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).forward(1).build();
-        TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
-                .back(45)
-                .turn(Math.toRadians(110))
-                .forward(13)
-                .build();
+
         intake.extensionPosition(.05);
 
         waitForStart();
@@ -52,7 +46,7 @@ public class Auto3Basket extends LinearOpMode {
         if (isStopRequested()) return;
 
         driveTrain.followTrajectorySequence(trajectoryToBasket);
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(900);
@@ -74,7 +68,7 @@ public class Auto3Basket extends LinearOpMode {
         shoulder.setPosition(.46);
         sleep(500);
         driveTrain.turn(Math.toRadians(-45));
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(900);
@@ -95,7 +89,7 @@ public class Auto3Basket extends LinearOpMode {
         shoulder.setPosition(.46);
         sleep(500);
         driveTrain.turn(Math.toRadians(-67));
-        lift.setTarget(Lift.POS_HIGH_BASKET_AUTO);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(1000);
         shoulder.shoulderPosition(.65);
         sleep(1500);
@@ -106,7 +100,6 @@ public class Auto3Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-     //   driveTrain.followTrajectorySequence(trajectoryToPark);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }
