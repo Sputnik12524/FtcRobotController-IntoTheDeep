@@ -44,13 +44,11 @@ import java.util.Objects;
  */
 @Config
 
-@Autonomous(name = "TEST Feedforward Manual", group = "drive")
+@Autonomous(name = "TEST Feedforward Manual", group = "test")
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 10; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
-
-    private DriveTrainMecanum drive;
 
     enum Mode {
         DRIVER_MODE,
@@ -74,7 +72,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, dashboard.getTelemetry());
 
-        drive = new DriveTrainMecanum(hardwareMap, this);
+        DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
 
         final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

@@ -17,16 +17,17 @@ public class Shoulder {
     public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double SH_POS_TO_BASKET = 0.63;
+    public static double SH_POS_TO_BASKET = .81;// 0.5561; upper
     public static double SH_POS_TO_INTAKE = 0;
 
     public static double SH_POS_INIT = 0.2;
 
     //Позиции клешни
 
-    public static double CLAW_POS_CLOSE = 0.52;
+    public static double CLAW_POS_CLOSE = 0.49;
     public static double CLAW_POS_OPEN = 0.65;
     public static double CLAW_POS_HALF_OPEN = 0.6;
+    public static double CLAW_STRONG_CLOSED = .5;
 
     public static double CLOSING_TIME = 250;
     public boolean stateOpenShoulder;
@@ -92,9 +93,12 @@ public class Shoulder {
     }
 
     public void strongCloseSh() {
-        clawServoShoulder.setPosition(0.03);
+        clawServoShoulder.setPosition(CLAW_STRONG_CLOSED);
     }
 
+    public void setPosition(double position) {
+        clawServoShoulder.setPosition(position);
+    }
     //Многопоточность
 
     public void needToBasketSh() {

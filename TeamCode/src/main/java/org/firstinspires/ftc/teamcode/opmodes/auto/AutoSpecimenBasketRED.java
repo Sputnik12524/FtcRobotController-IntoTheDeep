@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
-@Autonomous(name="Auto RED Specimen + Basket", group="Robot")
+@Autonomous(name="RED Auto Specimen + Basket", group="Robot")
 public class AutoSpecimenBasketRED extends LinearOpMode {
 
     @Override
@@ -48,96 +49,65 @@ public class AutoSpecimenBasketRED extends LinearOpMode {
                     telemetry.update();
                 })
                 .waitSeconds(2)
-                .forward(10)
+                .forward(25)
                 .addDisplacementMarker(() -> {
                     sleep(500);
                     shoulder.shoulderPosition(.1);
                 })
-                .waitSeconds(3)
+                .waitSeconds(2)
                 .addDisplacementMarker(() -> lift.setTarget(0))
-                .waitSeconds(4)
-                .turn(Math.toRadians(65))
+                .splineTo(new Vector2d(-54, -55), Math.toRadians(55))
                 .build();
-        TrajectorySequence trajectoryFirstSample = driveTrain.trajectorySequenceBuilder(trajectorySpecimen.end())
-                .forward(34)
-                .turn(Math.toRadians(-45))
-                .splineTo(new Vector2d(-52,-40), Math.toRadians(90))
-                .turn(Math.toRadians(-25))
-                .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    intake.extensionPosition(0.5);
-                    intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
-                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
-                    telemetry.update();
-                })
-                //capturing yellow sample
-                .turn(Math.toRadians(-100))
-                .waitSeconds(2)
-                .back(5)
-                //scoring to basket
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-                    shoulder.closeSh();
-                })
-                .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
-                    lift.setTarget(Lift.POS_HIGH_BASKET);
-                })
-                .waitSeconds(5)
-                .addTemporalMarker(5, shoulder::openSh)
-                .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_LOWEST);
-                    shoulder.shoulderPosition(0);
-                })
-                .forward(5)
-                .waitSeconds(3)
+
+        Trajectory trajectoryToSample1 = driveTrain.trajectoryBuilder
+                        (trajectorySpecimen.end().plus(new Pose2d(0,0, Math.toRadians(35))))
+                .forward(1)
                 .build();
-        TrajectorySequence trajectorySecondSample = driveTrain.trajectorySequenceBuilder(trajectoryFirstSample.end())
-                .turn(Math.toRadians(100))
-                .addDisplacementMarker(() -> {
-                    intake.extensionPosition(0.5);
-                    intake.brushIntake();
-                    sleep(500);
-                    intake.extensionPosition(0.05);
-                    intake.flipPosition(Intake.FLIP_POS_FOR_OUTTAKE);
-                    telemetry.addLine("Здесь выдвинется выдвижение, и мы захватим желтую пробу");
-                    telemetry.update();
-                })
-                .turn(Math.toRadians(-100))
-                .back(5)
-                .waitSeconds(3)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-                    shoulder.closeSh();
-                })
-                .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
-                    lift.setTarget(Lift.POS_HIGH_BASKET);
-                })
-                .waitSeconds(5)
-                .addTemporalMarker(5, shoulder::openSh)
-                .waitSeconds(2)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_LOWEST);
-                    shoulder.shoulderPosition(0);
-                })
-                .splineTo(new Vector2d(-25, -9), Math.toRadians(0))
+        Trajectory trajectoryBack = driveTrain.trajectoryBuilder(trajectoryToSample1.end()).back(1).build();
+        TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
+                .turn(Math.toRadians(45))
+                .forward(52)
+                .turn(Math.toRadians(105))
+                .back(13)
                 .build();
+
         intake.extensionPosition(.05);
         waitForStart();
-        if(isStopRequested()) return;
+        if (isStopRequested()) return;
         driveTrain.followTrajectorySequence(trajectorySpecimen);
         sleep(1000);
-        driveTrain.followTrajectorySequence(trajectoryFirstSample);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        sleep(2000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
-        driveTrain.followTrajectorySequence(trajectorySecondSample);
+        shoulder.openSh();
         sleep(1000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
+        sleep(1000);
+        lift.setTarget(0);
+        sleep(1000);
+
+        driveTrain.turn(Math.toRadians(35));
+        sleep(1000);
+        intake.needTake();
+        sleep(1000);
+        driveTrain.followTrajectory(trajectoryToSample1);
+        sleep(1000);
+        intake.needOuttake();
+
+        driveTrain.followTrajectory(trajectoryBack);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        sleep(2000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
+        sleep(1000);
+        shoulder.openSh();
+        sleep(1000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
+        sleep(1000);
+        lift.setTarget(0);
+
+        driveTrain.followTrajectorySequence(trajectoryToPark);
+
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
     }

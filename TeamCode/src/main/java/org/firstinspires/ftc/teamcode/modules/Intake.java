@@ -29,23 +29,25 @@ public class Intake {
 
     NormalizedColorSensor colorSensor;
     public static double BLUE_MAX = 280;
-    public static double BLUE_MIN = 210;
+    public static double BLUE_MIN = 180;
     public static double YELLOW_MAX = 110;
     public static double YELLOW_MIN = 60;
     public static float GAIN = 2;
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXT_POS_MAX = 0.54;
-    public static double EXT_POS_MIN = 0.05;
+    public static double EXT_POS_MAX = 0.36;
+    public static double EXT_POS_MIN = 0.07;
 
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_SPEED_COEF = 8;
-    public static double EXT_POS_INIT = 0.065;
+    public static double EXT_POS_INIT = 0.075;
 
-    public static double FLIP_POS_FOR_TAKE = 0.1;
-    public static double FLIP_POS_FOR_OUTTAKE = 0.72;
+    public static double FLIP_POS_FOR_TAKE = 0.08;
+    public static double FLIP_POS_FOR_OUTTAKE = 0.73;
     public static double FLIP_TIME = 350;
+
+    public static double BRUSH_TIME = 600;
     public static final double SPEED_BRUSH = 1;
 
     public Intake(LinearOpMode opMode) {
@@ -117,7 +119,6 @@ public class Intake {
             extensionServoRight.setPosition(extensionServoRight.getPosition() + EXTENSION_STEP);
         }
     }
-
     public double getFlipPositionR() {
         return flipServoRight.getPosition();
     }
@@ -152,19 +153,25 @@ public class Intake {
         public void run() {
             while (!isInterrupted()) {
                 if (needOuttake) {
-                    flipPosition(FLIP_POS_FOR_OUTTAKE);
                     brushIntake();
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME) ;
+                    while (timer.milliseconds() < BRUSH_TIME);
+                    flipPosition(FLIP_POS_FOR_OUTTAKE);
+                    timer.reset();
+                    while (timer.milliseconds() < FLIP_TIME);
                     brushStop();
                     extensionPosition(EXT_POS_MIN);
                     needOuttake = false;
                 }
                 if (needTake) {
+                    brushIntake();
                     flipPosition(FLIP_POS_FOR_TAKE);
                     timer.reset();
-                    while (timer.milliseconds() < FLIP_TIME) ;
+                    while (timer.milliseconds() < FLIP_TIME);
                     extensionPosition(EXT_POS_MAX);
+                    timer.reset();
+                    while (timer.milliseconds() < BRUSH_TIME);
+                    brushStop();
                     needTake = false;
                 }
             }

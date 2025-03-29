@@ -36,11 +36,11 @@ public class ConstantsOfTeleOp {
 
     /// INTAKE
     public static double EXT_TIME = 400;
-    public static double FLIP_TIME = 400;
+    public static double FLIP_TIME = 700;
     public static double BRUSH_TIME = 600;
     public static double BRUSHING_OUT_TIME = 400;
 
-    public static double NECESSARY_EXT_POS = 0.2;
+    public static double NECESSARY_EXT_POS = 0.14;
 
 
 }

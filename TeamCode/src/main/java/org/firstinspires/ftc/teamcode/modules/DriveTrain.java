@@ -40,6 +40,11 @@ public class DriveTrain {
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
 
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection);
@@ -67,8 +72,7 @@ public class DriveTrain {
         leftBack.setPower(DRIVE_SPEED);
         rightBack.setPower(DRIVE_SPEED);
 
-        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance))
-            ;
+        while (aggregate.opModeIsActive() && Math.abs(leftFront.getCurrentPosition()) < distance(distance)) ;
 
         leftFront.setPower(0);
         rightFront.setPower(0);

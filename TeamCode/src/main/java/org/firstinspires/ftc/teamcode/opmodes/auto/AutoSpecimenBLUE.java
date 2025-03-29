@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -12,92 +14,79 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "BLUE Auto Specimen", group = "Robot")
+@Autonomous(name = "1+1 Auto Specimen", group = "Robot")
 public class AutoSpecimenBLUE extends LinearOpMode {
-    public Claw claw;
-    public Shoulder shoulder;
 
     @Override
     public void runOpMode() {
         DriveTrainMecanum base = new DriveTrainMecanum(hardwareMap, this);
-        claw = new Claw(this);
+        Claw cl = new Claw(this);
         Lift lift = new Lift(this);
         Intake in = new Intake(this);
-        shoulder = new Shoulder(this);
+        Shoulder shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-9, 54, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-10, 56, Math.toRadians(90));
         base.setPoseEstimate(startPose);
-        base.imu.resetYaw();
-        claw.openLift();
+        cl.openLift();
+
+        /*<?TODO: use spline trajectories to deliver specimens*/
 
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(.72);
-                    lift.setTarget(-33);
-                })
-                .back(10, DriveTrainMecanum.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .back(15, DriveTrainMecanum.getVelocityConstraint(7, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .addDisplacementMarker(() -> {
-                    shoulder.openSh();
-                    shoulder.shoulderPosition(.75);
-                    telemetry.addLine("Здесь опустится подъемник");
-                    telemetry.update();
-                })
-                //.waitSeconds(1)
-                .forward(5)
-                .addDisplacementMarker(() -> shoulder.shoulderPosition(.1))
-                .waitSeconds(0.5)
-                .addDisplacementMarker(() -> lift.setTarget(0)) //statement lambda was replaced with expression lambda
+                .addDisplacementMarker(() -> lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE))
+                .forward(28)
                 .build();
-        TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
+        TrajectorySequence trajectoryFirstSpecimen = base.trajectorySequenceBuilder(trajectorySpecimen.end())
+                .addDisplacementMarker(() -> lift.setTarget(0))
+                .back(10)
+                .waitSeconds(0.5)
+                .build();
+        TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
                 .turn(Math.toRadians(-120))
-                .back(34)
-                .turn(Math.toRadians(-50))
-                .back(20, DriveTrainMecanum.getVelocityConstraint(4,
-                                DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                .forward(35)
+                .turn(Math.toRadians(-60))
+                .forward(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .forward(1)
                 .addDisplacementMarker(() -> {
-                    claw.closeLift();
-                    sleep(1000);
+                    cl.openLift();
+                    sleep(700);
                     lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
                 })
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
-                .waitSeconds(1)
-                .forward(5)
-                .turn(Math.toRadians(-145))
-                .back(52)
-                .turn(Math.toRadians(-45))
-                .back(5.5,DriveTrainMecanum.getVelocityConstraint(15,
-                                DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
-                    sleep(1000);
-                    claw.openLift();
-                })
-                .forward(6)
+                .back(10)
+                .turn(Math.toRadians(-110))
+                .forward(30)
+                .turn(Math.toRadians(-70))
+                .forward(10)
+                .waitSeconds(0.5)
+                .build();
+        Trajectory trajectorySecondSpecEnd = base.trajectoryBuilder(trajectoryScoringSecondSpecimen.end(), true)
                 .addDisplacementMarker(() -> lift.setTarget(0))
-                .waitSeconds(1)
+                .splineTo(new Vector2d(40, 50), Math.toRadians(180))
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
         in.extensionPosition(Intake.EXT_POS_MIN);
+
         waitForStart();
 
-        if (isStopRequested()) ;
+        if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(500);
+        lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
+        sleep(1000);
+        cl.closeLift();
+        sleep(1000);
+        base.followTrajectorySequence(trajectoryFirstSpecimen);
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
         sleep(500);
         base.followTrajectorySequence(trajectoryScoringSecondSpecimen);
-        sleep(500);
         sleep(1000);
+        lift.setTarget(-27);
+        sleep(900);
+        cl.closeLift();
+        base.followTrajectory(trajectorySecondSpecEnd);
         lift.liftMotorPowerDriver.interrupt();
     }
 }

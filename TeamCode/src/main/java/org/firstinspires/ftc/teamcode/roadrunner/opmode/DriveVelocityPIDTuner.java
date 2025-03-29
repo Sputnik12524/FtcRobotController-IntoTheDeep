@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 
 import java.util.List;
@@ -51,7 +52,7 @@ import java.util.List;
  */
 @Config
 @Disabled
-@Autonomous(group = "drive")
+@Autonomous(group = "test")
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
@@ -75,8 +76,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
+        DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
         Mode mode = Mode.TUNING_MODE;
 
         double lastKp = MOTOR_VELO_PID.p;

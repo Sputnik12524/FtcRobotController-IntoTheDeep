@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
  * is recommended that you use the FollowerPIDTuner opmode for further fine tuning.
  */
 @Config
-@Autonomous(name = "TEST Back&Forth", group = "drive")
+@Autonomous(name = "TEST Back&Forth", group = "test")
 public class BackAndForth extends LinearOpMode {
 
     public static double DISTANCE = 50;
@@ -36,7 +36,6 @@ public class BackAndForth extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
-
         Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE)
                 .build();

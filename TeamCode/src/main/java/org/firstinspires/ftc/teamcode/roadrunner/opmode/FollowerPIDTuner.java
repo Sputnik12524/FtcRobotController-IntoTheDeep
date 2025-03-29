@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 
@@ -22,7 +23,7 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "TEST follower PID", group = "drive")
+@Autonomous(name = "TEST follower PID", group = "test")
 public class FollowerPIDTuner extends LinearOpMode {
     public static double DISTANCE = 15; // in
 

@@ -26,8 +26,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
  * accurate track width estimate is important or else the angular constraints will be thrown off.
  */
 @Config
-@Autonomous(group = "drive")
-@Disabled
+@Autonomous(name="TEST TRACK WIDTH", group = "test")
 public class TrackWidthTuner extends LinearOpMode {
     public static double ANGLE = 180; // deg
     public static int NUM_TRIALS = 5;
@@ -38,7 +37,7 @@ public class TrackWidthTuner extends LinearOpMode {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
-        // TODO: if you haven't already, set the localizer to something that doesn't depend on
+        // DONE: if you haven't already, set the localizer to something that doesn't depend on
         // drive encoders for computing the heading
 
         telemetry.addLine("Press play to begin the track width tuner routine");
