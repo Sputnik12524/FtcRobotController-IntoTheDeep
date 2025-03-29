@@ -80,8 +80,7 @@ public class Auto3Basket extends LinearOpMode {
         sleep(900);
         shoulder.openSh();
         sleep(900);
-        shoulder.shoulderPos
-    ition(Shoulder.SH_POS_INIT);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         sleep(500);
         lift.setTarget(0);
 
