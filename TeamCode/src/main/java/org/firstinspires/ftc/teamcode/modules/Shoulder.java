@@ -27,6 +27,7 @@ public class Shoulder {
     public static double CLAW_POS_CLOSE = 0.49;
     public static double CLAW_POS_OPEN = 0.65;
     public static double CLAW_POS_HALF_OPEN = 0.6;
+    public static double CLAW_STRONG_CLOSED = .5;
 
     public static double CLOSING_TIME = 250;
     public boolean stateOpenShoulder;
@@ -92,10 +93,10 @@ public class Shoulder {
     }
 
     public void strongCloseSh() {
-        clawServoShoulder.setPosition(0.5);
+        clawServoShoulder.setPosition(CLAW_STRONG_CLOSED);
     }
 
-    public void setPosition(double position){
+    public void setPosition(double position) {
         clawServoShoulder.setPosition(position);
     }
     //Многопоточность

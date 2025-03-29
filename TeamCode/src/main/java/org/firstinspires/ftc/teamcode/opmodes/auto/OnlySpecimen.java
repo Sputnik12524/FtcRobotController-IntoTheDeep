@@ -23,7 +23,6 @@ public class OnlySpecimen extends LinearOpMode {
         Intake in = new Intake(this);
         Shoulder shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
-/*<?Белый комментарий> */
         Pose2d startPose = new Pose2d(9,-54, Math.toRadians(90));
         base.setPoseEstimate(startPose);
 
