@@ -17,7 +17,7 @@ public class Shoulder {
     public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double SH_POS_TO_BASKET = 1;// 0.5561; upper
+    public static double SH_POS_TO_BASKET = .81;// 0.5561; upper
     public static double SH_POS_TO_INTAKE = 0;
 
     public static double SH_POS_INIT = 0.2;
