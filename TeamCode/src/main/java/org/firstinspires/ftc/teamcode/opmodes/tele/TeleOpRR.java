@@ -69,7 +69,7 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateLeftBumper1 = false;
 
     public Intake.Color badColor;
-    private boolean stateSensor = true;
+    private boolean stateSensor = false;
     private boolean stateDpadLeft1 = false;
 
     /// different things
@@ -387,7 +387,6 @@ public class TeleOpRR extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             /// DriveTrain ALL:
-
             dt.setWeightedDrivePower(
                     new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger - gamepad1.right_trigger)
             );

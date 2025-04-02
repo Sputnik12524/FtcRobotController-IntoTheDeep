@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
 import org.firstinspires.ftc.teamcode.modules.*;
+import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveConstants;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
@@ -32,40 +33,18 @@ public class AutoPark4Basket extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                 })
-                .strafeRight(10)
+                .strafeRight(14)
                 .forward(15)
-                .turn(Math.toRadians(40))
-                //.splineTo(-x,y,Math.toRadians(0)
+                .turn(Math.toRadians(55))
                 .build();
-        TrajectorySequence trajectoryToSample1 = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end().plus(new Pose2d(0, 0, Math.toRadians(35))))
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-                    sleep(500);
-                    shoulder.closeSh();
-                    sleep(500);
-                })
-                .turn(Math.toRadians(-80))
+        TrajectorySequence trajectoryToSample1 = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end())
+                .back(2)
                 .build();
-        TrajectorySequence trajectoryToSample2 = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end().plus(new Pose2d(0, 0, Math.toRadians(35))))
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-                    sleep(500);
-                    shoulder.closeSh();
-                    sleep(500);
-                })
-                .turn(Math.toRadians(-110))
 
+        TrajectorySequence trajectoryBack = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end())
+                .forward(-1)
                 .build();
-        TrajectorySequence trajectoryBack = driveTrain.trajectorySequenceBuilder(trajectoryToSample1.end())
-                .addDisplacementMarker(() -> {
-                    shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-                    sleep(500);
-                    shoulder.closeSh();
-                    sleep(500);
-                })
-                .turn(Math.toRadians(-110))
-
-                .build();
+ ;
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
                 .back(45)
                 .turn(Math.toRadians(110))
@@ -84,7 +63,7 @@ public class AutoPark4Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(600);
 
-        driveTrain.turn(Math.toRadians(65));
+        driveTrain.turn(Math.toRadians(38));
         sleep(100);
         intake.needTake();
         sleep(1000);
@@ -95,16 +74,17 @@ public class AutoPark4Basket extends LinearOpMode {
         shoulder.setClawPosition(.46);
         sleep(1000);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
-        driveTrain.turn(Math.toRadians(-65));
+        sleep(100);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
+        driveTrain.turn(Math.toRadians(-38));
         sleep(100);
         shoulder.openSh();
-        sleep(400);
+        sleep(200);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
 
         lift.setTarget(0);
 
-        driveTrain.turn(Math.toRadians(75));
+        driveTrain.turn(Math.toRadians(61));
         sleep(100);
         intake.needTake();
         sleep(1000);
@@ -115,11 +95,36 @@ public class AutoPark4Basket extends LinearOpMode {
         shoulder.setClawPosition(.46);
         sleep(1000);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
-        driveTrain.turn(Math.toRadians(-75));
+        sleep(100);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
+        driveTrain.turn(Math.toRadians(-61));
         sleep(100);
         shoulder.openSh();
-        sleep(500);
+        sleep(200);
+        shoulder.shoulderPosition(0.42);
+        sleep(1000);
+        lift.setTarget(0);
+        sleep(1000);
+
+        driveTrain.followTrajectorySequence(trajectoryToSample1);
+
+        driveTrain.turn(Math.toRadians(78));
+        sleep(100);
+        intake.needTake();
+        sleep(1000);
+        intake.needOuttake();
+        sleep(1500);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+        sleep(300);
+        shoulder.setClawPosition(.46);
+        sleep(1000);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        sleep(100);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
+        driveTrain.turn(Math.toRadians(-78));
+        sleep(100);
+        shoulder.openSh();
+        sleep(200);
         shoulder.shoulderPosition(0.42);
         sleep(1000);
         lift.setTarget(0);
@@ -128,8 +133,6 @@ public class AutoPark4Basket extends LinearOpMode {
         /*
         Here will be third sample capturing and dropping
          */
-
-       /// driveTrain.followTrajectorySequence(trajectoryToPark);
 
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
