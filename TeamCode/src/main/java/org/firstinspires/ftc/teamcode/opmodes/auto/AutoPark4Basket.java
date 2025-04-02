@@ -28,6 +28,8 @@ public class AutoPark4Basket extends LinearOpMode {
         shoulder.closeSh();
         intake.extensionPosition(Intake.EXT_POS_MIN);
 
+        //TODO: moving with the unfolded intake video
+        //TODO: make more sleeps
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
@@ -129,10 +131,6 @@ public class AutoPark4Basket extends LinearOpMode {
         sleep(1000);
         lift.setTarget(0);
         sleep(1000);
-
-        /*
-        Here will be third sample capturing and dropping
-         */
 
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();
