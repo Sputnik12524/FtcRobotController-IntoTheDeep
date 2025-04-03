@@ -69,6 +69,8 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateLeftBumper1 = false;
 
     public Intake.Color badColor;
+    private final ElapsedTime colorSensorTimer = new ElapsedTime();
+    ColorSensorStates sensorState = ColorSensorStates.PASSIVE;
     private boolean stateSensor = false;
     private boolean stateDpadLeft1 = false;
 
@@ -313,6 +315,25 @@ public class TeleOpRR extends LinearOpMode {
 
     }};
 
+    private final Map<ColorSensorStates, Supplier<ColorSensorStates>> colorSensorMap =
+            new HashMap<ColorSensorStates, Supplier<ColorSensorStates>>() {{
+        put(ColorSensorStates.PASSIVE, () -> {
+            if (gamepad1.dpad_left && !stateDpadLeft1) {
+                colorSensorTimer.reset();
+                stateSensor = true;
+                return ColorSensorStates.ACTIVE;
+            }
+            return ColorSensorStates.PASSIVE;
+        });
+        put(ColorSensorStates.ACTIVE, () -> {
+            if (colorSensorTimer.seconds() >= COLOR_SENSOR_TIMER) {
+                stateSensor = false;
+                return ColorSensorStates.PASSIVE;
+            }
+            return ColorSensorStates.ACTIVE;
+        });
+    }};
+
     public void liftFSM() {
         posLift = liftFSMMap.get(posLift).get();
     }
@@ -323,6 +344,10 @@ public class TeleOpRR extends LinearOpMode {
 
     public void intakeFSM() {
         posIntake = intakeFSMMap.get(posIntake).get();
+    }
+
+    public void colorSensorFSM() {
+        sensorState = colorSensorMap.get(sensorState).get();
     }
 
 
@@ -456,7 +481,7 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.x) flipFSM = Intake.FLIP_POS_FOR_TAKE;
 
             //Color sensor
-            if (gamepad1.dpad_left && !stateDpadLeft1) stateSensor = !stateSensor;
+            colorSensorFSM();
             stateDpadLeft1 = gamepad1.dpad_left;
 
             /// Suspension
@@ -465,17 +490,17 @@ public class TeleOpRR extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();
-
+            
 
             /// Telemetry
             telemetry.addLine(String.join(" ", "УПРАВЛЕНИЕ НЕ ДАМ!1!11", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
 
-            telemetry.addData("ДАТЧИК ЦВЕТА:", stateSensor);
+            telemetry.addData("COLOR SENSOR:", sensorState);
             telemetry.addData("Color:", in.getColorSample());
 
             telemetry.addData("State FSM Lift:", posLift);
             telemetry.addData("State FSM Shoulder:", posShoulder);
-            telemetry.addData("State FSM Intake", posIntake);
+            telemetry.addData("State FSM Intake:", posIntake);
 
             FtcDashboard.getInstance().getTelemetry().addData("Hue:", in.getHue());
             FtcDashboard.getInstance().getTelemetry().addData("Saturation:", in.getSaturation());
