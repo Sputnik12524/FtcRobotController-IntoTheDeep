@@ -40,7 +40,6 @@ public class TeleOpRR extends LinearOpMode {
     double targetLiftFSM = 0;
     private boolean stateDpadUp2 = false;
     private boolean stateDpadDown2 = false;
-    private boolean stateDpadLeft2 = false;
     private boolean stateDpadRight2 = false;
     private boolean stateLeftStickButton = false;
     private boolean stateRightBumper2 = false; // Claw for specimens
@@ -425,7 +424,6 @@ public class TeleOpRR extends LinearOpMode {
             lt.setTarget(targetLiftFSM);
             stateDpadUp2 = gamepad2.dpad_up;
             stateDpadDown2 = gamepad2.dpad_down;
-            stateDpadLeft2 = gamepad2.dpad_left;
             stateDpadRight2 = gamepad2.dpad_right;
             stateLeftStickButton = gamepad2.left_bumper;
 
