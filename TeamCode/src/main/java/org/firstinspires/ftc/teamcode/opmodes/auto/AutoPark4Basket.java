@@ -36,8 +36,8 @@ public class AutoPark4Basket extends LinearOpMode {
                     shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                 })
                 .strafeRight(14)
-                .forward(15)
-                .turn(Math.toRadians(55))
+                .forward(17)
+                .turn(Math.toRadians(80))
                 .build();
         TrajectorySequence trajectoryToSample1 = driveTrain.trajectorySequenceBuilder(trajectoryToBasket.end())
                 .back(2)
@@ -48,6 +48,7 @@ public class AutoPark4Basket extends LinearOpMode {
                 .build();
  ;
         TrajectorySequence trajectoryToPark = driveTrain.trajectorySequenceBuilder(trajectoryBack.end())
+                .addDisplacementMarker(() -> lift.setTarget(0))
                 .back(45)
                 .turn(Math.toRadians(110))
                 .forward(13)
@@ -65,12 +66,10 @@ public class AutoPark4Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(600);
 
-        driveTrain.turn(Math.toRadians(38));
-        sleep(100);
         intake.needTake();
         sleep(1000);
         intake.needOuttake();
-        sleep(1500);
+        sleep(1600);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
         sleep(300);
         shoulder.setClawPosition(.46);
@@ -78,7 +77,6 @@ public class AutoPark4Basket extends LinearOpMode {
         lift.setTarget(Lift.POS_HIGH_BASKET);
         sleep(100);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
-        driveTrain.turn(Math.toRadians(-38));
         sleep(100);
         shoulder.openSh();
         sleep(200);
@@ -91,7 +89,7 @@ public class AutoPark4Basket extends LinearOpMode {
         intake.needTake();
         sleep(1000);
         intake.needOuttake();
-        sleep(1500);
+        sleep(1600);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
         sleep(300);
         shoulder.setClawPosition(.46);
@@ -115,7 +113,7 @@ public class AutoPark4Basket extends LinearOpMode {
         intake.needTake();
         sleep(1000);
         intake.needOuttake();
-        sleep(1500);
+        sleep(1600);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
         sleep(300);
         shoulder.setClawPosition(.46);
