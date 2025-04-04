@@ -26,7 +26,7 @@ public class Shoulder {
 
     //Позиции клешни
 
-    public static double CLAW_POS_CLOSE = 0.49;
+    public static double CLAW_POS_CLOSE = 0.55;
     public static double CLAW_POS_OPEN = 0.65;
     public static double CLAW_POS_HALF_OPEN = 0.6;
     public static double CLAW_STRONG_CLOSED = .5;

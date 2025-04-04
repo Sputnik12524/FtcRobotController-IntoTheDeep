@@ -171,7 +171,6 @@ public class Intake {
                     extensionPosition(EXT_POS_MAX);
                     timer.reset();
                     while (timer.milliseconds() < BRUSH_TIME);
-                    brushStop();
                     needTake = false;
                 }
             }
