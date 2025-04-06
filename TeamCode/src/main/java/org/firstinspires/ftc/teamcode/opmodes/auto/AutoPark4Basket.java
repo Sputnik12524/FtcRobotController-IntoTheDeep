@@ -32,7 +32,7 @@ public class AutoPark4Basket extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
                 })
-                .strafeRight(14)
+                .strafeRight(13)
                 .forward(17)
                 .turn(Math.toRadians(80))
                 .build();
@@ -48,86 +48,84 @@ public class AutoPark4Basket extends LinearOpMode {
         sleep(500);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         lift.setTarget(0);
-        sleep(600);
 
         intake.needTake();
-        sleep(1000);
+        sleep(600);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
                 .back(3)
                 .build());
         intake.needOuttake();
-        sleep(1000);
+        sleep(500);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
                 .forward(3)
                 .build());
         driveTrain.turn(Math.toRadians(-20));
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-        sleep(1000);
+        sleep(500);
         shoulder.closeSh();
-        sleep(1000);
+        sleep(200);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
+        sleep(1600);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
-        sleep(1000);
+        sleep(990);
         shoulder.openSh();
-        sleep(1000);
+        sleep(500);
         shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
         lift.setTarget(0);
 
-        driveTrain.turn(Math.toRadians(42));
+        driveTrain.turn(Math.toRadians(44));
         intake.needTake();
-        sleep(1000);
-        driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
-                .back(2)
-                .build());
-        intake.needOuttake();
-        sleep(1000);
-        driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
-                .forward(2)
-                .build());
-        driveTrain.turn(Math.toRadians(-42));
-        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-        sleep(1000);
-        shoulder.closeSh();
-        sleep(1000);
-        lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
-        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
-        sleep(1000);
-        shoulder.openSh();
-        sleep(1000);
-        shoulder.shoulderPosition(0.42);
-        sleep(1000);
-        lift.setTarget(0);
-        sleep(1000);
-
-        driveTrain.turn(Math.toRadians(62));
-        intake.needTake();
-        sleep(1000);
+        sleep(600);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
                 .back(3)
                 .build());
         intake.needOuttake();
-        sleep(1000);
+        sleep(500);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
                 .forward(3)
                 .build());
-        driveTrain.turn(Math.toRadians(-63));
+        driveTrain.turn(Math.toRadians(-41));
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
-        sleep(1000);
+        sleep(500);
         shoulder.closeSh();
-        sleep(1000);
+        sleep(200);
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(2000);
+        sleep(1600);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
-        sleep(1000);
+        sleep(990);
         shoulder.openSh();
-        sleep(1000);
-
+        sleep(500);
         shoulder.shoulderPosition(0.42);
         sleep(1000);
         lift.setTarget(0);
-        sleep(1500);
+        sleep(1000);
+
+        driveTrain.turn(Math.toRadians(64));
+        intake.needTake();
+        sleep(600);
+        driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
+                .back(5)
+                .build());
+        intake.needOuttake();
+        sleep(500);
+        driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
+                .forward(5)
+                .build());
+        driveTrain.turn(Math.toRadians(-65));
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
+        sleep(500);
+        shoulder.closeSh();
+        sleep(200);
+        lift.setTarget(Lift.POS_HIGH_BASKET);
+        sleep(1600);
+        shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
+        sleep(990);
+        shoulder.openSh();
+        sleep(500);
+        shoulder.shoulderPosition(0.69);
+        sleep(500);
+        lift.setTarget(0);
+        sleep(1100);
 
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();

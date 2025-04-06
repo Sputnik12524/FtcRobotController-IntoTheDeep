@@ -26,11 +26,9 @@ public class Auto2Specimen extends LinearOpMode {
         Shoulder shoulder = new Shoulder(this);
         lift.liftMotorPowerDriver.start();
 
-        Pose2d startPose = new Pose2d(-10, 56, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(10, 56, Math.toRadians(90));
         base.setPoseEstimate(startPose);
         cl.openLift();
-
-        /*<?TODO: use spline trajectories to deliver specimens*/
 
         TrajectorySequence trajectorySpecimen = base.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE))
@@ -42,9 +40,10 @@ public class Auto2Specimen extends LinearOpMode {
                 .waitSeconds(0.5)
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
-                .turn(Math.toRadians(-120))
-                .forward(35)
-                .turn(Math.toRadians(-60))
+               .turn(Math.toRadians(-120))
+               .forward(35)
+               .turn(Math.toRadians(-60))
+               /**<?.lineToLinearHeading(new Pose2d(new Vector2d(40,50), Math.toRadians(-180)))**/
                 .forward(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
