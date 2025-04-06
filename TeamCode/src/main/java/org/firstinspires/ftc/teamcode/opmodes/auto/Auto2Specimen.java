@@ -40,12 +40,14 @@ public class Auto2Specimen extends LinearOpMode {
                 .waitSeconds(0.5)
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
-               .turn(Math.toRadians(-120))
-               .forward(35)
-               .turn(Math.toRadians(-60))
-               /**<?.lineToLinearHeading(new Pose2d(new Vector2d(40,50), Math.toRadians(-180)))**/
-                .forward(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                /// .turn(Math.toRadians(-120))
+                ///.forward(35)
+                ///.turn(Math.toRadians(-60))
+                .lineToLinearHeading(new Pose2d(50, 60, Math.toRadians(270)))
+                .forward(10)
+                .waitSeconds(1)
+                /// .back(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                ///    DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .addDisplacementMarker(() -> {
                     cl.openLift();
                     sleep(700);
@@ -53,7 +55,7 @@ public class Auto2Specimen extends LinearOpMode {
                 })
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
-                .back(10)
+                .forward(10)
                 .turn(Math.toRadians(-110))
                 .forward(30)
                 .turn(Math.toRadians(-70))
@@ -62,7 +64,7 @@ public class Auto2Specimen extends LinearOpMode {
                 .build();
         Trajectory trajectorySecondSpecEnd = base.trajectoryBuilder(trajectoryScoringSecondSpecimen.end(), true)
                 .addDisplacementMarker(() -> lift.setTarget(0))
-                .splineTo(new Vector2d(40, 50), Math.toRadians(180))
+                .splineTo(new Vector2d(50, 90), Math.toRadians(180))
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
