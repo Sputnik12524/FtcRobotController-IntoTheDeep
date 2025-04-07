@@ -40,9 +40,6 @@ public class Auto2Specimen extends LinearOpMode {
                 .waitSeconds(0.5)
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
-                /// .turn(Math.toRadians(-120))
-                ///.forward(35)
-                ///.turn(Math.toRadians(-60))
                 .lineToLinearHeading(new Pose2d(50, 60, Math.toRadians(270)))
                 .forward(10)
                 .waitSeconds(1)
