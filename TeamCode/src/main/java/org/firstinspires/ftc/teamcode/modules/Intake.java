@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class Intake {
     public enum Color {
-        RED, BLUE, YELLOW, NONE
+        RED, BLUE, YELLOW, NONE, FAKE
     }
 
     private final CRServo brushServoLeft;

@@ -65,7 +65,6 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateA1 = false;
     private boolean stateB1 = false;
     private boolean stateRightBumper1 = false;
-    private boolean stateLeftBumper1 = false;
 
     public Intake.Color badColor;
     private final ElapsedTime colorSensorTimer = new ElapsedTime();
@@ -371,7 +370,6 @@ public class TeleOpRR extends LinearOpMode {
 
         lt.liftMotorPowerDriver.start();
 
-        dt.standardMode();
         dt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = dt.getPoseEstimate();
         dt.setPoseEstimate(PoseStorage.currentPose);
@@ -392,7 +390,7 @@ public class TeleOpRR extends LinearOpMode {
                     initWait = true;
                     sleep(300);
                 } else if (gamepad1.y) { //For tests
-                    badColor = null;
+                    badColor = Intake.Color.FAKE;
                     telemetry.addLine("БЕЗ АЛЬЯНСА");
                     telemetry.update();
                     initWait = true;
@@ -414,9 +412,6 @@ public class TeleOpRR extends LinearOpMode {
             dt.setWeightedDrivePower(
                     new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger - gamepad1.right_trigger)
             );
-
-            if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
-            stateLeftBumper1 = gamepad1.left_bumper;
 
 
             /// Lift FSM
