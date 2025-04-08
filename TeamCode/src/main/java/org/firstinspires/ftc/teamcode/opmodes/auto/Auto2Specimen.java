@@ -41,7 +41,7 @@ public class Auto2Specimen extends LinearOpMode {
                 .build();
         TrajectorySequence trajectoryCaptureSecondSpecimen = base.trajectorySequenceBuilder(trajectoryFirstSpecimen.end())
                 .lineToLinearHeading(new Pose2d(50, 60, Math.toRadians(270)))
-                .forward(10)
+                .forward(6)
                 .waitSeconds(1)
                 /// .back(1, DriveTrainMecanum.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                 ///    DriveTrainMecanum.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -52,16 +52,15 @@ public class Auto2Specimen extends LinearOpMode {
                 })
                 .build();
         TrajectorySequence trajectoryScoringSecondSpecimen = base.trajectorySequenceBuilder(trajectoryCaptureSecondSpecimen.end())
-                .forward(10)
-                .turn(Math.toRadians(-110))
-                .forward(30)
-                .turn(Math.toRadians(-70))
-                .forward(10)
-                .waitSeconds(0.5)
+                .back(10)
+                .turn(Math.toRadians(180))
+                .strafeLeft(50)
+                .forward(20)
                 .build();
-        Trajectory trajectorySecondSpecEnd = base.trajectoryBuilder(trajectoryScoringSecondSpecimen.end(), true)
+        TrajectorySequence trajectorySecondSpecEnd = base.trajectorySequenceBuilder((trajectoryScoringSecondSpecimen.end()))
+                .back(10)
+                .lineTo(new Vector2d(50,60))
                 .addDisplacementMarker(() -> lift.setTarget(0))
-                .splineTo(new Vector2d(50, 90), Math.toRadians(180))
                 .build();
         shoulder.shoulderPosition(0.1);
         shoulder.closeSh();
@@ -80,11 +79,10 @@ public class Auto2Specimen extends LinearOpMode {
         base.followTrajectorySequence(trajectoryCaptureSecondSpecimen);
         sleep(500);
         base.followTrajectorySequence(trajectoryScoringSecondSpecimen);
-        sleep(1000);
         lift.setTarget(-27);
-        sleep(900);
+        sleep(1200);
         cl.closeLift();
-        base.followTrajectory(trajectorySecondSpecEnd);
+        base.followTrajectorySequence(trajectorySecondSpecEnd);
         lift.liftMotorPowerDriver.interrupt();
     }
 }

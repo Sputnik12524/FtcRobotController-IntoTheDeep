@@ -20,6 +20,9 @@ public class MeepMeepTesting {
                         .back(10)
                         .waitSeconds(0.5)
                         .lineToLinearHeading(new Pose2d(50,60, Math.toRadians(-90)))
+                        .waitSeconds(1)
+                        .lineToLinearHeading(new Pose2d(10,40, Math.toRadians(90)))
+
                         .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
