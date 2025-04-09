@@ -41,7 +41,7 @@ public class Shoulder {
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
         clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
-        servoShoulder.setDirection(Servo.Direction.REVERSE);
+        // servoShoulder.setDirection(Servo.Direction.REVERSE);
 
         this.sampleShTaker = new SampleShTaker();
     }
