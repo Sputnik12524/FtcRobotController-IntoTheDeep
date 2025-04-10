@@ -40,40 +40,39 @@ public class Auto2Specimen extends LinearOpMode {
 
         if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
-        sleep(500);
+        sleep(200);
         lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
-        sleep(1000);
+        sleep(100);
         cl.closeLift();
-        sleep(1000);
+        sleep(100);
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .back(10)
-                .waitSeconds(0.5)
                 .build());
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .lineToLinearHeading(new Pose2d(50, 60, Math.toRadians(270)))
                 .forward(10)
-                .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    cl.openLift();
-                    sleep(700);
-                    lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
-                })
+                .addDisplacementMarker(cl::openLift)
                 .build());
-        sleep(500);
+        sleep(200);
+        lift.setTarget(Lift.POS_HIGH_SPECIMEN_BEFORE);
+        sleep(200);
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .back(10)
                 .turn(Math.toRadians(180))
                 .strafeLeft(50)
-                .forward(20)
+                .forward(23)
                 .build());
         lift.setTarget(-27);
-        sleep(1200);
+        sleep(500);
         cl.closeLift();
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .back(10)
-                .lineTo(new Vector2d(50,60))
+                .lineTo(new Vector2d(50,50))
+                .build());
+        base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
+                .forward(15).strafeRight(5).back(20)
                 .build());
         lift.liftMotorPowerDriver.interrupt();
     }
