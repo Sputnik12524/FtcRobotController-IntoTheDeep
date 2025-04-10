@@ -41,10 +41,10 @@ public class Auto2Specimen extends LinearOpMode {
         if (isStopRequested()) return;
         base.followTrajectorySequence(trajectorySpecimen);
         sleep(200);
-        lift.setTarget(Lift.POS_HIGH_SPECIMEN_AFTER);
-        sleep(100);
+        lift.setTarget(-27);
+        sleep(500);
         cl.closeLift();
-        sleep(100);
+        sleep(500);
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .back(10)
@@ -69,10 +69,12 @@ public class Auto2Specimen extends LinearOpMode {
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
                 .addDisplacementMarker(() -> lift.setTarget(0))
                 .back(10)
-                .lineTo(new Vector2d(50,50))
+                .lineTo(new Vector2d(50,45))
                 .build());
         base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
-                .forward(15).strafeRight(5).back(20)
+                .forward(30).strafeRight(10).back(30)
+                .forward(30).strafeRight(10).back(30)
+                .forward(30).strafeRight(20).back(30)
                 .build());
         lift.liftMotorPowerDriver.interrupt();
     }

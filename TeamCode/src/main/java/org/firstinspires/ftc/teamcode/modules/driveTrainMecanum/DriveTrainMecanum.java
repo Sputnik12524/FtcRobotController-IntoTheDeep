@@ -298,4 +298,11 @@ public class DriveTrainMecanum extends MecanumDrive {
         }
     }
 
+    public void setPower(double main, double side, double rotation) {
+        leftFront.setPower(main + side + rotation);
+        leftBack.setPower(main - side + rotation);
+        rightFront.setPower(main - side - rotation);
+        rightBack.setPower(main + side - rotation);
+    }
+
 }
