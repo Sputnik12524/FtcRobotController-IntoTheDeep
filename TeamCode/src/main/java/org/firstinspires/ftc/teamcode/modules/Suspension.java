@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Config
 public class Suspension {
 
-    public DcMotorEx susMotorRight;
-    public DcMotorEx susMotorLeft;
+    public final DcMotorEx susMotorRight;
+    public final DcMotorEx susMotorLeft;
     LinearOpMode opMode;
 
     public static double SUS_SPEED = 1;

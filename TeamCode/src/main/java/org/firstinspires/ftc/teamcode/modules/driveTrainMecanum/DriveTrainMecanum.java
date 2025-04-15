@@ -54,7 +54,7 @@ public class DriveTrainMecanum extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    private final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     private List<DcMotorEx> motors;
 
     private VoltageSensor batteryVoltageSensor;

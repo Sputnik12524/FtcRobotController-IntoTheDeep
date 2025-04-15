@@ -14,10 +14,6 @@ public class TeleopShoulder extends LinearOpMode {
     public void runOpMode() {
         Shoulder sl = new Shoulder(this);
 
-
-        while (opModeInInit()) {
-
-        }
         waitForStart();
         while (opModeIsActive()) {
 

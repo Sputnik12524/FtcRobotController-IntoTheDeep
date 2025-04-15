@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 @TeleOp(name = "Claw", group = "Test")
 public class TeleopClaw extends LinearOpMode {
 
-
     boolean btnStateSh;
     boolean btnStateLift;
 
@@ -18,7 +17,6 @@ public class TeleopClaw extends LinearOpMode {
         Claw cl = new Claw(this);
         Shoulder sl = new Shoulder(this);
 
-        while (opModeInInit()) {}
         waitForStart();
         while (opModeIsActive()){
 
