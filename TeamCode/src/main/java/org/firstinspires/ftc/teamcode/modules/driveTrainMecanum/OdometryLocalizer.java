@@ -50,7 +50,7 @@ public class OdometryLocalizer extends ThreeTrackingWheelLocalizer {
         lastEncPositions = lastTrackingEncPositions;
         lastEncVels = lastTrackingEncVels;
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"y_enc"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"left_enc"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionL"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionR"));
 

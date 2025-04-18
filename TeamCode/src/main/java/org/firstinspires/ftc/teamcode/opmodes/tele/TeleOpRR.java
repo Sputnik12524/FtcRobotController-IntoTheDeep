@@ -223,7 +223,6 @@ public class TeleOpRR extends LinearOpMode {
                 return IntakeStates.FLIPPING_OUT;
             }
             return IntakeStates.EXTENDING_OUT;
-            //TODO добавить режим подвеса - условие, что если плечо опущено, то захват задвинуть нельзя; чтобы захват не складывался при подъеме; автоматик для подвеса?
         });
         put(IntakeStates.FLIPPING_OUT, () -> {
             if (intakeTimer.milliseconds() >= FLIP_TIME) {
@@ -245,8 +244,7 @@ public class TeleOpRR extends LinearOpMode {
         });
         put(IntakeStates.UNFOLDED_POS, () -> {
             if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor)
-                    && (in.getColorSample() != Intake.Color.NONE) && stateSensor
-            && (in.getColorSample() != Intake.Color.YELLOW) || !isYellowBad)) { // #НеБойсяПж
+                    && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
@@ -258,8 +256,7 @@ public class TeleOpRR extends LinearOpMode {
                 brushInStatus = false;
                 brushOutStatus = false;
                 return IntakeStates.FOLDED_POS;
-            } else if (( (in.getColorSample() == badColor) ||
-                    (isYellowBad && (in.getColorSample() == Intake.Color.YELLOW)) ) && stateSensor) {
+            } else if ((in.getColorSample() == badColor) && stateSensor) {
                 intakeTimer.reset();
                 in.brushOuttake();
                 brushInStatus = false;
