@@ -67,12 +67,10 @@ public class TeleOpRR extends LinearOpMode {
     private boolean stateDpadRight1 = false;
 
     public Intake.Color badColor;
-    public boolean isYellowBad = false;
     private final ElapsedTime colorSensorTimer = new ElapsedTime();
     ColorSensorStates sensorState = ColorSensorStates.PASSIVE;
     private boolean stateSensor = false;
     private boolean stateDpadLeft1 = false;
-    private final boolean stateLSB = false;
 
     /// different things
     private boolean initWait = false;
@@ -476,11 +474,6 @@ public class TeleOpRR extends LinearOpMode {
             //Color sensor
             colorSensorFSM();
             stateDpadLeft1 = gamepad1.dpad_left;
-
-//            if (gamepad1.right_stick_button && !stateLSB) {
-//                isYellowBad = !isYellowBad;
-//            }
-//            stateLSB = gamepad1.right_stick_button;
 
             /// Suspension
             if (gamepad1.dpad_up) {
