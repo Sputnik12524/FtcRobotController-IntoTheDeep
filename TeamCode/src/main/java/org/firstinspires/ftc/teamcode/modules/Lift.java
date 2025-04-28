@@ -36,10 +36,9 @@ public class Lift {
     public static double POS_LOW_SPECIMEN_AFTER = -2; // Устанавливаем образец
     public static double POS_HIGH_SPECIMEN_BEFORE = -37; // Целимся для установки
     public static double POS_HIGH_SPECIMEN_AFTER = -27; // Устанавливаем образец
-
-
     public boolean StateSpecimenLow;
     public boolean StateSpecimenHigh;
+
     public LiftMotorPowerDriver liftMotorPowerDriver = new LiftMotorPowerDriver();
 
     public Lift(LinearOpMode opMode) {

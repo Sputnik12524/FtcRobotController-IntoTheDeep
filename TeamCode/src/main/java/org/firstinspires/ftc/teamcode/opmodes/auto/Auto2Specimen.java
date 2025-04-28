@@ -71,11 +71,6 @@ public class Auto2Specimen extends LinearOpMode {
                 .back(10)
                 .lineTo(new Vector2d(50,45))
                 .build());
-       /* base.followTrajectorySequence(base.trajectorySequenceBuilder(base.getPoseEstimate())
-                .forward(30).strafeRight(10).back(30)
-                .forward(30).strafeRight(10).back(30)
-                .forward(30).strafeRight(20).back(30)
-                .build());*/
         lift.liftMotorPowerDriver.interrupt();
     }
 }

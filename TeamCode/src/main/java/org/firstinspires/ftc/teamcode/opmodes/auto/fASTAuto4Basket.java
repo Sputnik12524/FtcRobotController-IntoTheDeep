@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "0 FAST 4 Auto Basket", group = "Robot")
+@Autonomous(name = "FAST 4 Auto Basket", group = "Robot")
 public class fASTAuto4Basket extends LinearOpMode {
 
     @Override
@@ -35,7 +35,7 @@ public class fASTAuto4Basket extends LinearOpMode {
                     lift.setTarget(Lift.POS_HIGH_BASKET);
                     shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET_AUTO);
                 })
-                .strafeRight(12)
+                .strafeRight(11)
                 .forward(18)
                 .turn(Math.toRadians(76))
                 .build();
@@ -60,7 +60,7 @@ public class fASTAuto4Basket extends LinearOpMode {
         intake.needOuttake();
         sleep(300);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
-                .forward(3)
+                .forward(4)
                 .build());
         driveTrain.turn(Math.toRadians(-17));
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
@@ -85,7 +85,7 @@ public class fASTAuto4Basket extends LinearOpMode {
         intake.needOuttake();
         sleep(300);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
-                .forward(3.5)
+                .forward(4)
                 .build());
         driveTrain.turn(Math.toRadians(-39));
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
@@ -103,7 +103,7 @@ public class fASTAuto4Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(67));
+        driveTrain.turn(Math.toRadians(66));
         intake.needTake();
         sleep(600);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
@@ -112,7 +112,7 @@ public class fASTAuto4Basket extends LinearOpMode {
         intake.needOuttake();
         sleep(500);
         driveTrain.followTrajectorySequence(driveTrain.trajectorySequenceBuilder(driveTrain.getPoseEstimate())
-                .forward(5)
+                .forward(6)
                 .build());
         driveTrain.turn(Math.toRadians(-65));
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);

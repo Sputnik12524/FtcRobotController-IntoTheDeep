@@ -17,7 +17,7 @@ public class Shoulder {
     public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double SH_POS_TO_BASKET = .89;// 0.5561; upper
+    public static double SH_POS_TO_BASKET = .89;
 
     public static double SH_POS_TO_BASKET_AUTO = .8644;
     public static double SH_POS_TO_INTAKE = 0;
@@ -41,7 +41,6 @@ public class Shoulder {
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
         clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
-        // servoShoulder.setDirection(Servo.Direction.REVERSE);
 
         this.sampleShTaker = new SampleShTaker();
     }

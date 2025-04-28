@@ -291,13 +291,6 @@ public class DriveTrainMecanum extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
-
-    public void cancelTrajectoryFollowing(boolean isCancelled) {
-        if (isCancelled) {
-            setDrivePower(new Pose2d(0, 0));
-        }
-    }
-
     public void setPower(double main, double side, double rotation) {
         leftFront.setPower(main + side + rotation);
         leftBack.setPower(main - side + rotation);

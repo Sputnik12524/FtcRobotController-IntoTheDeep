@@ -27,27 +27,27 @@ public class Intake {
 
     public final SamplesTaker samplesTaker;
 
-    NormalizedColorSensor colorSensor;
-    public static double BLUE_MAX = 280;
-    public static double BLUE_MIN = 180;
-    public static double YELLOW_MAX = 110;
-    public static double YELLOW_MIN = 60;
-    public static float GAIN = 2;
+    final NormalizedColorSensor colorSensor;
+    public static final double BLUE_MAX = 280;
+    public static final double BLUE_MIN = 180;
+    public static final double YELLOW_MAX = 110;
+    public static final double YELLOW_MIN = 60;
+    public static final float GAIN = 2;
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXT_POS_MAX = 0.39;
-    public static double EXT_POS_MIN = 0;
+    public static final double EXT_POS_MAX = 0.39;
+    public static final double EXT_POS_MIN = 0;
 
-    public static double EXTENSION_STEP = 0.005;
-    public static double EXT_SPEED_COEF = 8;
+    public static final double EXTENSION_STEP = 0.005;
+    public static final double EXT_SPEED_COEF = 8;
     public static double EXT_POS_INIT = 0.075;
 
-    public static double FLIP_POS_FOR_TAKE = 0.05;
-    public static double FLIP_POS_FOR_OUTTAKE = 0.68;
-    public static double FLIP_TIME = 350;
+    public static final double FLIP_POS_FOR_TAKE = 0.05;
+    public static final double FLIP_POS_FOR_OUTTAKE = 0.68;
+    public static final double FLIP_TIME = 350;
 
-    public static double BRUSH_TIME = 600;
+    public static final double BRUSH_TIME = 600;
     public static final double SPEED_BRUSH = 1;
 
     public Intake(LinearOpMode opMode) {
