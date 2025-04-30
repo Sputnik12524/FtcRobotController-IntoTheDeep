@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanu
 //Need test
 @Autonomous(name = "Far Park", group = "Robot")
 @Config
-
 public class ParkFar extends LinearOpMode {
     public static final double DISTANCE = 45;
 

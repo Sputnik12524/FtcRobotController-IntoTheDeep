@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Claw {
 
     private final Servo clawServoLift;
-    private final LinearOpMode opMode;
+    private LinearOpMode opMode;
 
     public static double CLAW_L_POS_OPEN = 0.072;
     public static double CLAW_L_POS_CLOSE = 0.3;
