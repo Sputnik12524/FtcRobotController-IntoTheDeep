@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.disabled;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.modules.Intake;
@@ -11,7 +12,8 @@ import org.firstinspires.ftc.teamcode.modules.Shoulder;
 import org.firstinspires.ftc.teamcode.modules.driveTrainMecanum.DriveTrainMecanum;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "1 + 1 Auto Basket", group = "Robot")
+@Autonomous(name = "Don't run this 1 + 1 Auto Basket please", group = "Robot")
+@Disabled
 public class Auto2Basket extends LinearOpMode {
 
     @Override
@@ -28,7 +30,7 @@ public class Auto2Basket extends LinearOpMode {
         driveTrain.setPoseEstimate(startPose);
 
         shoulder.shoulderPosition(0.1);
-        shoulder.setPosition(.46);
+        shoulder.setClawPosition(.46);
         intake.extensionPosition(Intake.EXT_POS_MIN);
 
         TrajectorySequence trajectoryToBasket = driveTrain.trajectorySequenceBuilder(startPose)
@@ -64,7 +66,7 @@ public class Auto2Basket extends LinearOpMode {
         lift.setTarget(0);
         sleep(1000);
 
-        driveTrain.turn(Math.toRadians(60));
+        driveTrain.turn(Math.toRadians(47));
         sleep(100);
         intake.needTake();
         sleep(1000);
@@ -72,18 +74,19 @@ public class Auto2Basket extends LinearOpMode {
         sleep(2000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_INTAKE);
         sleep(500);
-        shoulder.setPosition(.46);
+        shoulder.setClawPosition(.46);
         sleep(500);
-        driveTrain.turn(Math.toRadians(-59));
+        driveTrain.turn(Math.toRadians(-47));
         lift.setTarget(Lift.POS_HIGH_BASKET);
-        sleep(1000);
-        shoulder.shoulderPosition(.65);
-        sleep(1000);
-        shoulder.openSh();
         sleep(1000);
         shoulder.shoulderPosition(Shoulder.SH_POS_TO_BASKET);
         sleep(1000);
+        shoulder.openSh();
+        sleep(1000);
+        shoulder.shoulderPosition(Shoulder.SH_POS_INIT);
+        sleep(1000);
         lift.setTarget(0);
+
         driveTrain.followTrajectorySequence(trajectoryToPark);
         lift.liftMotorPowerDriver.interrupt();
         intake.samplesTaker.interrupt();

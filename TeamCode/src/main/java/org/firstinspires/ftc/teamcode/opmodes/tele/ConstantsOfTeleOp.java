@@ -25,6 +25,9 @@ public class ConstantsOfTeleOp {
         REMOVE_TRASH,
 
     }
+    public enum ColorSensorStates {
+        ACTIVE, PASSIVE
+    }
 
     /// DRIVETRAIN
     public static double VELO_SCALE_COEF = 0.00225;
@@ -41,6 +44,9 @@ public class ConstantsOfTeleOp {
     public static double BRUSHING_OUT_TIME = 400;
 
     public static double NECESSARY_EXT_POS = 0.14;
+
+
+    public static double COLOR_SENSOR_TIMER = 2;
 
 
 }

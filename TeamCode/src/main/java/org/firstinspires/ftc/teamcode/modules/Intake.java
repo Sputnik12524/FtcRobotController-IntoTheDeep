@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
 public class Intake {
     public enum Color {
-        RED, BLUE, YELLOW, NONE
+        RED, BLUE, YELLOW, NONE, FAKE
     }
 
     private final CRServo brushServoLeft;
@@ -27,7 +27,7 @@ public class Intake {
 
     public final SamplesTaker samplesTaker;
 
-    NormalizedColorSensor colorSensor;
+    private final NormalizedColorSensor colorSensor;
     public static double BLUE_MAX = 280;
     public static double BLUE_MIN = 180;
     public static double YELLOW_MAX = 110;
@@ -36,15 +36,15 @@ public class Intake {
     private final float[] hsvValues = new float[3]; // 0 - Оттенок Hue / 1 - Насыщенность Saturation / 2 - Яркость Value
 
 
-    public static double EXT_POS_MAX = 0.36;
-    public static double EXT_POS_MIN = 0.07;
+    public static double EXT_POS_MAX = 0.39;
+    public static double EXT_POS_MIN = 0;
 
     public static double EXTENSION_STEP = 0.005;
     public static double EXT_SPEED_COEF = 8;
     public static double EXT_POS_INIT = 0.075;
 
-    public static double FLIP_POS_FOR_TAKE = 0.08;
-    public static double FLIP_POS_FOR_OUTTAKE = 0.73;
+    public static double FLIP_POS_FOR_TAKE = 0.05;
+    public static double FLIP_POS_FOR_OUTTAKE = 0.68;
     public static double FLIP_TIME = 350;
 
     public static double BRUSH_TIME = 600;
@@ -171,7 +171,6 @@ public class Intake {
                     extensionPosition(EXT_POS_MAX);
                     timer.reset();
                     while (timer.milliseconds() < BRUSH_TIME);
-                    brushStop();
                     needTake = false;
                 }
             }

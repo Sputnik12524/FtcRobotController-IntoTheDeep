@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Config
 public class Suspension {
 
-    public DcMotorEx susMotorRight;
-    public DcMotorEx susMotorLeft;
+    public final DcMotorEx susMotorRight;
+    public final DcMotorEx susMotorLeft;
     LinearOpMode opMode;
 
     public static double SUS_SPEED = 1;
     public static double SUS_POS_MAX = 100;
-    public static double SUS_POS_SECOND_LVL = 50;
 
     public Suspension (LinearOpMode opMode) {
         this.susMotorRight = opMode.hardwareMap.get(DcMotorEx.class, "SuspensionR");

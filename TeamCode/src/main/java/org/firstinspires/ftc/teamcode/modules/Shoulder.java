@@ -17,14 +17,16 @@ public class Shoulder {
     public static double SH_POS_MIN = 0;
     public static double SHOULDER_STEP = 0.005;
 
-    public static double SH_POS_TO_BASKET = .81;// 0.5561; upper
+    public static double SH_POS_TO_BASKET = .89;
+
+    public static double SH_POS_TO_BASKET_AUTO = .8644;
     public static double SH_POS_TO_INTAKE = 0;
 
     public static double SH_POS_INIT = 0.2;
 
     //Позиции клешни
 
-    public static double CLAW_POS_CLOSE = 0.49;
+    public static double CLAW_POS_CLOSE = 0.55;
     public static double CLAW_POS_OPEN = 0.65;
     public static double CLAW_POS_HALF_OPEN = 0.6;
     public static double CLAW_STRONG_CLOSED = .5;
@@ -39,7 +41,6 @@ public class Shoulder {
     public Shoulder(LinearOpMode opMode) {
         this.servoShoulder = opMode.hardwareMap.servo.get("servoShoulder");
         clawServoShoulder = opMode.hardwareMap.servo.get("ClawServoShoulder");
-        servoShoulder.setDirection(Servo.Direction.REVERSE);
 
         this.sampleShTaker = new SampleShTaker();
     }
@@ -96,7 +97,7 @@ public class Shoulder {
         clawServoShoulder.setPosition(CLAW_STRONG_CLOSED);
     }
 
-    public void setPosition(double position) {
+    public void setClawPosition(double position) {
         clawServoShoulder.setPosition(position);
     }
     //Многопоточность

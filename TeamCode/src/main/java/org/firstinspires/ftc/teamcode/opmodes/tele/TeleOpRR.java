@@ -40,7 +40,6 @@ public class TeleOpRR extends LinearOpMode {
     double targetLiftFSM = 0;
     private boolean stateDpadUp2 = false;
     private boolean stateDpadDown2 = false;
-    private boolean stateDpadLeft2 = false;
     private boolean stateDpadRight2 = false;
     private boolean stateLeftStickButton = false;
     private boolean stateRightBumper2 = false; // Claw for specimens
@@ -65,11 +64,12 @@ public class TeleOpRR extends LinearOpMode {
     private boolean brushOutStatus = false;
     private boolean stateA1 = false;
     private boolean stateB1 = false;
-    private boolean stateRightBumper1 = false;
-    private boolean stateLeftBumper1 = false;
+    private boolean stateDpadRight1 = false;
 
     public Intake.Color badColor;
-    private boolean stateSensor = true;
+    private final ElapsedTime colorSensorTimer = new ElapsedTime();
+    ColorSensorStates sensorState = ColorSensorStates.PASSIVE;
+    private boolean stateSensor = false;
     private boolean stateDpadLeft1 = false;
 
     /// different things
@@ -204,7 +204,7 @@ public class TeleOpRR extends LinearOpMode {
             }};
     private final Map<IntakeStates, Supplier<IntakeStates>> intakeFSMMap = new HashMap<IntakeStates, Supplier<IntakeStates>>() {{
         put(IntakeStates.FOLDED_POS, () -> {
-            if (gamepad1.right_bumper && !stateRightBumper1) {
+            if (gamepad1.dpad_right && !stateDpadRight1) {
                 intakeTimer.reset();
                 extFSM = Intake.EXT_POS_MAX;
                 return IntakeStates.EXTENDING_OUT;
@@ -241,7 +241,8 @@ public class TeleOpRR extends LinearOpMode {
             return IntakeStates.BRUSHING_OUT;
         });
         put(IntakeStates.UNFOLDED_POS, () -> {
-            if (gamepad1.right_bumper && !stateRightBumper1 || ((in.getColorSample() != badColor) && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
+            if ((gamepad1.dpad_right && !stateDpadRight1) || ((in.getColorSample() != badColor)
+                    && (in.getColorSample() != Intake.Color.NONE) && stateSensor)) { // #НеБойсяПж
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
@@ -265,7 +266,7 @@ public class TeleOpRR extends LinearOpMode {
             return IntakeStates.UNFOLDED_POS;
         });
         put(IntakeStates.UNFOLDED_POS_FOR_FLIP, () -> {
-            if (gamepad1.right_bumper && !stateRightBumper1) { /// #НеБойсяПж
+            if (gamepad1.dpad_right && !stateDpadRight1) { /// #НеБойсяПж
                 intakeTimer.reset();
                 flipFSM = Intake.FLIP_POS_FOR_OUTTAKE;
                 in.brushIntake();
@@ -312,6 +313,25 @@ public class TeleOpRR extends LinearOpMode {
 
     }};
 
+    private final Map<ColorSensorStates, Supplier<ColorSensorStates>> colorSensorMap =
+            new HashMap<ColorSensorStates, Supplier<ColorSensorStates>>() {{
+        put(ColorSensorStates.PASSIVE, () -> {
+            if (gamepad1.dpad_left && !stateDpadLeft1) {
+                colorSensorTimer.reset();
+                stateSensor = true;
+                return ColorSensorStates.ACTIVE;
+            }
+            return ColorSensorStates.PASSIVE;
+        });
+        put(ColorSensorStates.ACTIVE, () -> {
+            if (colorSensorTimer.seconds() >= COLOR_SENSOR_TIMER) {
+                stateSensor = false;
+                return ColorSensorStates.PASSIVE;
+            }
+            return ColorSensorStates.ACTIVE;
+        });
+    }};
+
     public void liftFSM() {
         posLift = liftFSMMap.get(posLift).get();
     }
@@ -322,6 +342,10 @@ public class TeleOpRR extends LinearOpMode {
 
     public void intakeFSM() {
         posIntake = intakeFSMMap.get(posIntake).get();
+    }
+
+    public void colorSensorFSM() {
+        sensorState = colorSensorMap.get(sensorState).get();
     }
 
 
@@ -346,7 +370,6 @@ public class TeleOpRR extends LinearOpMode {
 
         lt.liftMotorPowerDriver.start();
 
-        dt.standardMode();
         dt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         PoseStorage.currentPose = dt.getPoseEstimate();
         dt.setPoseEstimate(PoseStorage.currentPose);
@@ -367,7 +390,7 @@ public class TeleOpRR extends LinearOpMode {
                     initWait = true;
                     sleep(300);
                 } else if (gamepad1.y) { //For tests
-                    badColor = null;
+                    badColor = Intake.Color.FAKE;
                     telemetry.addLine("БЕЗ АЛЬЯНСА");
                     telemetry.update();
                     initWait = true;
@@ -386,13 +409,7 @@ public class TeleOpRR extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             /// DriveTrain ALL:
-
-            dt.setWeightedDrivePower(
-                    new Pose2d(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger - gamepad1.right_trigger)
-            );
-
-            if (gamepad1.left_bumper && !stateLeftBumper1) dt.switchSlowMode();
-            stateLeftBumper1 = gamepad1.left_bumper;
+            dt.setPower(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
 
 
             /// Lift FSM
@@ -400,7 +417,6 @@ public class TeleOpRR extends LinearOpMode {
             lt.setTarget(targetLiftFSM);
             stateDpadUp2 = gamepad2.dpad_up;
             stateDpadDown2 = gamepad2.dpad_down;
-            stateDpadLeft2 = gamepad2.dpad_left;
             stateDpadRight2 = gamepad2.dpad_right;
             stateLeftStickButton = gamepad2.left_bumper;
 
@@ -422,7 +438,7 @@ public class TeleOpRR extends LinearOpMode {
             intakeFSM();
             in.extensionPosition(extFSM);
             in.flipPosition(flipFSM);
-            stateRightBumper1 = gamepad1.right_bumper;
+            stateDpadRight1 = gamepad1.dpad_right;
 
 
             /// Manual control:
@@ -456,7 +472,7 @@ public class TeleOpRR extends LinearOpMode {
             if (gamepad1.x) flipFSM = Intake.FLIP_POS_FOR_TAKE;
 
             //Color sensor
-            if (gamepad1.dpad_left && !stateDpadLeft1) stateSensor = !stateSensor;
+            colorSensorFSM();
             stateDpadLeft1 = gamepad1.dpad_left;
 
             /// Suspension
@@ -465,17 +481,17 @@ public class TeleOpRR extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 sp.moveDownStupid(SUS_SPEED);
             } else sp.moveStop();
-
+            
 
             /// Telemetry
             telemetry.addLine(String.join(" ", "УПРАВЛЕНИЕ НЕ ДАМ!1!11", "САНЕЧКА, СБРОС НУЛЯ", "НА КНОПКУ ЛЕВОГО СТИКА!!"));
 
-            telemetry.addData("ДАТЧИК ЦВЕТА:", stateSensor);
+            telemetry.addData("COLOR SENSOR:", sensorState);
             telemetry.addData("Color:", in.getColorSample());
 
             telemetry.addData("State FSM Lift:", posLift);
             telemetry.addData("State FSM Shoulder:", posShoulder);
-            telemetry.addData("State FSM Intake", posIntake);
+            telemetry.addData("State FSM Intake:", posIntake);
 
             FtcDashboard.getInstance().getTelemetry().addData("Hue:", in.getHue());
             FtcDashboard.getInstance().getTelemetry().addData("Saturation:", in.getSaturation());
@@ -485,7 +501,6 @@ public class TeleOpRR extends LinearOpMode {
         }
         lt.liftMotorPowerDriver.interrupt();
     }
-
     public static class PoseStorage {
         public static Pose2d currentPose = new Pose2d();
     }
