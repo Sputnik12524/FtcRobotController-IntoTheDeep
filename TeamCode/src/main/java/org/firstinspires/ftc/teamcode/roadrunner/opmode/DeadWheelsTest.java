@@ -14,7 +14,7 @@ public class DeadWheelsTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"y_enc"));
+        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"left_enc"));
         rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionL"));
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class,"SuspensionR"));
         DriveTrainMecanum drive = new DriveTrainMecanum(hardwareMap, this);
